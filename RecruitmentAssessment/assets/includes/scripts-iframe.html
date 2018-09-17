@@ -1,0 +1,55 @@
+<link href="/assets/css/iframe.css" rel="stylesheet" type="text/css"  />
+<link rel="stylesheet" type="text/css" href="/assets/js/fancybox/jquery.fancybox-1.3.4.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="/assets/js/jquery-ui.css" />
+<script type="text/javascript" src="/assets/js/jquery-1.7.1.js" ></script>
+<script type="text/javascript" src="/assets/js/jquery-ui.min.js" ></script>
+<script type="text/javascript" src="/assets/js/fancybox/jquery.fancybox-1.3.4.js"></script>
+<script type="text/javascript" src="/assets/js/fancybox/jquery.mousewheel-3.0.4.pack.js"></script>
+<script type="text/javascript" src="/assets/js/fancybox/jquery.easing-1.3.pack.js"></script>
+
+
+<script type="text/javascript">
+		$(document).ready(function() {
+ 
+
+		$(".framee").fancybox({
+				'width'				: '60%',
+				'height'			: '60%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+				
+			});
+			
+		$(".framee-large").fancybox({
+				'width'				: '100%',
+				'height'			: '90%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+			
+			
+					$("td:empty").html("&nbsp;");
+		});
+		$(".framee").fancybox({
+				'width'				: '50%',
+				'height'			: '50%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+			
+		$(".framee-large").fancybox({
+				'width'				: '100%',
+				'height'			: '90%',
+				'autoScale'			: false,
+				'transitionIn'		: 'none',
+				'transitionOut'		: 'none',
+				'type'				: 'iframe'
+			});
+		
+</script>

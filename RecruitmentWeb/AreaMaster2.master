@@ -1,0 +1,35 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="AreaMaster2.master.cs" Inherits="AreaMaster2" %>
+
+<%@ Register TagPrefix="pa" TagName="profileArea" Src="~/controls/ProfileControl.ascx" %>
+<!DOCTYPE >
+<html >
+<head id="Head1" runat="server">
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <title>My Area</title>
+    <!--#include virtual="/Area/includes/header-scripts2.html"-->
+    
+    <asp:ContentPlaceHolder ID="HeadContainer" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="main">
+    <form id="form1" runat="server" class="xStyledForm">
+        <!-- Start Header -->
+        <header>
+         <pa:profileArea ID="profileArea" runat="server"/>
+        <!-- End Header -->
+        </header>
+        <div class="row-fluid">
+            <asp:ContentPlaceHolder ID="ContentContainer" runat="server">
+            </asp:ContentPlaceHolder>
+        </div>
+        </form>
+        <!-- Start Footer -->
+       
+        <!-- End Footer -->
+        <!--#include virtual="/Area/includes/footer-scripts.html"-->
+    </div>
+</body>
+</html>

@@ -1,0 +1,897 @@
+﻿using ASP;
+using ErrorLog;
+using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Web;
+using System.Web.Profile;
+using System.Web.SessionState;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using XRecruitmentStatusLibrary;
+public partial class Candidate_CandidateDetails2 : Page, IRequiresSessionState
+{
+    #region Page Variables
+
+    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString);
+    SqlConnection Errlogconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["errLogConnection"].ToString());
+    string DocumentFolderPath = System.Configuration.ConfigurationManager.AppSettings["DocumentFolderPath"].ToString();
+    string PortfolioFolderPath = System.Configuration.ConfigurationManager.AppSettings["PortfolioFolderPath"].ToString();
+    string candidateCode = "0";
+    string supportFileName = string.Empty;
+    string portfolioFileName = string.Empty;
+    string CommCode = "0";
+
+
+   
+
+
+    #endregion
+
+    #region Event-Handlers
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (IsPostBack)
+            return;
+        try
+        {
+            CheckQueryString();
+            connection.Open();
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkViewPortfolio_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!(portfolioFileName != ""))
+                return;
+            hdnpFileName.Value = portfolioFileName;
+            string name = new FileInfo(hdnpFileName.Value).Name;
+            lnkViewPortfolio.CommandArgument = PortfolioFolderPath + candidateCode;
+            FileResponse(name, lnkViewPortfolio.CommandArgument);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkSubmit_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(txtaComments.InnerText))
+                return;
+            InsertUserInterviewComments();
+            if (rdbPass.Checked)
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+                StatusManagement.MarkLifeCycleStatus(connection, Convert.ToInt32(Request.QueryString["CID"].ToString()), Constants.ModuleCode.LifeCycleStatus, (Constants.CandidateStatus)1160, Request.UserHostAddress.ToString(), 1553);
+                SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateSlotIsAvailed", connection);
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+                sqlCommand.ExecuteNonQuery();
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+                ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Saved Successfully!');", true);
+                GetCandidateDetail(ref connection);
+            }
+            else
+            {
+                if (!rdbFail.Checked)
+                    return;
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+                StatusManagement.MarkLifeCycleStatus(connection, Convert.ToInt32(Request.QueryString["CID"].ToString()), Constants.ModuleCode.LifeCycleStatus, (Constants.CandidateStatus)1170, Request.UserHostAddress.ToString(), 1553);
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+                ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Saved Successfully!');", true);
+                GetCandidateDetail(ref connection);
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkMarkOfferDelivered_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            if (!string.IsNullOrEmpty(txtaOfferdelivered.InnerText))
+                InsertUserOfferDeliveredComments();
+            StatusManagement.MarkLifeCycleStatus(connection, Convert.ToInt32(Request.QueryString["CID"].ToString()), Constants.ModuleCode.LifeCycleStatus, (Constants.CandidateStatus)1200, Request.UserHostAddress.ToString(), 1553);
+            SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateSlotIsAvailed", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+            sqlCommand.ExecuteNonQuery();
+            ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Saved Successfully!');", true);
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkMarkOfferAccepted_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            if (!string.IsNullOrEmpty(txtaOfferAccepetance.InnerText))
+                InsertUserOfferAcceptedComments();
+            StatusManagement.MarkLifeCycleStatus(connection, Convert.ToInt32(Request.QueryString["CID"].ToString()), Constants.ModuleCode.LifeCycleStatus, (Constants.CandidateStatus)1210, Request.UserHostAddress.ToString(), 1553);
+            ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Saved Successfully!');", true);
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkMarkOfferNotAccepted_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!string.IsNullOrEmpty(txtaOfferAccepetance.InnerText))
+                InsertUserOfferAcceptedComments();
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            StatusManagement.MarkLifeCycleStatus(connection, Convert.ToInt32(Request.QueryString["CID"].ToString()), Constants.ModuleCode.LifeCycleStatus, (Constants.CandidateStatus)1220, Request.UserHostAddress.ToString(), 1553);
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+            ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Saved Successfully!');", true);
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptPersonal_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Header)
+        {
+            try
+            {
+                HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("thPersonalAction");
+                if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                    control.Style.Add("display", "");
+                else
+                    control.Style.Add("display", "none");
+            }
+            catch (Exception ex)
+            {
+                LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+        if (e.Item.ItemType != ListItemType.AlternatingItem)
+        {
+            if (e.Item.ItemType != ListItemType.Item)
+                return;
+        }
+        try
+        {
+            HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("tdPersonalAction");
+            if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                control.Style.Add("display", "");
+            else
+                control.Style.Add("display", "none");
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptPersonal_ItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        try
+        {
+            if (!(e.CommandName == "MarkDocVerified"))
+                return;
+            connection.Open();
+            SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateDocVerified", connection);
+            sqlCommand.Parameters.Add("@CandDocCode", SqlDbType.Int).Value = Convert.ToInt32(e.CommandArgument.ToString());
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.ExecuteNonQuery();
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptEducational_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Header)
+        {
+            try
+            {
+                HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("thEduAction");
+                if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                    control.Style.Add("display", "");
+                else
+                    control.Style.Add("display", "none");
+            }
+            catch (Exception ex)
+            {
+                LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+        if (e.Item.ItemType != ListItemType.AlternatingItem)
+        {
+            if (e.Item.ItemType != ListItemType.Item)
+                return;
+        }
+        try
+        {
+            HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("tdEduAction");
+            if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                control.Style.Add("display", "");
+            else
+                control.Style.Add("display", "none");
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptEducational_ItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        try
+        {
+            if (!(e.CommandName == "MarkDocVerified"))
+                return;
+            connection.Open();
+            SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateDocVerified", connection);
+            sqlCommand.Parameters.Add("@CandDocCode", SqlDbType.Int).Value = Convert.ToInt32(e.CommandArgument.ToString());
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.ExecuteNonQuery();
+            connection.Close();
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptProfessional_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Header)
+        {
+            try
+            {
+                HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("thProfAction");
+                if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                    control.Style.Add("display", "");
+                else
+                    control.Style.Add("display", "none");
+            }
+            catch (Exception ex)
+            {
+                LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+        if (e.Item.ItemType != ListItemType.AlternatingItem)
+        {
+            if (e.Item.ItemType != ListItemType.Item)
+                return;
+        }
+        try
+        {
+            HtmlTableCell control = (HtmlTableCell)e.Item.FindControl("tDProfAction");
+            if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                control.Style.Add("display", "");
+            else
+                control.Style.Add("display", "none");
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptProfessional_ItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        if (!(e.CommandName == "MarkDocVerified"))
+            return;
+        try
+        {
+            connection.Open();
+            SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateDocVerified", connection);
+            sqlCommand.Parameters.Add("@CandDocCode", SqlDbType.Int).Value = Convert.ToInt32(e.CommandArgument.ToString());
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.ExecuteNonQuery();
+            GetCandidateDetail(ref connection);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkShortlist_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            ShortlistCandidate();
+            sShortlist.Style.Add("display", "none");
+            lnkShortlist.Text = "";
+            ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Shortlisted Successfully!');", true);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkbtnCV_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(hdnCVPath.Value))
+                return;
+            FileResponses(hdnCVPath.Value, ConfigurationManager.AppSettings["CandidateDocumentPath"].ToString() + Convert.ToInt32(Request.QueryString["CID"]) + "/CV/");
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptCommunication_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        try
+        {
+            if (e.Item.ItemType != ListItemType.Item && e.Item.ItemType != ListItemType.AlternatingItem)
+                return;
+            HiddenField control1 = (HiddenField)e.Item.FindControl("hdnCommCode");
+            HtmlTableRow control2 = (HtmlTableRow)e.Item.FindControl("trCommunicationWay");
+            control1.Value = DataBinder.Eval(e.Item.DataItem, "CommunicationWayCode").ToString();
+            if (CommCode == control1.Value)
+                control2.Visible = false;
+            CommCode = control1.Value;
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void lnkChangeJoiningDate_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateJoiningDate", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+            sqlCommand.Parameters.Add("@JoiningDate", SqlDbType.DateTime).Value = Convert.ToDateTime(txtJoiningDate.Value);
+            sqlCommand.ExecuteNonQuery();
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+            GetCandidateDetail(ref connection);
+            ClientScript.RegisterClientScriptBlock(GetType(), "alert", "alert('Joining Date Changed Successfully!');", true);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, "1553");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    public void FileResponses(string filename, string FolderPath)
+    {
+        FileInfo fileInfo = new FileInfo(HttpContext.Current.Server.MapPath(FolderPath + "/" + filename));
+        if (!fileInfo.Exists)
+            return;
+        BinaryReader binaryReader = new BinaryReader((Stream)fileInfo.OpenRead());
+        HttpContext.Current.Response.ClearContent();
+        HttpContext.Current.Response.Clear();
+        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
+        HttpContext.Current.Response.AddHeader("Content-Length", fileInfo.Length.ToString());
+        HttpContext.Current.Response.ContentType = "application/octet-stream";
+        byte[] buffer = binaryReader.ReadBytes((int)fileInfo.Length);
+        binaryReader.Close();
+        HttpContext.Current.Response.BinaryWrite(buffer);
+    }
+
+    private void CheckDivs()
+    {
+        if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1140))
+        {
+            tblInterview.Style.Add("display", "");
+            tblOfferGeneration.Style.Add("display", "none");
+            tblOfferDelivered.Style.Add("display", "none");
+            tblOfferAcceptance.Style.Add("display", "none");
+        }
+        else if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1160))
+        {
+            tblInterview.Style.Add("display", "none");
+            tblOfferGeneration.Style.Add("display", "");
+            tblOfferDelivered.Style.Add("display", "none");
+            tblOfferAcceptance.Style.Add("display", "none");
+            AReserve.HRef = "../schedule/SchduleCandidate.aspx?refno=" + ViewState["CurrentRefNo"].ToString();
+            trOfferGenerationReserved.Style.Add("display", "none");
+        }
+        else if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1190))
+        {
+            tblInterview.Style.Add("display", "none");
+            tblOfferGeneration.Style.Add("display", "none");
+            tblOfferDelivered.Style.Add("display", "");
+            tblOfferAcceptance.Style.Add("display", "none");
+        }
+        else if ((int)Convert.ToInt16(ViewState["CurrentStatusCode"].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1200))
+        {
+            tblInterview.Style.Add("display", "none");
+            tblOfferGeneration.Style.Add("display", "none");
+            tblOfferDelivered.Style.Add("display", "none");
+            tblOfferAcceptance.Style.Add("display", "");
+        }
+        else
+            HActions.Style.Add("display", "none");
+    }
+
+    private void ShortlistCandidate()
+    {
+        SqlCommand sqlCommand = new SqlCommand("dbo.XRec_UpdateSelectedCandidateLockBit", connection);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        sqlCommand.Parameters.Add("@CPM_Codes", SqlDbType.VarChar).Value = ViewState["CurrentRefNo"].ToString();
+        sqlCommand.Parameters.Add("@UpdatedBy", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@UpdationIP", SqlDbType.VarChar).Value = Request.UserHostAddress;
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+        sqlCommand.ExecuteNonQuery();
+        if (connection.State == ConnectionState.Closed)
+            return;
+        connection.Close();
+    }
+
+    private void InsertUserInterviewComments()
+    {
+        SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Insert_CandidateInterview", connection);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+        sqlCommand.Parameters.Add("@UserCode", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@IsPassOrFail", SqlDbType.Bit).Value = rdbPass.Checked;
+        sqlCommand.Parameters.Add("@Comments", SqlDbType.VarChar).Value = txtaComments.InnerText;
+        sqlCommand.Parameters.Add("@LifeCycleStatus", SqlDbType.Int).Value = Convert.ToInt32((Constants.CandidateStatus)1140);
+        if (ddlGrade.SelectedValue != "-1")
+            sqlCommand.Parameters.Add("@GradeGiven", SqlDbType.VarChar).Value = ddlGrade.SelectedItem.Text;
+        sqlCommand.Parameters.Add("@Updated_By", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@Updated_IP", SqlDbType.VarChar).Value = Request.UserHostAddress.ToString();
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+        sqlCommand.ExecuteNonQuery();
+        if (connection.State == ConnectionState.Closed)
+            return;
+        connection.Close();
+    }
+
+    private void InsertUserOfferDeliveredComments()
+    {
+        SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Insert_CandidateInterview", connection);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+        sqlCommand.Parameters.Add("@UserCode", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@Comments", SqlDbType.VarChar).Value = txtaOfferdelivered.InnerText;
+        sqlCommand.Parameters.Add("@LifeCycleStatus", SqlDbType.Int).Value = Convert.ToInt32((Constants.CandidateStatus)1190);
+        if (ddlGrade.SelectedValue != "-1")
+            sqlCommand.Parameters.Add("@GradeGiven", SqlDbType.VarChar).Value = ddlGrade.SelectedItem.Text;
+        sqlCommand.Parameters.Add("@Updated_By", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@Updated_IP", SqlDbType.VarChar).Value = Request.UserHostAddress.ToString();
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+        sqlCommand.ExecuteNonQuery();
+        if (connection.State == ConnectionState.Closed)
+            return;
+        connection.Close();
+    }
+
+    private void InsertUserOfferAcceptedComments()
+    {
+        SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Insert_CandidateInterview", connection);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        sqlCommand.Parameters.Add("@CandidateCode", SqlDbType.Int).Value = Convert.ToInt32(Request.QueryString["CID"].ToString());
+        sqlCommand.Parameters.Add("@UserCode", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@Comments", SqlDbType.VarChar).Value = txtaOfferAccepetance.InnerText;
+        sqlCommand.Parameters.Add("@LifeCycleStatus", SqlDbType.Int).Value = Convert.ToInt32((Constants.CandidateStatus)1200);
+        if (ddlGrade.SelectedValue != "-1")
+            sqlCommand.Parameters.Add("@GradeGiven", SqlDbType.VarChar).Value = ddlGrade.SelectedItem.Text;
+        sqlCommand.Parameters.Add("@Updated_By", SqlDbType.Int).Value = 1553;
+        sqlCommand.Parameters.Add("@Updated_IP", SqlDbType.VarChar).Value = Request.UserHostAddress.ToString();
+        if (connection.State != ConnectionState.Open)
+            connection.Open();
+        sqlCommand.ExecuteNonQuery();
+        if (connection.State == ConnectionState.Closed)
+            return;
+        connection.Close();
+    }
+
+    public void GetCandidateDetail(ref SqlConnection connection)
+    {
+        SqlCommand selectCommand = new SqlCommand("XRec_SelectCandidateDetail", connection);
+        selectCommand.Parameters.AddWithValue("@Candidate_Code", candidateCode == "0" ? Request.QueryString["CID"].ToString() : candidateCode);
+        selectCommand.CommandType = CommandType.StoredProcedure;
+        SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand);
+        DataSet dataSet = new DataSet();
+        sqlDataAdapter.Fill(dataSet);
+        if (dataSet.Tables.Count == 0)
+            return;
+        if (dataSet.Tables[0].Rows.Count > 0)
+        {
+            if (!string.IsNullOrEmpty(dataSet.Tables[0].Rows[0]["Resume_Path"].ToString()))
+            {
+                lnkbtnCV.Style.Add("display", "");
+                lblNoCV.InnerText = "";
+                hdnCVPath.Value = dataSet.Tables[0].Rows[0]["Resume_Path"].ToString();
+            }
+            else
+            {
+                lnkbtnCV.Style.Add("display", "none");
+                lblNoCV.InnerText = "No CV Browsed";
+                hdnCVPath.Value = "";
+            }
+            portfolioFileName = dataSet.Tables[0].Rows[0]["Portfolio_Path"].ToString();
+            aPURL.HRef = dataSet.Tables[0].Rows[0]["Portfolio_URL"].ToString();
+            lblName.InnerText = dataSet.Tables[0].Rows[0]["Full_Name"].ToString();
+            lblEmailAddress.InnerText = dataSet.Tables[0].Rows[0]["Email_Address"].ToString();
+            lblDoB.InnerText = dataSet.Tables[0].Rows[0]["DateOf_Birth"].ToString();
+            lblNic.InnerText = dataSet.Tables[0].Rows[0]["NIC"].ToString();
+            lblGender.InnerText = dataSet.Tables[0].Rows[0]["Gender"].ToString();
+            lblPhoneNumber.InnerText = dataSet.Tables[0].Rows[0]["Phone_Number"].ToString();
+            lblReligion.InnerText = dataSet.Tables[0].Rows[0]["Religion"].ToString();
+            lblMaritalStatus.InnerText = dataSet.Tables[0].Rows[0]["MaritalStatus"].ToString();
+            lblNationality.InnerText = dataSet.Tables[0].Rows[0]["Nationality"].ToString();
+            lblAddress.InnerText = dataSet.Tables[0].Rows[0]["Address"].ToString();
+            imgCandidatePic.Src = ".." + dataSet.Tables[0].Rows[0]["PicPath"].ToString();
+        }
+        if (dataSet.Tables[1].Rows.Count > 0)
+        {
+            rptProfessionalExperience.DataSource = dataSet.Tables[1];
+            rptProfessionalExperience.DataBind();
+        }
+        if (dataSet.Tables[2].Rows.Count > 0)
+        {
+            rptEduQualification.DataSource = dataSet.Tables[2];
+            rptEduQualification.DataBind();
+        }
+        if (dataSet.Tables[3].Rows.Count > 0)
+        {
+            rptSkills.DataSource = dataSet.Tables[3];
+            rptSkills.DataBind();
+        }
+        if (dataSet.Tables[5] != null && dataSet.Tables[5].Rows.Count > 0)
+        {
+            if (dataSet.Tables[5].Rows[0]["Is_locked"].ToString().ToLower() == "false")
+            {
+                sShortlist.Style.Add("display", "");
+                lnkShortlist.Text = "Shortlist";
+            }
+            else
+            {
+                sShortlist.Style.Add("display", "none");
+                lnkShortlist.Text = "";
+            }
+            lblCurrentStatus.InnerText = dataSet.Tables[5].Rows[0]["Status_Name"].ToString();
+            lblProfileName.InnerText = dataSet.Tables[5].Rows[0]["Profile_Name"].ToString();
+            lblRequisitionName.InnerText = dataSet.Tables[5].Rows[0]["Requisition_Name"].ToString();
+            lblCategoryName.InnerText = dataSet.Tables[5].Rows[0]["Category_Name"].ToString();
+            lblJoiningDateName.InnerText = dataSet.Tables[5].Rows[0]["Joining_Date"].ToString();
+            ViewState["CurrentRefNo"] = dataSet.Tables[5].Rows[0]["CandidateProfileMapping_Code"].ToString();
+            if (!string.IsNullOrEmpty(dataSet.Tables[5].Rows[0][0].ToString()))
+            {
+                ViewState["CurrentStatusCode"] = dataSet.Tables[5].Rows[0][0].ToString();
+                if ((int)Convert.ToInt16(dataSet.Tables[5].Rows[0][0].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1050))
+                {
+                    sSchedule.Style.Add("display", "");
+                    aSchedule.InnerHtml = "Schedule For Test";
+                    aSchedule.HRef = "../schedule/SchduleCandidate.aspx?refno=" + ViewState["CurrentRefNo"].ToString();
+                    aSchedule.Attributes.Add("class", "openframe");
+                }
+                else if ((int)Convert.ToInt16(dataSet.Tables[5].Rows[0][0].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1110) || (int)Convert.ToInt16(dataSet.Tables[5].Rows[0][0].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1120))
+                {
+                    sSchedule.Style.Add("display", "");
+                    aSchedule.InnerHtml = "Schedule For Interview";
+                    aSchedule.HRef = "../schedule/SchduleCandidate.aspx?refno=" + ViewState["CurrentRefNo"].ToString();
+                    aSchedule.Attributes.Add("class", "openframe");
+                }
+                else if ((int)Convert.ToInt16(dataSet.Tables[5].Rows[0][0].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1180))
+                {
+                    sSchedule.Style.Add("display", "");
+                    aSchedule.InnerHtml = "Schedule For Offer";
+                    aSchedule.HRef = "../schedule/SchduleCandidate.aspx?refno=" + ViewState["CurrentRefNo"].ToString();
+                    aSchedule.Attributes.Add("class", "openframe");
+                }
+                else if ((int)Convert.ToInt16(dataSet.Tables[5].Rows[0][0].ToString()) == (int)Convert.ToInt16((Constants.CandidateStatus)1210))
+                {
+                    sSchedule.Style.Add("display", "");
+                    aSchedule.InnerHtml = "Schedule For Appointment";
+                    aSchedule.HRef = "../schedule/SchduleCandidate.aspx?refno=" + ViewState["CurrentRefNo"].ToString();
+                    aSchedule.Attributes.Add("class", "openframe");
+                }
+                else
+                {
+                    sSchedule.Style.Add("display", "none");
+                    aSchedule.InnerHtml = "";
+                    aSchedule.HRef = "Javascript:;";
+                }
+            }
+            else
+                ViewState["CurrentStatusCode"] = "0";
+        }
+        else
+        {
+            lblCurrentStatus.InnerText = "-";
+            sSchedule.Style.Add("display", "none");
+            ViewState["CurrentStatusCode"] = "0";
+            ViewState["CurrentRefNo"] = "0";
+        }
+        if (dataSet.Tables[4] != null)
+        {
+            if (dataSet.Tables[4].Rows.Count > 0)
+            {
+                if (dataSet.Tables[4].Select("DocType_Code =" + 9).Length > 0)
+                {
+                    DataTable dataTable = ((IEnumerable<DataRow>)dataSet.Tables[4].Select("DocType_Code =" + 9)).CopyToDataTable<DataRow>();
+                    rptProfessional.Visible = true;
+                    lblemtyProfessional.Visible = false;
+                    rptProfessional.DataSource = dataTable;
+                    rptProfessional.DataBind();
+                }
+                else
+                {
+                    rptProfessional.DataSource = null;
+                    rptProfessional.Visible = false;
+                    lblemtyProfessional.Visible = true;
+                    lblemtyProfessional.Text = "No documents browsed.";
+                }
+                if (dataSet.Tables[4].Select("DocType_Code =" + 1).Length > 0)
+                {
+                    DataTable dataTable = ((IEnumerable<DataRow>)dataSet.Tables[4].Select("DocType_Code =" + 1)).CopyToDataTable<DataRow>();
+                    rptPersonal.Visible = true;
+                    lblemtypersonal.Visible = false;
+                    rptPersonal.DataSource = dataTable;
+                    rptPersonal.DataBind();
+                }
+                else
+                {
+                    rptPersonal.DataSource = null;
+                    rptPersonal.Visible = false;
+                    lblemtypersonal.Visible = true;
+                    lblemtypersonal.Text = "No documents browsed.";
+                }
+                if (dataSet.Tables[4].Select("DocType_Code <>" + 9 + "and DocType_Code <>" + 1).Length > 0)
+                {
+                    DataTable dataTable = ((IEnumerable<DataRow>)dataSet.Tables[4].Select("DocType_Code <>" + 9 + "and DocType_Code <>" + 1)).CopyToDataTable<DataRow>();
+                    rptEducational.Visible = true;
+                    lblemtyEducational.Visible = false;
+                    rptEducational.DataSource = dataTable;
+                    rptEducational.DataBind();
+                }
+                else
+                {
+                    rptEducational.DataSource = null;
+                    rptEducational.Visible = false;
+                    lblemtyEducational.Visible = true;
+                    lblemtyEducational.Text = "No documents browsed.";
+                }
+            }
+            else
+            {
+                rptEducational.DataSource = null;
+                rptEducational.Visible = false;
+                lblemtyEducational.Visible = true;
+                lblemtyEducational.Text = "No documents browsed.";
+                rptPersonal.DataSource = null;
+                rptPersonal.Visible = false;
+                lblemtypersonal.Visible = true;
+                lblemtypersonal.Text = "No documents browsed.";
+                rptProfessional.DataSource = null;
+                rptProfessional.Visible = false;
+                lblemtyProfessional.Visible = true;
+                lblemtyProfessional.Text = "No documents browsed.";
+            }
+        }
+        else
+        {
+            rptEducational.DataSource = null;
+            rptEducational.Visible = false;
+            lblemtyEducational.Visible = true;
+            lblemtyEducational.Text = "No documents browsed.";
+            rptPersonal.DataSource = null;
+            rptPersonal.Visible = false;
+            lblemtypersonal.Visible = true;
+            lblemtypersonal.Text = "No documents browsed.";
+            rptProfessional.DataSource = null;
+            rptProfessional.Visible = false;
+            lblemtyProfessional.Visible = true;
+            lblemtyProfessional.Text = "No documents browsed.";
+        }
+        if (dataSet.Tables[6] != null && dataSet.Tables[6].Rows.Count > 0)
+        {
+            rptFamily.DataSource = dataSet.Tables[6];
+            rptFamily.DataBind();
+        }
+        else
+        {
+            lblMsgfamily.Text = "No record(s) found";
+            rptFamily.DataSource = null;
+            rptFamily.DataBind();
+        }
+        if (dataSet.Tables[7] != null && dataSet.Tables[7].Rows.Count > 0)
+        {
+            rptTest.DataSource = dataSet.Tables[7];
+            rptTest.DataBind();
+        }
+        else
+        {
+            lblMsgTest.Text = "No record(s) found";
+            rptTest.DataSource = null;
+            rptTest.DataBind();
+        }
+        if (dataSet.Tables[8] != null && dataSet.Tables[8].Rows.Count > 0)
+        {
+            rptCommunication.DataSource = dataSet.Tables[8];
+            rptCommunication.DataBind();
+        }
+        else
+        {
+            lblMsgCommu.Text = "No record(s) found";
+            rptCommunication.DataSource = null;
+            rptCommunication.DataBind();
+        }
+        if (dataSet.Tables[9] != null && dataSet.Tables[9].Rows.Count > 0)
+        {
+            ddlGrade.DataSource = dataSet.Tables[9];
+            ddlGrade.DataTextField = "Grade_Name";
+            ddlGrade.DataValueField = "Grade_Code";
+            ddlGrade.DataBind();
+        }
+        ddlGrade.Items.Insert(0, new ListItem("--Grade--", "-1"));
+        CheckDivs();
+    }
+
+    private void CheckQueryString()
+    {
+        if (Request.QueryString["CID"] == null)
+            return;
+        candidateCode = Request.QueryString["CID"].ToString();
+    }
+
+    public void FileResponse(string filename, string FolderPath)
+    {
+        FileInfo fileInfo = new FileInfo(HttpContext.Current.Server.MapPath(FolderPath + "/" + filename));
+        if (!fileInfo.Exists)
+            return;
+        BinaryReader binaryReader = new BinaryReader((Stream)fileInfo.OpenRead());
+        HttpContext.Current.Response.ClearContent();
+        HttpContext.Current.Response.Clear();
+        HttpContext.Current.Response.AddHeader("Content-Disposition", "attachment; filename=" + filename);
+        HttpContext.Current.Response.AddHeader("Content-Length", fileInfo.Length.ToString());
+        HttpContext.Current.Response.ContentType = "application/octet-stream";
+        byte[] buffer = binaryReader.ReadBytes((int)fileInfo.Length);
+        binaryReader.Close();
+        HttpContext.Current.Response.BinaryWrite(buffer);
+    }
+
+    #endregion
+}

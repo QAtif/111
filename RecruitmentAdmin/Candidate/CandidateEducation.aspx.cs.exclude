@@ -1,0 +1,1367 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.UI.WebControls;
+using System.Configuration;
+using ErrorLog;
+using XRecruitmentStatusLibrary;
+
+public partial class CandidateEducation : CustomBasePage
+{
+    #region Page Variables
+    string DomainAddress = ConfigurationManager.AppSettings["DomainAddress"].ToString();
+    public static string CID;
+    string QueryStringVar = string.Empty;
+    SecureQueryString secQueryString;
+    #endregion Page Variables
+
+
+    #region Methods
+    private void UpdateCandidateMaster()
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand sqlCommand = new SqlCommand("XRec_UpdateCandidateQualificationAdmin", connection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                sqlCommand.Parameters.AddWithValue("@QualificationCode", hfMasterCode.Value);
+                sqlCommand.Parameters.AddWithValue("@InstituteCode", Convert.ToInt32(hfMasterInstitute.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@DegreeCode", Convert.ToInt32(hfMasterDegree.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@MajorCode", Convert.ToInt32(hfMasterField.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@InstituteText", txtMasterInstitute.Text);
+                sqlCommand.Parameters.AddWithValue("@DegreeText", txtMasterDegree.Text);
+                sqlCommand.Parameters.AddWithValue("@MajorText", txtMasterField.Text);
+                DateTime dateTime = new DateTime(Convert.ToInt32(ddlMasterFromYear.SelectedValue), Convert.ToInt32(ddlMasterFromMonth.SelectedValue), 1);
+                sqlCommand.Parameters.AddWithValue("@DateFrom", dateTime);
+                if (!chkMasterStudy.Checked)
+                    sqlCommand.Parameters.AddWithValue("@DateTo", (chkMasterStudy.Checked ? Convert.ToDateTime(DateTime.Now.ToString("MMM dd, yyyy")) : Convert.ToDateTime(new DateTime(Convert.ToInt32(ddlMasterToYear.SelectedValue), Convert.ToInt32(ddlMasterToMonth.SelectedValue), 1))));
+                sqlCommand.Parameters.AddWithValue("@EducationStatus", (chkMasterStudy.Checked ? 1 : 0));
+                sqlCommand.Parameters.AddWithValue("@GradingSystemCode", Convert.ToInt32(rblMaster.SelectedValue.ToString()));
+                sqlCommand.Parameters.AddWithValue("@Grade", txtMasterGrade.Text.ToString());
+                if (rblMasterPosition.SelectedValue == "1")
+                    sqlCommand.Parameters.AddWithValue("@Position", txtMasterPosition.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@Activities", txtMasterActivities.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", UserCode);
+                sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                sqlCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(Constants.EducationalPrograms.Master));
+                sqlCommand.Parameters.AddWithValue("@userType", 1);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+    }
+
+    private void UpdateCandidateDoctorate()
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand sqlCommand = new SqlCommand("XRec_UpdateCandidateQualificationAdmin", connection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                sqlCommand.Parameters.AddWithValue("@QualificationCode", hfDocCode.Value);
+                sqlCommand.Parameters.AddWithValue("@InstituteCode", Convert.ToInt32(hfDocInstitute.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@DegreeCode", Convert.ToInt32(hfDocDegree.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@MajorCode", Convert.ToInt32(hfDocField.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@InstituteText", txtDocInstitute.Text);
+                sqlCommand.Parameters.AddWithValue("@DegreeText", txtDocDegree.Text);
+                sqlCommand.Parameters.AddWithValue("@MajorText", txtDocField.Text);
+                DateTime dateTime = new DateTime(Convert.ToInt32(ddlDocFromYear.SelectedValue), Convert.ToInt32(ddlDocFromMonth.SelectedValue), 1);
+                sqlCommand.Parameters.AddWithValue("@DateFrom", dateTime);
+                if (!chkDocStudy.Checked)
+                    sqlCommand.Parameters.AddWithValue("@DateTo", (chkDocStudy.Checked ? Convert.ToDateTime(DateTime.Now.ToString("MMM dd, yyyy")) : Convert.ToDateTime(new DateTime(Convert.ToInt32(ddlDocToYear.SelectedValue), Convert.ToInt32(ddlDocToMonth.SelectedValue), 1))));
+                sqlCommand.Parameters.AddWithValue("@EducationStatus", (chkDocStudy.Checked ? 1 : 0));
+                sqlCommand.Parameters.AddWithValue("@GradingSystemCode ", Convert.ToInt32(rblDoctor.SelectedValue.ToString()));
+                sqlCommand.Parameters.AddWithValue("@Grade", txtDocGrade.Text.ToString());
+                if (rblDocPosition.SelectedValue == "1")
+                    sqlCommand.Parameters.AddWithValue("@Position", txtDocPosition.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@Activities", txtDocActivities.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", UserCode);
+                sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                sqlCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(Constants.EducationalPrograms.Doctorate));
+                sqlCommand.Parameters.AddWithValue("@userType", 1);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+    }
+
+    private void UpdateCandidateBachelor()
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand sqlCommand = new SqlCommand("XRec_UpdateCandidateQualificationAdmin", connection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                sqlCommand.Parameters.AddWithValue("@QualificationCode", hfBachelorCode.Value);
+                sqlCommand.Parameters.AddWithValue("@InstituteCode", Convert.ToInt32(hfBachelorInstitute.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@DegreeCode", Convert.ToInt32(hfBachelorDegree.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@MajorCode", Convert.ToInt32(hfBachelorField.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@InstituteText", txtBachelorInstitute.Text);
+                sqlCommand.Parameters.AddWithValue("@DegreeText", txtBachelorDegree.Text);
+                sqlCommand.Parameters.AddWithValue("@MajorText", txtBachelorField.Text);
+                DateTime dateTime = new DateTime(Convert.ToInt32(ddlBachelorFromYear.SelectedValue), Convert.ToInt32(ddlBachelorFromMonth.SelectedValue), 1);
+                sqlCommand.Parameters.AddWithValue("@DateFrom", dateTime);
+                if (!chkBachelorStudy.Checked)
+                    sqlCommand.Parameters.AddWithValue("@DateTo", (chkBachelorStudy.Checked ? Convert.ToDateTime(DateTime.Now.ToString("MMM dd, yyyy")) : Convert.ToDateTime(new DateTime(Convert.ToInt32(ddlBachelorToYear.SelectedValue), Convert.ToInt32(ddlBachelorToMonth.SelectedValue), 1))));
+                sqlCommand.Parameters.AddWithValue("@EducationStatus", (chkBachelorStudy.Checked ? 1 : 0));
+                sqlCommand.Parameters.AddWithValue("@GradingSystemCode ", Convert.ToInt32(rblBachelor.SelectedValue.ToString()));
+                sqlCommand.Parameters.AddWithValue("@Grade", txtBachelorGrade.Text.ToString());
+                if (rblBachelorPosition.SelectedValue == "1")
+                    sqlCommand.Parameters.AddWithValue("@Position", txtBachelorPosition.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@Activities", txtBachelorActivities.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", UserCode);
+                sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                sqlCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(Constants.EducationalPrograms.Bachelor));
+                sqlCommand.Parameters.AddWithValue("@userType", 1);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+    }
+
+    private void UpdateCandidateInter()
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand sqlCommand = new SqlCommand("XRec_UpdateCandidateQualificationAdmin", connection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                sqlCommand.Parameters.AddWithValue("@QualificationCode", hfInterCode.Value);
+                sqlCommand.Parameters.AddWithValue("@InstituteCode", Convert.ToInt32(hfInterInstitute.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@DegreeCode", Convert.ToInt32(hfInterDegree.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@MajorCode", Convert.ToInt32(hfInterField.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@InstituteText", txtInterInstitute.Text);
+                sqlCommand.Parameters.AddWithValue("@DegreeText", txtInterDegree.Text);
+                sqlCommand.Parameters.AddWithValue("@MajorText", txtInterField.Text);
+                DateTime dateTime = new DateTime(Convert.ToInt32(ddlInterFromYear.SelectedValue), Convert.ToInt32(ddlInterFromMonth.SelectedValue), 1);
+                sqlCommand.Parameters.AddWithValue("@DateFrom", dateTime);
+                if (!chkInterStudy.Checked)
+                    sqlCommand.Parameters.AddWithValue("@DateTo", (chkInterStudy.Checked ? Convert.ToDateTime(DateTime.Now.ToString("MMM dd, yyyy")) : Convert.ToDateTime(new DateTime(Convert.ToInt32(ddlInterToYear.SelectedValue), Convert.ToInt32(ddlInterToMonth.SelectedValue), 1))));
+                sqlCommand.Parameters.AddWithValue("@EducationStatus", (chkInterStudy.Checked ? 1 : 0));
+                sqlCommand.Parameters.AddWithValue("@GradingSystemCode ", Convert.ToInt32(rblInter.SelectedValue.ToString()));
+                sqlCommand.Parameters.AddWithValue("@Grade", txtInterGrade.Text.ToString());
+                if (rblInterPosition.SelectedValue == "1")
+                    sqlCommand.Parameters.AddWithValue("@Position", txtInterPosition.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@Activities", txtInterActivities.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", UserCode);
+                sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                sqlCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(Constants.EducationalPrograms.Intermediate));
+                sqlCommand.Parameters.AddWithValue("@userType", 1);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+    }
+
+    private void UpdateCandidateMatric()
+    {
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand sqlCommand = new SqlCommand("XRec_UpdateCandidateQualificationAdmin", connection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                sqlCommand.Parameters.AddWithValue("@QualificationCode", hfMatricCode.Value);
+                sqlCommand.Parameters.AddWithValue("@InstituteCode", Convert.ToInt32(hfMatricInstitute.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@DegreeCode", Convert.ToInt32(hfMatricDegree.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@MajorCode", Convert.ToInt32(hfMatricField.Value.ToString()));
+                sqlCommand.Parameters.AddWithValue("@InstituteText", txtMatricInstitute.Text);
+                sqlCommand.Parameters.AddWithValue("@DegreeText", txtMatricDegree.Text);
+                sqlCommand.Parameters.AddWithValue("@MajorText", txtMatricField.Text);
+                DateTime dateTime = new DateTime(Convert.ToInt32(ddlMatricFromYear.SelectedValue), Convert.ToInt32(ddlMatricFromMonth.SelectedValue), 1);
+                sqlCommand.Parameters.AddWithValue("@DateFrom", dateTime);
+                if (!chkMatricStudy.Checked)
+                    sqlCommand.Parameters.AddWithValue("@DateTo", (chkMatricStudy.Checked ? Convert.ToDateTime(DateTime.Now.ToString("MMM dd, yyyy")) : Convert.ToDateTime(new DateTime(Convert.ToInt32(ddlMatricToYear.SelectedValue), Convert.ToInt32(ddlMatricToMonth.SelectedValue), 1))));
+                sqlCommand.Parameters.AddWithValue("@EducationStatus", (chkMatricStudy.Checked ? 1 : 0));
+                sqlCommand.Parameters.AddWithValue("@GradingSystemCode ", Convert.ToInt32(rblMatric.SelectedValue.ToString()));
+                sqlCommand.Parameters.AddWithValue("@Grade", txtMatricGrade.Text.ToString());
+                if (rblMatricPosition.SelectedValue == "1")
+                    sqlCommand.Parameters.AddWithValue("@Position", txtMatricPosition.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@Activities", txtMatricActivities.Text.ToString());
+                sqlCommand.Parameters.AddWithValue("@UpdatedBy", UserCode);
+                sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                sqlCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(Constants.EducationalPrograms.Matric));
+                sqlCommand.Parameters.AddWithValue("@userType", 1);
+                sqlCommand.ExecuteNonQuery();
+            }
+        }
+    }
+
+    private void ClearAllControls()
+    {
+        txtDocField.Text = "";
+        txtDocPosition.Text = "";
+        chkDocStudy.Checked = false;
+        txtDocInstitute.Text = "";
+        txtDocDegree.Text = "";
+        ddlDocToMonth.SelectedValue = "";
+        ddlDocToYear.SelectedValue = "";
+        ddlDocFromMonth.SelectedValue = "";
+        ddlDocFromYear.SelectedValue = "";
+        txtDocGrade.Text = "";
+        txtDocActivities.Text = "";
+        txtMasterField.Text = "";
+        txtMasterPosition.Text = "";
+        chkMasterStudy.Checked = false;
+        txtMasterInstitute.Text = "";
+        txtMasterDegree.Text = "";
+        ddlMasterToMonth.SelectedValue = "";
+        ddlMasterToYear.SelectedValue = "";
+        ddlMasterFromMonth.SelectedValue = "";
+        ddlMasterFromYear.SelectedValue = "";
+        txtMasterGrade.Text = "";
+        txtMasterActivities.Text = "";
+        txtBachelorField.Text = "";
+        txtBachelorPosition.Text = "";
+        chkBachelorStudy.Checked = false;
+        txtBachelorInstitute.Text = "";
+        txtBachelorDegree.Text = "";
+        ddlBachelorToMonth.SelectedValue = "";
+        ddlBachelorToYear.SelectedValue = "";
+        ddlBachelorFromMonth.SelectedValue = "";
+        ddlBachelorFromYear.SelectedValue = "";
+        txtBachelorGrade.Text = "";
+        txtBachelorActivities.Text = "";
+        txtInterPosition.Text = "";
+        txtInterField.Text = "";
+        chkInterStudy.Checked = false;
+        txtInterInstitute.Text = "";
+        txtInterDegree.Text = "";
+        ddlInterToMonth.SelectedValue = "";
+        ddlInterToYear.SelectedValue = "";
+        ddlInterFromMonth.SelectedValue = "";
+        ddlInterFromYear.SelectedValue = "";
+        txtInterGrade.Text = "";
+        txtInterActivities.Text = "";
+        txtMatricPosition.Text = "";
+        txtMatricField.Text = "";
+        chkMatricStudy.Checked = false;
+        txtMatricInstitute.Text = "";
+        txtMatricDegree.Text = "";
+        ddlMatricToMonth.SelectedValue = "";
+        ddlMatricToYear.SelectedValue = "";
+        ddlMatricFromMonth.SelectedValue = "";
+        ddlMatricFromYear.SelectedValue = "";
+        txtMatricGrade.Text = "";
+        txtMatricActivities.Text = "";
+        hfEducationCode.Value = "";
+        hfMatricCode.Value = "";
+        hfInterCode.Value = "";
+        hfBachelorCode.Value = "";
+        hfMasterCode.Value = "";
+        hfDocCode.Value = "";
+        hfDocInstitute.Value = "";
+        hfDocDegree.Value = "";
+        hfDocField.Value = "";
+        hfMasterInstitute.Value = "";
+        hfMasterDegree.Value = "";
+        hfMasterField.Value = "";
+        hfBachelorInstitute.Value = "";
+        hfBachelorDegree.Value = "";
+        hfBachelorField.Value = "";
+        hfInterInstitute.Value = "";
+        hfInterDegree.Value = "";
+        hfInterField.Value = "";
+        hfMatricInstitute.Value = "";
+        hfMatricDegree.Value = "";
+        hfMatricField.Value = "";
+        AllStudy();
+    }
+
+    private void AllStudy()
+    {
+        DoctorStudy();
+        MasterStudy();
+        BachelorStudy();
+        InterStudy();
+        MatricStudy();
+    }
+
+    private void BindGradings()
+    {
+        DataSet dataSet = new DataSet();
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand selectCommand = new SqlCommand("XRec_SelectAllGradingSystems", connection))
+            {
+                selectCommand.CommandType = CommandType.StoredProcedure;
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                    sqlDataAdapter.Fill(dataSet);
+            }
+            if (dataSet != null && dataSet.Tables != null)
+            {
+                if (dataSet.Tables[0].Rows.Count > 0)
+                {
+                    rblDoctor.DataSource = dataSet;
+                    rblDoctor.DataTextField = "GradingSystem";
+                    rblDoctor.DataValueField = "GradingSystem_Code";
+                    rblDoctor.DataBind();
+                    rblDoctor.SelectedIndex = 0;
+                    rblMaster.DataSource = dataSet;
+                    rblMaster.DataTextField = "GradingSystem";
+                    rblMaster.DataValueField = "GradingSystem_Code";
+                    rblMaster.DataBind();
+                    rblMaster.SelectedIndex = 0;
+                    rblBachelor.DataSource = dataSet;
+                    rblBachelor.DataTextField = "GradingSystem";
+                    rblBachelor.DataValueField = "GradingSystem_Code";
+                    rblBachelor.DataBind();
+                    rblBachelor.SelectedIndex = 0;
+                    rblInter.DataSource = dataSet;
+                    rblInter.DataTextField = "GradingSystem";
+                    rblInter.DataValueField = "GradingSystem_Code";
+                    rblInter.DataBind();
+                    rblInter.SelectedIndex = 0;
+                    rblMatric.DataSource = dataSet;
+                    rblMatric.DataTextField = "GradingSystem";
+                    rblMatric.DataValueField = "GradingSystem_Code";
+                    rblMatric.DataBind();
+                    rblMatric.SelectedIndex = 0;
+                }
+                else
+                {
+                    rblDoctor.DataSource = null;
+                    rblDoctor.DataTextField = "GradingSystem";
+                    rblDoctor.DataValueField = "GradingSystem_Code";
+                    rblDoctor.DataBind();
+                    rblDoctor.SelectedIndex = 0;
+                    rblMaster.DataSource = null;
+                    rblMaster.DataTextField = "GradingSystem";
+                    rblMaster.DataValueField = "GradingSystem_Code";
+                    rblMaster.DataBind();
+                    rblMaster.SelectedIndex = 0;
+                    rblBachelor.DataSource = null;
+                    rblBachelor.DataTextField = "GradingSystem";
+                    rblBachelor.DataValueField = "GradingSystem_Code";
+                    rblBachelor.DataBind();
+                    rblBachelor.SelectedIndex = 0;
+                    rblInter.DataSource = null;
+                    rblInter.DataTextField = "GradingSystem";
+                    rblInter.DataValueField = "GradingSystem_Code";
+                    rblInter.DataBind();
+                    rblInter.SelectedIndex = 0;
+                    rblMatric.DataSource = null;
+                    rblMatric.DataTextField = "GradingSystem";
+                    rblMatric.DataValueField = "GradingSystem_Code";
+                    rblMatric.DataBind();
+                    rblMatric.SelectedIndex = 0;
+                }
+            }
+            else
+            {
+                rblDoctor.DataSource = null;
+                rblDoctor.DataTextField = "GradingSystem";
+                rblDoctor.DataValueField = "GradingSystem_Code";
+                rblDoctor.DataBind();
+                rblDoctor.SelectedIndex = 0;
+                rblMaster.DataSource = null;
+                rblMaster.DataTextField = "GradingSystem";
+                rblMaster.DataValueField = "GradingSystem_Code";
+                rblMaster.DataBind();
+                rblMaster.SelectedIndex = 0;
+                rblBachelor.DataSource = null;
+                rblBachelor.DataTextField = "GradingSystem";
+                rblBachelor.DataValueField = "GradingSystem_Code";
+                rblBachelor.DataBind();
+                rblBachelor.SelectedIndex = 0;
+                rblInter.DataSource = null;
+                rblInter.DataTextField = "GradingSystem";
+                rblInter.DataValueField = "GradingSystem_Code";
+                rblInter.DataBind();
+                rblInter.SelectedIndex = 0;
+                rblMatric.DataSource = null;
+                rblMatric.DataTextField = "GradingSystem";
+                rblMatric.DataValueField = "GradingSystem_Code";
+                rblMatric.DataBind();
+                rblMatric.SelectedIndex = 0;
+            }
+        }
+    }
+
+    private void BindCandidateAllEducation()
+    {
+        DataSet dataSet = new DataSet();
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            connection.Open();
+            using (SqlCommand selectCommand = new SqlCommand("XRec_SelectCandidateAllQualification", connection))
+            {
+                selectCommand.CommandType = CommandType.StoredProcedure;
+                selectCommand.Parameters.AddWithValue("@CandidateCode", CandidateEducation.CID);
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                    sqlDataAdapter.Fill(dataSet);
+            }
+            if (dataSet != null && dataSet.Tables != null)
+            {
+                if (dataSet.Tables[0].Rows.Count > 0)
+                {
+                    rptAllEducation.DataSource = dataSet;
+                    rptAllEducation.DataBind();
+                }
+                else
+                {
+                    rptAllEducation.DataSource = null;
+                    rptAllEducation.DataBind();
+                }
+            }
+            else
+            {
+                rptAllEducation.DataSource = null;
+                rptAllEducation.DataBind();
+            }
+        }
+    }
+
+    private void ClearMatricControls()
+    {
+        txtMatricPosition.Text = "";
+        txtMatricField.Text = "";
+        chkMatricStudy.Checked = false;
+        txtMatricInstitute.Text = "";
+        txtMatricDegree.Text = "";
+        ddlMatricToMonth.SelectedValue = "";
+        ddlMatricToYear.SelectedValue = "";
+        ddlMatricFromMonth.SelectedValue = "";
+        ddlMatricFromYear.SelectedValue = "";
+        txtMatricGrade.Text = "";
+        txtMatricActivities.Text = "";
+        hfMatricCode.Value = "";
+        hfMatricInstitute.Value = "";
+        hfMatricDegree.Value = "";
+        hfMatricField.Value = "";
+        MatricStudy();
+        ImgMatricAddMore.Visible = false;
+    }
+
+    private void ClearInterControls()
+    {
+        txtInterPosition.Text = "";
+        txtInterField.Text = "";
+        chkInterStudy.Checked = false;
+        txtInterInstitute.Text = "";
+        txtInterDegree.Text = "";
+        ddlInterToMonth.SelectedValue = "";
+        ddlInterToYear.SelectedValue = "";
+        ddlInterFromMonth.SelectedValue = "";
+        ddlInterFromYear.SelectedValue = "";
+        txtInterGrade.Text = "";
+        txtInterActivities.Text = "";
+        hfInterCode.Value = "";
+        hfInterInstitute.Value = "";
+        hfInterDegree.Value = "";
+        hfInterField.Value = "";
+        InterStudy();
+        ImgMatricAddMore.Visible = false;
+    }
+
+    private void ClearBachelorControls()
+    {
+        txtBachelorField.Text = "";
+        txtBachelorPosition.Text = "";
+        chkBachelorStudy.Checked = false;
+        txtBachelorInstitute.Text = "";
+        txtBachelorDegree.Text = "";
+        ddlBachelorToMonth.SelectedValue = "";
+        ddlBachelorToYear.SelectedValue = "";
+        ddlBachelorFromMonth.SelectedValue = "";
+        ddlBachelorFromYear.SelectedValue = "";
+        txtBachelorGrade.Text = "";
+        txtBachelorActivities.Text = "";
+        hfBachelorCode.Value = "";
+        hfBachelorInstitute.Value = "";
+        hfBachelorDegree.Value = "";
+        hfBachelorField.Value = "";
+        BachelorStudy();
+        ImgBachelorAddMore.Visible = false;
+    }
+
+    private void ClearMasterControls()
+    {
+        txtMasterField.Text = "";
+        txtMasterPosition.Text = "";
+        chkMasterStudy.Checked = false;
+        txtMasterInstitute.Text = "";
+        txtMasterDegree.Text = "";
+        ddlMasterToMonth.SelectedValue = "";
+        ddlMasterToYear.SelectedValue = "";
+        ddlMasterFromMonth.SelectedValue = "";
+        ddlMasterFromYear.SelectedValue = "";
+        txtMasterGrade.Text = "";
+        txtMasterActivities.Text = "";
+        hfMasterCode.Value = "";
+        hfMasterInstitute.Value = "";
+        hfMasterDegree.Value = "";
+        hfMasterField.Value = "";
+        MasterStudy();
+        ImgMasterAddMore.Visible = false;
+    }
+
+    private void ClearDoctorateControls()
+    {
+        txtDocField.Text = "";
+        txtDocPosition.Text = "";
+        chkDocStudy.Checked = false;
+        txtDocInstitute.Text = "";
+        txtDocDegree.Text = "";
+        ddlDocToMonth.SelectedValue = "";
+        ddlDocToYear.SelectedValue = "";
+        ddlDocFromMonth.SelectedValue = "";
+        ddlDocFromYear.SelectedValue = "";
+        txtDocGrade.Text = "";
+        txtDocActivities.Text = "";
+        hfDocCode.Value = "";
+        hfDocInstitute.Value = "";
+        hfDocDegree.Value = "";
+        hfDocField.Value = "";
+        DoctorStudy();
+        ImgDocAddMore.Visible = false;
+    }
+
+    private void DoctorStudy()
+    {
+        if (chkDocStudy.Checked)
+        {
+            ddlDocToMonth.Style.Add("display", "none");
+            ddlDocToYear.Style.Add("display", "none");
+            lblDocTo.Style.Add("display", "none");
+            rfvDocMonthTo.Enabled = false;
+            rfvDocYearTo.Enabled = false;
+        }
+        else
+        {
+            ddlDocToMonth.Style.Add("display", "");
+            ddlDocToYear.Style.Add("display", "");
+            lblDocTo.Style.Add("display", "");
+            rfvDocMonthTo.Enabled = true;
+            rfvDocYearTo.Enabled = true;
+        }
+    }
+
+    private void MasterStudy()
+    {
+        if (chkMasterStudy.Checked)
+        {
+            ddlMasterToMonth.Style.Add("display", "none");
+            ddlMasterToYear.Style.Add("display", "none");
+            lblMasterTo.Style.Add("display", "none");
+            rfvMasterToMonth.Enabled = false;
+            rfvMasterToYear.Enabled = false;
+        }
+        else
+        {
+            ddlMasterToMonth.Style.Add("display", "");
+            ddlMasterToYear.Style.Add("display", "");
+            lblMasterTo.Style.Add("display", "");
+            rfvMatricToMonth.Enabled = true;
+            rfvMasterToYear.Enabled = true;
+        }
+    }
+
+    private void BachelorStudy()
+    {
+        if (chkBachelorStudy.Checked)
+        {
+            ddlBachelorToMonth.Style.Add("display", "none");
+            ddlBachelorToYear.Style.Add("display", "none");
+            lblBachelorTo.Style.Add("display", "none");
+            rfvBachelorToMonth.Enabled = false;
+            rfvBachelorToYear.Enabled = false;
+        }
+        else
+        {
+            ddlBachelorToMonth.Style.Add("display", "");
+            ddlBachelorToYear.Style.Add("display", "");
+            lblBachelorTo.Style.Add("display", "");
+            rfvMatricToMonth.Enabled = true;
+            rfvBachelorToYear.Enabled = true;
+        }
+    }
+
+    private void InterStudy()
+    {
+        if (chkInterStudy.Checked)
+        {
+            ddlInterToMonth.Style.Add("display", "none");
+            ddlInterToYear.Style.Add("display", "none");
+            lblInterTo.Style.Add("display", "none");
+            rfvInterToMonth.Enabled = false;
+            rfvInterToYear.Enabled = false;
+        }
+        else
+        {
+            ddlInterToMonth.Style.Add("display", "");
+            ddlInterToYear.Style.Add("display", "");
+            lblInterTo.Style.Add("display", "");
+            rfvMatricToMonth.Enabled = true;
+            rfvInterToYear.Enabled = true;
+        }
+    }
+
+    private void MatricStudy()
+    {
+        if (chkMatricStudy.Checked)
+        {
+            ddlMatricToMonth.Style.Add("display", "none");
+            ddlMatricToYear.Style.Add("display", "none");
+            lblMatricTo.Style.Add("display", "none");
+            rfvMatricToMonth.Enabled = false;
+            rfvMatricToYear.Enabled = false;
+        }
+        else
+        {
+            ddlMatricToMonth.Style.Add("display", "");
+            ddlMatricToYear.Style.Add("display", "");
+            lblMatricTo.Style.Add("display", "");
+            rfvMatricToMonth.Enabled = true;
+            rfvMatricToYear.Enabled = true;
+        }
+    }
+
+    private void ShowHideDocPosition()
+    {
+        if (rblDocPosition.SelectedValue == "2")
+        {
+            txtDocPosition.Attributes.CssStyle.Add("display", "none");
+            revDocPosition.Enabled = false;
+            rfvDocPosition.Enabled = false;
+        }
+        else
+        {
+            txtDocPosition.Attributes.CssStyle.Add("display", "block");
+            revDocPosition.Enabled = true;
+            rfvDocPosition.Enabled = true;
+        }
+    }
+
+    private void ShowHideMasterPosition()
+    {
+        if (rblMasterPosition.SelectedValue == "2")
+        {
+            txtMasterPosition.Attributes.CssStyle.Add("display", "none");
+            revMasterPosition.Enabled = false;
+            rfvMasterPosition.Enabled = false;
+            lblMasterPosition.Attributes.CssStyle.Add("display", "none");
+        }
+        else
+        {
+            txtMasterPosition.Attributes.CssStyle.Add("display", "block");
+            revMasterPosition.Enabled = true;
+            rfvMasterPosition.Enabled = true;
+            lblMasterPosition.Attributes.CssStyle.Add("display", "block");
+        }
+    }
+
+    private void ShowHideBachelorPosition()
+    {
+        if (rblBachelorPosition.SelectedValue == "2")
+        {
+            txtBachelorPosition.Attributes.CssStyle.Add("display", "none");
+            revBachelorPosition.Enabled = false;
+            rfvBachelorPosition.Enabled = false;
+            lblBachelorPosition.Attributes.CssStyle.Add("display", "none");
+        }
+        else
+        {
+            txtBachelorPosition.Attributes.CssStyle.Add("display", "block");
+            revBachelorPosition.Enabled = true;
+            rfvBachelorPosition.Enabled = true;
+            lblBachelorPosition.Attributes.CssStyle.Add("display", "block");
+        }
+    }
+
+    private void ShowHideInterPosition()
+    {
+        if (rblInterPosition.SelectedValue == "2")
+        {
+            txtInterPosition.Attributes.CssStyle.Add("display", "none");
+            revInterPosition.Enabled = false;
+            rfvInterPosition.Enabled = false;
+        }
+        else
+        {
+            txtInterPosition.Attributes.CssStyle.Add("display", "block");
+            revInterPosition.Enabled = true;
+            rfvInterPosition.Enabled = true;
+        }
+    }
+
+    private void ShowHideMatricPosition()
+    {
+        if (rblMatricPosition.SelectedValue == "2")
+        {
+            txtMatricPosition.Attributes.CssStyle.Add("display", "none");
+            revMatricPosition.Enabled = false;
+            rfvMatricPosition.Enabled = false;
+        }
+        else
+        {
+            txtMatricPosition.Attributes.CssStyle.Add("display", "block");
+            revMatricPosition.Enabled = true;
+            rfvMatricPosition.Enabled = true;
+        }
+    }
+
+    private void ShowHideAllPosition()
+    {
+        ShowHideDocPosition();
+        ShowHideMasterPosition();
+        ShowHideBachelorPosition();
+        ShowHideInterPosition();
+        ShowHideMatricPosition();
+    }
+
+    private void LoadDates()
+    {
+        for (int year = DateTime.Now.Year; year > DateTime.Now.Year - 80; --year)
+        {
+            ddlDocFromYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlDocToYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlMasterFromYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlMasterToYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlBachelorFromYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlBachelorToYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlInterFromYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlInterToYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlMatricFromYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+            ddlMatricToYear.Items.Add(new ListItem(year.ToString(), year.ToString()));
+        }
+        ddlDocToYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlDocFromYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlMasterToYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlMasterFromYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlBachelorToYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlBachelorFromYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlInterToYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlInterFromYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlMatricToYear.Items.Insert(0, new ListItem("-Year-", ""));
+        ddlMatricFromYear.Items.Insert(0, new ListItem("-Year-", ""));
+    }
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        QueryStringVar = HttpContext.Current.Request[SecureQueryString.QueryStringVar];
+        if (QueryStringVar == null)
+            return;
+        secQueryString = new SecureQueryString(QueryStringVar);
+        if (secQueryString["CID"] == null)
+            return;
+        CandidateEducation.CID = secQueryString["CID"].ToString();
+        ShowHideAllPosition();
+        try
+        {
+            if (IsPostBack)
+                return;
+            BindGradings();
+            BindCandidateAllEducation();
+            LoadDates();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnDocSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            hfCounter.Value = "0";
+            ShowHideDocPosition();
+            DoctorStudy();
+            if (!Page.IsValid)
+                return;
+            UpdateCandidateDoctorate();
+            BindCandidateAllEducation();
+            ClearDoctorateControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnmasterSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            hfCounter.Value = "1";
+            ShowHideMasterPosition();
+            MasterStudy();
+            if (!Page.IsValid)
+                return;
+            UpdateCandidateMaster();
+            BindCandidateAllEducation();
+            ClearMasterControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnBachelorSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            hfCounter.Value = "2";
+            ShowHideBachelorPosition();
+            BachelorStudy();
+            if (!Page.IsValid)
+                return;
+            UpdateCandidateBachelor();
+            BindCandidateAllEducation();
+            ClearBachelorControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnInterSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            hfCounter.Value = "3";
+            ShowHideInterPosition();
+            InterStudy();
+            if (!Page.IsValid)
+                return;
+            UpdateCandidateInter();
+            BindCandidateAllEducation();
+            ClearInterControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnMatricSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            hfCounter.Value = "4";
+            ShowHideMatricPosition();
+            MatricStudy();
+            if (!Page.IsValid)
+                return;
+            UpdateCandidateMatric();
+            BindCandidateAllEducation();
+            ClearMatricControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void rptAllEducation_OnItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        try
+        {
+            Label control = (Label)e.Item.FindControl("lblProgramCode");
+            DataSet dataSet = new DataSet();
+            if ((e.CommandName == "Delete" || e.CommandName == "Delete") && e.CommandName == "Delete")
+            {
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+                {
+                    connection.Open();
+                    try
+                    {
+                        using (SqlCommand sqlCommand = new SqlCommand("XRec_DeactivateCandidateQualification", connection))
+                        {
+                            sqlCommand.CommandType = CommandType.StoredProcedure;
+                            sqlCommand.Parameters.AddWithValue("@CandidateQualificationCode", Convert.ToInt32(e.CommandArgument.ToString()));
+                            sqlCommand.Parameters.AddWithValue("@UpdatedBy", Convert.ToInt32(CandidateEducation.CID));
+                            sqlCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress);
+                            sqlCommand.ExecuteNonQuery();
+                            BindCandidateAllEducation();
+                            ClearAllControls();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+                    }
+                }
+            }
+            if (!(e.CommandName == "Edit") && !(e.CommandName == "Edit") || !(e.CommandName == "Edit"))
+                return;
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+            {
+                connection.Open();
+                try
+                {
+                    using (SqlCommand selectCommand = new SqlCommand("XRec_SelectCandidateEducation", connection))
+                    {
+                        selectCommand.CommandType = CommandType.StoredProcedure;
+                        selectCommand.Parameters.AddWithValue("@CandidateCode", Convert.ToInt32(CandidateEducation.CID));
+                        selectCommand.Parameters.AddWithValue("@QualificationCode", Convert.ToInt32(e.CommandArgument.ToString()));
+                        selectCommand.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(control.Text));
+                        selectCommand.ExecuteNonQuery();
+                        using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                            sqlDataAdapter.Fill(dataSet);
+                        if (dataSet == null || dataSet.Tables == null || dataSet.Tables[0].Rows.Count <= 0)
+                            return;
+                        if (control.Text == Convert.ToInt32(Constants.EducationalPrograms.Doctorate).ToString())
+                        {
+                            hfCounter.Value = "0";
+                            txtDocActivities.Text = dataSet.Tables[0].Rows[0]["Activities"].ToString();
+                            txtDocDegree.Text = dataSet.Tables[0].Rows[0]["Diploma"].ToString();
+                            hfDocDegree.Value = dataSet.Tables[0].Rows[0]["Degree_Code"].ToString();
+                            txtDocField.Text = dataSet.Tables[0].Rows[0]["Field"].ToString();
+                            hfDocField.Value = dataSet.Tables[0].Rows[0]["Major_Code"].ToString();
+                            hfDocInstitute.Value = dataSet.Tables[0].Rows[0]["Institute_Code"].ToString();
+                            if (dataSet.Tables[0].Rows[0]["Position"].ToString() == "")
+                            {
+                                rblDocPosition.SelectedValue = "2";
+                                txtDocPosition.Attributes.CssStyle.Add("display", "none");
+                                revDocPosition.Enabled = false;
+                                rfvDocPosition.Enabled = false;
+                            }
+                            else
+                            {
+                                rblDocPosition.SelectedValue = "1";
+                                txtDocPosition.Attributes.CssStyle.Add("display", "block");
+                                revDocPosition.Enabled = true;
+                                rfvDocPosition.Enabled = true;
+                            }
+                            txtDocPosition.Text = dataSet.Tables[0].Rows[0]["Position"].ToString();
+                            txtDocInstitute.Text = dataSet.Tables[0].Rows[0]["Institute"].ToString();
+                            rblDoctor.SelectedValue = dataSet.Tables[0].Rows[0]["GradingSystem_Code"].ToString();
+                            txtDocGrade.Text = dataSet.Tables[0].Rows[0]["Grade"].ToString();
+                            chkDocStudy.Checked = dataSet.Tables[0].Rows[0]["CurrentlyStuding"].ToString() == "1";
+                            ddlDocFromMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Month.ToString();
+                            ddlDocFromYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Year.ToString();
+                            if (chkDocStudy.Checked)
+                            {
+                                ddlDocToMonth.Style.Add("display", "none");
+                                ddlDocToYear.Style.Add("display", "none");
+                                lblDocTo.Style.Add("display", "none");
+                                rfvDocMonthTo.Enabled = false;
+                                rfvDocYearTo.Enabled = false;
+                            }
+                            else
+                            {
+                                ddlDocToMonth.Style.Add("display", "");
+                                ddlDocToYear.Style.Add("display", "");
+                                lblDocTo.Style.Add("display", "");
+                                rfvDocMonthTo.Enabled = true;
+                                rfvDocYearTo.Enabled = true;
+                                ddlDocToMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Month.ToString();
+                                ddlDocToYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Year.ToString();
+                            }
+                            hfDocCode.Value = dataSet.Tables[0].Rows[0]["CandidateQualificationCode"].ToString();
+                            ImgDocAddMore.Visible = true;
+                        }
+                        else if (control.Text == Convert.ToInt32(Constants.EducationalPrograms.Master).ToString())
+                        {
+                            hfCounter.Value = "1";
+                            txtMasterActivities.Text = dataSet.Tables[0].Rows[0]["Activities"].ToString();
+                            txtMasterDegree.Text = dataSet.Tables[0].Rows[0]["Diploma"].ToString();
+                            hfMasterDegree.Value = dataSet.Tables[0].Rows[0]["Degree_Code"].ToString();
+                            txtMasterField.Text = dataSet.Tables[0].Rows[0]["Field"].ToString();
+                            hfMasterField.Value = dataSet.Tables[0].Rows[0]["Major_Code"].ToString();
+                            hfMasterInstitute.Value = dataSet.Tables[0].Rows[0]["Institute_Code"].ToString();
+                            if (dataSet.Tables[0].Rows[0]["Position"].ToString() == "")
+                            {
+                                rblMasterPosition.SelectedValue = "2";
+                                txtMasterPosition.Attributes.CssStyle.Add("display", "none");
+                                revMasterPosition.Enabled = false;
+                                rfvMasterPosition.Enabled = false;
+                                lblMasterPosition.Attributes.CssStyle.Add("display", "none");
+                            }
+                            else
+                            {
+                                rblMasterPosition.SelectedValue = "1";
+                                txtMasterPosition.Attributes.CssStyle.Add("display", "block");
+                                revMasterPosition.Enabled = true;
+                                rfvMasterPosition.Enabled = true;
+                                lblMasterPosition.Attributes.CssStyle.Add("display", "block");
+                            }
+                            txtMasterPosition.Text = dataSet.Tables[0].Rows[0]["Position"].ToString();
+                            txtMasterInstitute.Text = dataSet.Tables[0].Rows[0]["Institute"].ToString();
+                            rblMaster.SelectedValue = dataSet.Tables[0].Rows[0]["GradingSystem_Code"].ToString();
+                            txtMasterGrade.Text = dataSet.Tables[0].Rows[0]["Grade"].ToString();
+                            chkMasterStudy.Checked = dataSet.Tables[0].Rows[0]["CurrentlyStuding"].ToString() == "1";
+                            ddlMasterFromMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Month.ToString();
+                            ddlMasterFromYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Year.ToString();
+                            if (chkMasterStudy.Checked)
+                            {
+                                ddlMasterToMonth.Style.Add("display", "none");
+                                ddlMasterToYear.Style.Add("display", "none");
+                                lblMasterTo.Style.Add("display", "none");
+                                rfvMasterToMonth.Enabled = false;
+                                rfvMasterToYear.Enabled = false;
+                            }
+                            else
+                            {
+                                ddlMasterToMonth.Style.Add("display", "");
+                                ddlMasterToYear.Style.Add("display", "");
+                                lblMasterTo.Style.Add("display", "");
+                                rfvMasterToMonth.Enabled = true;
+                                rfvMasterToYear.Enabled = true;
+                                ddlMasterToMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Month.ToString();
+                                ddlMasterToYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Year.ToString();
+                            }
+                            hfMasterCode.Value = dataSet.Tables[0].Rows[0]["CandidateQualificationCode"].ToString();
+                            ImgMasterAddMore.Visible = true;
+                        }
+                        else if (control.Text == Convert.ToInt32(Constants.EducationalPrograms.Bachelor).ToString())
+                        {
+                            hfCounter.Value = "2";
+                            txtBachelorActivities.Text = dataSet.Tables[0].Rows[0]["Activities"].ToString();
+                            txtBachelorDegree.Text = dataSet.Tables[0].Rows[0]["Diploma"].ToString();
+                            hfBachelorDegree.Value = dataSet.Tables[0].Rows[0]["Degree_Code"].ToString();
+                            txtBachelorField.Text = dataSet.Tables[0].Rows[0]["Field"].ToString();
+                            hfBachelorField.Value = dataSet.Tables[0].Rows[0]["Major_Code"].ToString();
+                            hfBachelorInstitute.Value = dataSet.Tables[0].Rows[0]["Institute_Code"].ToString();
+                            if (dataSet.Tables[0].Rows[0]["Position"].ToString() == "")
+                            {
+                                rblBachelorPosition.SelectedValue = "2";
+                                txtBachelorPosition.Attributes.CssStyle.Add("display", "none");
+                                revBachelorPosition.Enabled = false;
+                                rfvBachelorPosition.Enabled = false;
+                                lblBachelorPosition.Attributes.CssStyle.Add("display", "none");
+                            }
+                            else
+                            {
+                                rblBachelorPosition.SelectedValue = "1";
+                                txtBachelorPosition.Attributes.CssStyle.Add("display", "block");
+                                revBachelorPosition.Enabled = true;
+                                rfvBachelorPosition.Enabled = true;
+                                lblBachelorPosition.Attributes.CssStyle.Add("display", "block");
+                            }
+                            txtBachelorPosition.Text = dataSet.Tables[0].Rows[0]["Position"].ToString();
+                            txtBachelorInstitute.Text = dataSet.Tables[0].Rows[0]["Institute"].ToString();
+                            rblBachelor.SelectedValue = dataSet.Tables[0].Rows[0]["GradingSystem_Code"].ToString();
+                            txtBachelorGrade.Text = dataSet.Tables[0].Rows[0]["Grade"].ToString();
+                            chkBachelorStudy.Checked = dataSet.Tables[0].Rows[0]["CurrentlyStuding"].ToString() == "1";
+                            ddlBachelorFromMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Month.ToString();
+                            ddlBachelorFromYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Year.ToString();
+                            if (chkBachelorStudy.Checked)
+                            {
+                                ddlBachelorToMonth.Style.Add("display", "none");
+                                ddlBachelorToYear.Style.Add("display", "none");
+                                lblBachelorTo.Style.Add("display", "none");
+                                rfvBachelorToMonth.Enabled = false;
+                                rfvBachelorToYear.Enabled = false;
+                            }
+                            else
+                            {
+                                ddlBachelorToMonth.Style.Add("display", "");
+                                ddlBachelorToYear.Style.Add("display", "");
+                                lblBachelorTo.Style.Add("display", "");
+                                rfvBachelorToMonth.Enabled = true;
+                                rfvBachelorToYear.Enabled = true;
+                                ddlBachelorToMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Month.ToString();
+                                ddlBachelorToYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Year.ToString();
+                            }
+                            hfBachelorCode.Value = dataSet.Tables[0].Rows[0]["CandidateQualificationCode"].ToString();
+                            ImgBachelorAddMore.Visible = true;
+                        }
+                        else if (control.Text == Convert.ToInt32(Constants.EducationalPrograms.Intermediate).ToString())
+                        {
+                            hfCounter.Value = "3";
+                            txtInterActivities.Text = dataSet.Tables[0].Rows[0]["Activities"].ToString();
+                            txtInterDegree.Text = dataSet.Tables[0].Rows[0]["Diploma"].ToString();
+                            hfInterDegree.Value = dataSet.Tables[0].Rows[0]["Degree_Code"].ToString();
+                            txtInterField.Text = dataSet.Tables[0].Rows[0]["Field"].ToString();
+                            hfInterField.Value = dataSet.Tables[0].Rows[0]["Major_Code"].ToString();
+                            hfInterInstitute.Value = dataSet.Tables[0].Rows[0]["Institute_Code"].ToString();
+                            if (dataSet.Tables[0].Rows[0]["Position"].ToString() == "")
+                            {
+                                rblInterPosition.SelectedValue = "2";
+                                txtInterPosition.Attributes.CssStyle.Add("display", "none");
+                                revInterPosition.Enabled = false;
+                                rfvInterPosition.Enabled = false;
+                            }
+                            else
+                            {
+                                rblInterPosition.SelectedValue = "1";
+                                txtInterPosition.Attributes.CssStyle.Add("display", "block");
+                                revInterPosition.Enabled = true;
+                                rfvInterPosition.Enabled = true;
+                            }
+                            txtInterPosition.Text = dataSet.Tables[0].Rows[0]["Position"].ToString();
+                            txtInterInstitute.Text = dataSet.Tables[0].Rows[0]["Institute"].ToString();
+                            rblInter.SelectedValue = dataSet.Tables[0].Rows[0]["GradingSystem_Code"].ToString();
+                            txtInterGrade.Text = dataSet.Tables[0].Rows[0]["Grade"].ToString();
+                            chkInterStudy.Checked = dataSet.Tables[0].Rows[0]["CurrentlyStuding"].ToString() == "1";
+                            ddlInterFromMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Month.ToString();
+                            ddlInterFromYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Year.ToString();
+                            if (chkInterStudy.Checked)
+                            {
+                                ddlInterToMonth.Style.Add("display", "none");
+                                ddlInterToYear.Style.Add("display", "none");
+                                lblInterTo.Style.Add("display", "none");
+                                rfvInterToMonth.Enabled = false;
+                                rfvInterToYear.Enabled = false;
+                            }
+                            else
+                            {
+                                ddlInterToMonth.Style.Add("display", "");
+                                ddlInterToYear.Style.Add("display", "");
+                                lblInterTo.Style.Add("display", "");
+                                rfvInterToMonth.Enabled = true;
+                                rfvInterToYear.Enabled = true;
+                                ddlInterToMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Month.ToString();
+                                ddlInterToYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Year.ToString();
+                            }
+                            hfInterCode.Value = dataSet.Tables[0].Rows[0]["CandidateQualificationCode"].ToString();
+                            ImgInterAddMore.Visible = true;
+                        }
+                        else
+                        {
+                            if (!(control.Text == Convert.ToInt32(Constants.EducationalPrograms.Matric).ToString()))
+                                return;
+                            hfCounter.Value = "4";
+                            txtMatricActivities.Text = dataSet.Tables[0].Rows[0]["Activities"].ToString();
+                            txtMatricDegree.Text = dataSet.Tables[0].Rows[0]["Diploma"].ToString();
+                            hfMatricDegree.Value = dataSet.Tables[0].Rows[0]["Degree_Code"].ToString();
+                            txtMatricField.Text = dataSet.Tables[0].Rows[0]["Field"].ToString();
+                            hfMatricField.Value = dataSet.Tables[0].Rows[0]["Major_Code"].ToString();
+                            hfMatricInstitute.Value = dataSet.Tables[0].Rows[0]["Institute_Code"].ToString();
+                            if (dataSet.Tables[0].Rows[0]["Position"].ToString() == "")
+                            {
+                                rblMatricPosition.SelectedValue = "2";
+                                txtMatricPosition.Attributes.CssStyle.Add("display", "none");
+                                revMatricPosition.Enabled = false;
+                                rfvMatricPosition.Enabled = false;
+                            }
+                            else
+                            {
+                                rblMatricPosition.SelectedValue = "1";
+                                txtMatricPosition.Attributes.CssStyle.Add("display", "block");
+                                revMatricPosition.Enabled = true;
+                                rfvMatricPosition.Enabled = true;
+                            }
+                            txtMatricPosition.Text = dataSet.Tables[0].Rows[0]["Position"].ToString();
+                            txtMatricInstitute.Text = dataSet.Tables[0].Rows[0]["Institute"].ToString();
+                            rblMatric.SelectedValue = dataSet.Tables[0].Rows[0]["GradingSystem_Code"].ToString();
+                            txtMatricGrade.Text = dataSet.Tables[0].Rows[0]["Grade"].ToString();
+                            chkMatricStudy.Checked = dataSet.Tables[0].Rows[0]["CurrentlyStuding"].ToString() == "1";
+                            ddlMatricFromMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Month.ToString();
+                            ddlMatricFromYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateFrom"].ToString()).Year.ToString();
+                            if (chkMatricStudy.Checked)
+                            {
+                                ddlMatricToMonth.Style.Add("display", "none");
+                                ddlMatricToYear.Style.Add("display", "none");
+                                lblMatricTo.Style.Add("display", "none");
+                                rfvMatricToMonth.Enabled = false;
+                                rfvMatricToYear.Enabled = false;
+                            }
+                            else
+                            {
+                                ddlMatricToMonth.Style.Add("display", "");
+                                ddlMatricToYear.Style.Add("display", "");
+                                lblMatricTo.Style.Add("display", "");
+                                rfvMatricToMonth.Enabled = true;
+                                rfvMatricToYear.Enabled = true;
+                                ddlMatricToMonth.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Month.ToString();
+                                ddlMatricToYear.SelectedValue = Convert.ToDateTime(dataSet.Tables[0].Rows[0]["DateTo"].ToString()).Year.ToString();
+                            }
+                            hfMatricCode.Value = dataSet.Tables[0].Rows[0]["CandidateQualificationCode"].ToString();
+                            ImgMatricAddMore.Visible = true;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ImgMatricAddMore_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            ClearMatricControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ImgInterAddMore_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            ClearInterControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ImgBachelorAddMore_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            ClearBachelorControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ImgMasterAddMore_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            ClearMasterControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ImgDocAddMore_OnClick(object sender, EventArgs e)
+    {
+        try
+        {
+            ClearDoctorateControls();
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnNext_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            SqlConnection sqlConnection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString());
+            sqlConnection.Open();
+            StatusManagement.MarkStatus(sqlConnection, int.Parse(CandidateEducation.CID), Constants.ModuleCode.ProfileStatus, (Constants.CandidateStatus)2040, Request.UserHostAddress.ToString(), int.Parse(CandidateEducation.CID));
+            if (sqlConnection.State != ConnectionState.Closed)
+                sqlConnection.Close();
+            HttpContext.Current.Response.Redirect(DomainAddress + "Profile/CandidateDiploma.aspx", false);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            HttpContext.Current.Response.Redirect(DomainAddress + "CandidateArea/Area.aspx", false);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ValidateDocTenure(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            if (chkDocStudy.Checked)
+                return;
+            args.IsValid = new DateTime(Convert.ToInt32(ddlDocFromYear.SelectedValue.ToString()), Convert.ToInt32(ddlDocFromMonth.SelectedValue.ToString()), 1) < new DateTime(Convert.ToInt32(ddlDocToYear.SelectedValue.ToString()), Convert.ToInt32(ddlDocToMonth.SelectedValue.ToString()), 1);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ValidateMasterTenure(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            if (chkMasterStudy.Checked)
+                return;
+            args.IsValid = new DateTime(Convert.ToInt32(ddlMasterFromYear.SelectedValue.ToString()), Convert.ToInt32(ddlMasterFromMonth.SelectedValue.ToString()), 1) < new DateTime(Convert.ToInt32(ddlMasterToYear.SelectedValue.ToString()), Convert.ToInt32(ddlMasterToMonth.SelectedValue.ToString()), 1);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ValidateBachelorTenure(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            if (chkBachelorStudy.Checked)
+                return;
+            args.IsValid = new DateTime(Convert.ToInt32(ddlBachelorFromYear.SelectedValue.ToString()), Convert.ToInt32(ddlBachelorFromMonth.SelectedValue.ToString()), 1) < new DateTime(Convert.ToInt32(ddlBachelorToYear.SelectedValue.ToString()), Convert.ToInt32(ddlBachelorToMonth.SelectedValue.ToString()), 1);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ValidateInterTenure(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            if (chkInterStudy.Checked)
+                return;
+            args.IsValid = new DateTime(Convert.ToInt32(ddlInterFromYear.SelectedValue.ToString()), Convert.ToInt32(ddlInterFromMonth.SelectedValue.ToString()), 1) < new DateTime(Convert.ToInt32(ddlInterToYear.SelectedValue.ToString()), Convert.ToInt32(ddlInterToMonth.SelectedValue.ToString()), 1);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    protected void ValidateMatricTenure(object source, ServerValidateEventArgs args)
+    {
+        try
+        {
+            if (chkMatricStudy.Checked)
+                return;
+            args.IsValid = new DateTime(Convert.ToInt32(ddlMatricFromYear.SelectedValue.ToString()), Convert.ToInt32(ddlMatricFromMonth.SelectedValue.ToString()), 1) < new DateTime(Convert.ToInt32(ddlMatricToYear.SelectedValue.ToString()), Convert.ToInt32(ddlMatricToMonth.SelectedValue.ToString()), 1);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+
+    private void CreateCookie(string programCode)
+    {
+        try
+        {
+            Response.Cookies.Add(new HttpCookie("Counter", programCode)
+            {
+                Expires = DateTime.Now.AddDays(1.0)
+            });
+        }
+        catch (Exception ex)
+        {
+            LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, CandidateEducation.CID);
+        }
+    }
+    #endregion
+
+} 

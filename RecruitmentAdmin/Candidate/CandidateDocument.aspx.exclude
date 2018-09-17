@@ -1,0 +1,182 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CandidateDocument.aspx.cs"
+    Inherits="CandidateDocument" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajax" %>
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Upload Requsite to Apply At Axact</title>
+
+    <script type="text/javascript" src="/assets/inc-Signup/js/jquery.accordion.2.0.js"></script>
+    <script type="text/javascript" src="/assets/inc-Signup/js/jquery.showLoading.js"></script>
+    <script type="text/javascript" src="/assets/inc-Signup/js/function.js"></script>
+    <script type="text/javascript" src="/assets/inc-Signup/js/demo.js"></script>
+    <script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+</head>
+<body>
+   
+    <div>
+        <form id="form1" runat="server">        
+        <div class="career-service fullwidth">
+            
+            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background: #fff;">
+                <tr>                   
+                    <td align="left" valign="top" style="position: relative;">
+                        <div class="governscr formarea">
+                            <h2>
+                                Browse Documents</h2>
+                            (doc,pdf,jpeg,png,jpg)
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center" colspan="2">
+                                        <asp:Label ID="lblMsg" runat="server" Font-Bold="True" ForeColor="Red"></asp:Label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <div id="accordion2">
+                                            <asp:Repeater ID="rptDocumentType" runat="server" OnItemDataBound="rptDocumentType_OnItemDataBound">
+                                                <HeaderTemplate>
+                                                    <table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid black">
+                                                </HeaderTemplate>
+                                                <ItemTemplate>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:HiddenField ID="hdnProgramCode" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "Program_Code")%>' />
+                                                            <asp:HiddenField ID="hdnDocumentTypeCode" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "DocType_Code")%>' />
+                                                            <h3>
+                                                                <span class="icon"></span>
+                                                                <asp:Label ID="lblDocTypeName" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "DocumentTypeName")%>'></asp:Label>
+                                                                <a class="btn-add">
+                                                                </a>
+                                                            </h3>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <asp:Repeater ID="rptCandidateDocument" runat="server" OnItemDataBound="rptCandidateDocument_OnItemDataBound">
+                                                                <HeaderTemplate>
+                                                                    <table cellpadding="0" cellspacing="0" width="100%" style="border: 1px solid black">
+                                                                </HeaderTemplate>
+                                                                <ItemTemplate>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <asp:HiddenField ID="hdnReferenceCode" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ReferencePK")%>' />
+                                                                            <asp:HiddenField ID="hdnProgram" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "ProgramCode")%>' />
+                                                                            <asp:HiddenField ID="hdnDocument_Type" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "DocumentType")%>' />
+                                                                            <asp:Label ID="lblName" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "RefernecInstitute")%>' style="font-size:large;"></asp:Label>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td>
+                                                                            <asp:Repeater ID="rptUploadDocuments" runat="server" OnItemCommand="rptUploadDocuments_OnItemCommand"
+                                                                                OnItemDataBound="rptUploadDocuments_OnItemDataBound">
+                                                                                <HeaderTemplate>
+                                                                                    <div>
+                                                                                        <div class="content">
+                                                                                            <table cellpadding="0" cellspacing="0" width="100%" border="1">
+                                                                                </HeaderTemplate>
+                                                                                <ItemTemplate>
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <asp:Label ID="lblDocumentCategory" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "DocType_Name")%>'
+                                                                                                Visible="false"></asp:Label>
+                                                                                            <asp:Label ID="lblDocumentTypeName" runat="server" Text='<%# DataBinder.Eval(Container.DataItem, "Document_Name")%>'></asp:Label>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            <table cellpadding="0" cellspacing="0" width="100%">
+                                                                                                <tr>
+                                                                                                    <td>
+                                                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                                                            <tr>
+                                                                                                                <td>
+                                                                                                                    <asp:ImageButton ID="Imgbtn" runat="server" CommandName="View" CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Document_Path")%>'
+                                                                                                                        ImageUrl="/assets/images/document-save.png" Height="50px" Width="50px"
+                                                                                                                        CausesValidation="false" />
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <asp:Button ID="btnChange" runat="server" Text="Change" CssClass="save btn" CommandName="Change" />
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                                                                                            <tr>
+                                                                                                                <td>
+                                                                                                                    <asp:RequiredFieldValidator ID="rfv" runat="server" ErrorMessage="Please Select File to Upload"
+                                                                                                                        Font-Bold="True" ForeColor="Red" ValidationGroup="abc" Text="*" InitialValue=""
+                                                                                                                        ControlToValidate="fuCandidateDocument"></asp:RequiredFieldValidator>
+                                                                                                                    <asp:RequiredFieldValidator ID="rfvCD" runat="server" ErrorMessage="Please Select File to Upload"
+                                                                                                                        Font-Bold="True" ForeColor="Red" Text="*" InitialValue=""></asp:RequiredFieldValidator>
+                                                                                                                    <asp:RegularExpressionValidator ID="revCD" runat="server" ErrorMessage="Please Select the Correct Format(jpg,jpeg,pdf,png)"
+                                                                                                                        ValidationExpression="^.+(.pdf|.PDF|.jpeg|.JPEG|.png|.PNG|.jpg|.JPG|.doc|.DOC)$"
+                                                                                                                        Text="*" Font-Bold="True" ForeColor="Red"> </asp:RegularExpressionValidator>
+                                                                                                                    <asp:FileUpload ID="fuCandidateDocument" runat="server" />
+                                                                                                                    <asp:HiddenField ID="ReferenceCode" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "Reference_Code")%>' />
+                                                                                                                    <asp:HiddenField ID="hdnDocumentCode" runat="server" Value='<%# DataBinder.Eval(Container.DataItem, "Document_Code")%>' />
+                                                                                                                </td>
+                                                                                                                <td>
+                                                                                                                    <asp:Button ID="btnUploadFile" runat="server" Text="Upload" CssClass="save btn" CommandName="Upload"
+                                                                                                                        CommandArgument='<%# DataBinder.Eval(Container.DataItem, "Reference_Code")%>' />
+                                                                                                                </td>
+                                                                                                            </tr>
+                                                                                                        </table>
+                                                                                                    </td>
+                                                                                                </tr>
+                                                                                            </table>
+                                                                                        </td>
+                                                                                    </tr>
+                                                                                </ItemTemplate>
+                                                                                <FooterTemplate>
+                                                                                    </table> </div> </div>
+                                                                                </FooterTemplate>
+                                                                            </asp:Repeater>
+                                                                        </td>
+                                                                    </tr>
+                                                                </ItemTemplate>
+                                                                <FooterTemplate>
+                                                                    </table>
+                                                                </FooterTemplate>
+                                                            </asp:Repeater>
+                                                        </td>
+                                                    </tr>
+                                                </ItemTemplate>
+                                                <FooterTemplate>
+                                                    </table>
+                                                </FooterTemplate>
+                                            </asp:Repeater>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <table cellpadding="0" cellspacing="0" width="100%">
+                                            <tr>
+                                                <td align="left">
+                                                    <%--<asp:Button ID="btnProceed" runat="server" Text="Cancel" CssClass="save btn" CausesValidation="true"
+                                                        ValidationGroup="abc" OnClick="btnCancel_Click" />--%>
+                                                    
+                                                </td>
+                                                <td align="right">
+                                                    
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                    </td>
+                </tr>
+              
+            </table>
+        </div>
+        </form>
+    </div>
+</body>
+</html>

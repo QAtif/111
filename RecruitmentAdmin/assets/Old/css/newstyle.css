@@ -1,0 +1,101 @@
+@charset "utf-8";
+/* CSS Document */
+
+input.vlarge2 {
+	width:400px;
+}
+
+select.small2 {
+	width:100px;
+}
+select.vlarge2 {
+	width:600px;
+}
+
+
+select.medium2 {
+	width:250px;
+}
+
+select.small {
+	width:150px;
+}
+#container .step-nav{
+	width:994px;
+	height:79px;
+	margin: 10px auto;
+	}
+#container .step-nav table{ background-color:transparent;
+	height:79px;
+	}
+	#container .step-nav table tr td{ background-color:transparent;
+	border:none;
+	padding: 0px 10px 5px 0px;
+	text-align:center;
+
+	
+	}
+	#container .step-nav table tr td a{ text-decoration:none;
+	color:#666666;
+	font:"Myriad Pro";
+	font-size:9pt;
+	font-weight:bold;
+	text-align:center;
+	
+	
+	}
+#container .step-nav table tr td a strong{ text-decoration:none;
+	color:#666666;
+	font:verdana;
+	font-size:12pt;
+	text-align:center;
+	
+	}
+	
+		#container .step-nav table tr td.active a{ text-decoration:none;
+	color:#FFF;
+	font:"Myriad Pro";
+	font-size:9pt;
+	font-weight:bold;
+	text-align:center;
+	
+	}
+		#container .step-nav table tr td.active a strong{ text-decoration:none;
+	color:#FFF;
+	font:verdana;
+	font-size:12pt;
+	text-align:center;
+	
+	}
+	
+#container .simple thead tr th.specialtd {
+	border-left:0px;
+	
+	}
+	#container .simple tbody tr.bold td {
+	font-weight:bold;
+	
+	}
+#container table thead tr th.noborder {
+	border-left:0px;
+	
+	}
+	
+	#container table thead tr.orangebg th{
+	background:url(/assets/images/orange-bg.jpg) repeat-x;
+	text-indent:10px;
+}
+#container table thead tr.orange td{
+	background:#fff6dd;
+	text-indent:10px;
+}
+
+#container table tbody.left tr td{
+	
+	text-align:left;
+	text-indent:10px;}
+	
+#container table tbody tr.blue td{
+	
+	background-color:#eaf5ff;}
+

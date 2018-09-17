@@ -1,0 +1,114 @@
+﻿<%@ WebHandler Language="C#" Class="MultiFileUploadHandler" %>
+
+using System;
+using System.Web;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using XProcurement.Controller.Purchase;
+using XProcurement.Core.Entities;
+using System.IO;
+using XProcurement.Controller;
+using XProcurement.Core.Enum;
+using XProcurement.Controller.Payables;
+
+public class MultiFileUploadHandler : IHttpHandler, System.Web.SessionState.IRequiresSessionState
+{
+
+    public void ProcessRequest(HttpContext context)
+    {
+
+        context.Response.ContentType = "text/plain";//"application/json";
+        var r = new System.Collections.Generic.List<ViewDataUploadFilesResult>();
+        System.Web.Script.Serialization.JavaScriptSerializer js = new System.Web.Script.Serialization.JavaScriptSerializer();
+
+
+        foreach (string file in context.Request.Files)
+        {
+            HttpPostedFile hpf = context.Request.Files[file] as HttpPostedFile;
+            string FileName = string.Empty;
+            
+            if (HttpContext.Current.Request.Browser.Browser.ToUpper() == "IE")
+            {
+                string[] files = hpf.FileName.Split(new char[] { '\\' });
+                FileName = files[files.Length - 1];
+            }
+            else
+            {
+                FileName = hpf.FileName;
+            }
+            if (hpf.ContentLength == 0)
+                continue;
+
+            FileName = context.Request["fileid"] + "." + FileName.Split('.')[FileName.Split('.').Count() - 1];
+            string savedFileName = HttpContext.Current.Server.MapPath("~"+context.Request["filePath"]) + FileName;
+            hpf.SaveAs(savedFileName);
+
+            
+            string columnName = context.Request["keyColumn"];
+            string KeyValue = context.Request.QueryString[columnName];
+            string tableName = context.Request["tableName"];
+            string connStringName = context.Request["connStringName"];
+
+           
+            string EmployeeID = context.Request.QueryString["UserId"];
+
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connStringName].ConnectionString)) 
+            {
+                string sql = @"insert into " + tableName + " " + 
+    "(" + columnName+ ",DocumentName,DocumentPath,CreationDate,documentID,UpdatedByUser)  " +
+      "  values ( @KeyValue,@DocumentName,@DocumentPath,GetDate(),@fileID,@EmployeeID)";
+                SqlCommand command = new SqlCommand(sql,connection);
+                command.Parameters.Add(new SqlParameter("@KeyValue",KeyValue));
+                command.Parameters.Add(new SqlParameter("@DocumentName",FileName));
+                command.Parameters.Add(new SqlParameter("@DocumentPath",savedFileName));
+                command.Parameters.Add(new SqlParameter("@fileID",context.Request["fileid"] ));
+                command.Parameters.Add(new SqlParameter("@EmployeeID",EmployeeID));
+                
+                connection.Open();
+                command.ExecuteNonQuery();
+            }
+
+            r.Add(new ViewDataUploadFilesResult()
+            {
+                Thumbnail_url = context.Request.Url.GetLeftPart(UriPartial.Authority) + context.Request.ApplicationPath + "/InvoiceDocuments/" + FileName,
+                Name = FileName,
+                Length = hpf.ContentLength,
+                Type = hpf.ContentType,
+                FileID=context.Request["fileid"]
+            });
+            var uploadedFiles = new
+            {
+                files = r.ToArray()
+            };
+            var jsonObj = js.Serialize(uploadedFiles);
+         
+            context.Response.Write(jsonObj.ToString());
+        }
+
+       
+
+    }
+
+    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+    
+    public class ViewDataUploadFilesResult
+    {
+        public string Thumbnail_url { get; set; }
+        public string Name { get; set; }
+        public int Length { get; set; }
+        public string Type { get; set; }
+        public string FileID { get; set; }
+    }
+}

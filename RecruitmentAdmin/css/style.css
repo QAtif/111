@@ -1,0 +1,78 @@
+*{
+	margin:0;
+	padding:0;	
+}
+body{
+	font-size:14px;
+	font-family:Times New Roman,Georgia,Serif;
+	color:#333;
+	background:#dedede;
+	line-height:18px;
+}	
+h1,h2,h3,h4,h5,h6{
+	font-weight:normal;	
+}
+.page{
+	position:relative;
+	margin:10px auto;
+	width:740px;
+	padding:0 30px;	
+	border:1px solid #999;
+	min-height:1020px;
+	background:#fff;
+}
+.header{
+	min-height: 70px;
+	padding: 15px 0;	
+	position:absolute;
+	top:0;
+	width:95%;
+}
+.footer{
+	min-height: 70px;
+	padding: 25px 0;
+	position: absolute;
+	bottom: 0;
+	font-size: 10px;
+	width: 95%;
+	line-height: 12px;
+	text-align: center;
+	color: #6f6f6f;
+}
+.content{
+	position:absolute;
+	top:85px;
+	width:92%;
+	clear:both;	
+}
+.signature{
+	padding:10px 20px;
+	border-bottom:1px solid #000;
+	float:left;	
+}
+.graybox{
+	background:#ccc;
+	padding:6px 8px;	
+	clear:both;
+}
+.text-right{
+	float:right;	
+}
+.tblstructure{
+	margin:0 auto;	
+}
+.tblstructure tr td{
+	padding:10px;
+}	
+.tblstructure tr.nopadd td{
+	padding:0;	
+}
+
+.clear{clear:both;}
+.fa15{font-size:15px;}
+.fa18{font-size:18px;}
+.fa20{font-size:20px;}
+.aligncenter{text-align:center;}
+.lineh20{ line-height:20px;}
+.lineh25{ line-height:25px;}
+.underline{text-decoration:underline;}

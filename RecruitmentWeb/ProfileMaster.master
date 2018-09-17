@@ -1,0 +1,52 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="ProfileMaster.master.cs"
+    Inherits="ProfileMaster" %>
+
+<%@ Register TagPrefix="nmc" TagName="NavigationMenuControl" Src="~/controls/navigation.ascx" %>
+<%@ Register TagPrefix="phc" TagName="ProfileHeaderControl" Src="~/controls/profileheadercontrol.ascx" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <!--#include virtual="/Area/includes/header-scripts-applications.html"-->
+    <script type="text/javascript">
+        xPageELEM = 1;
+    </script>
+    <asp:ContentPlaceHolder ID="HeadContainer" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="main">
+        <form id="form1" runat="server" class="xStyledForm">
+        
+            <phc:ProfileHeaderControl ID="ProfHead" runat="server" />
+   
+        <!-- End Header -->
+        <div class="row-fluid">
+            <nmc:NavigationMenuControl ID="NavMenu" runat="server" />
+            <div class="span8">
+                <section>
+      <div class="tab-content">
+            <asp:ScriptManager runat="server" ID="scrptmgr"></asp:ScriptManager>
+            <div>
+                <asp:ContentPlaceHolder ID="ContentContainer" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+             </div>
+    </section>
+            </div>
+        </div>
+        <div id="footer" class="row-fluid">
+            <!--#include virtual="/Area/includes/footer-profile.html"-->
+        </div>
+        <!-- End Footer -->
+        
+            </form>
+    </div>
+    <!-- main body ends here -->
+    <!--#include virtual="/Area/includes/allModal.html"-->
+    <!--#include virtual="/Area/includes/footer-scripts.html"-->
+</body>
+</html>

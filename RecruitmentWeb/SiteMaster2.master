@@ -1,0 +1,118 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="SiteMaster2.master.cs" Inherits="SiteMaster2" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8, IE=9" />
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!--#include virtual="/Area/includes/header-scripts-applications.html"-->
+    <script type="text/javascript">
+        xPageELEM = 1;
+    </script>
+    <style>
+        select
+        {
+            height: auto;
+            width: 100%;
+        }
+    </style>
+        <style type="text/css">
+        .error
+        {
+            /*background: #FFD9D9 !important;*/
+            border: 1px solid #CC0000 !important;
+        }
+        .success
+        {
+            color: Green !important;
+        }
+    </style>
+    <asp:ContentPlaceHolder ID="HeadContainer" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="main" style="width: 850px;">
+        <br>
+        <!-- Start Header -->
+        <header>
+    <div class="row-fluid">
+      <div class="span3"> <a href="/" >
+      <img src="/Area/assets/img/logo-new.png" alt=""> </a> </div>
+      <div class="span9" style="padding-top:10px;">
+      	<div class="row-fluid">
+        	<div class="span12">
+            	<ul class="topinfo pull-right">
+            	<li>Need Help, Call</li>
+                <li class="nobg">(9221) 11 11 Axact (29228) Ext. HR (47)</li>
+            </ul>
+            </div>
+        </div>
+        
+      	<div class="row-fluid">
+        	<div class="span12">
+            	<ul class="pull-right sublinks">
+            	<li><a href="signin.aspx" title="" rel="loginscr"><img src="/Area/assets/img/info.jpg" alt="">Login</a></li>
+                <li><a href="signup.aspx" title="" rel="signupscr"><img src="/Area/assets/img/signup.jpg" alt="">Signup</a></li>
+            </ul>
+            </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="xbox2 notification">
+        <div class="span9">
+          <h3>Thank you for downloading Data Protecto!</h3>
+          <p>If your download hasn’t started, <a href="javascript:;">click here</a> to manually start your download.</p>          
+          <p style="margin:0px;">This is your personalized area, here you can manage all XCloud Systems' products. Learn how to use and customize your area by watching Demo or reading Guidelines.</p>
+        </div>
+        <div class="span3">
+          <button class="btn btn-small pull-right btn-mar" type="button">View Guidelines</button>
+          <button class="btn btn-small pull-right" type="button">Start Demo</button>
+        </div>
+        <a href="javascript:void(0);" class="xclose" title="Close">Close</a> </div>
+    </div>
+  </header>
+        <!-- End Header -->
+        <div class="signin-container">
+            <div class="row-fluid">
+                <div class="span5">
+                    <a href="javascript:;" title="">
+                        <img src="/Area/assets/img/banners/new-bol.jpg" alt=""></a>
+                </div>
+                <form id="form1" runat="server" class="xStyledForm">
+        <asp:ScriptManager ID="ScriptManager1" runat="server">
+        </asp:ScriptManager>
+                <asp:ContentPlaceHolder ID="ContentContainer" runat="server">
+                </asp:ContentPlaceHolder>
+                </form>
+            </div>
+        </div>
+        <!-- Start Footer -->
+        <div id="footer" class="row-fluid">
+         
+        </div>
+        <!-- End Footer -->
+    </div>
+    <!-- main body ends here -->
+    <!--#include virtual="/Area/includes/footer-scripts.html"-->
+    <%--<script type="text/javascript">
+        $(document).ready(function (e) {
+            $('.loginscr').show();
+            $('.sublinks li a').click(function () {
+                $('.hideit').hide();
+                var getrel = $(this).attr('rel');
+                $('.' + getrel).fadeIn("slow");
+            });
+            $('.xSignupNow').click(function () {
+                $('.hideit').hide();
+                $('.forgetpass').fadeIn('slow');
+            });
+        });
+    </script>--%>
+</body>
+</html>

@@ -1,0 +1,31 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+
+<%@ Register Src="UserControls/Menu.ascx" TagName="Menu" TagPrefix="uc1" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <!--#include virtual="/assets/includes/scripts.asp"-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("td:empty").html("&nbsp;");
+        });
+    </script>
+	<title>B O L</title>
+	<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico"/>
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+    
+    </div>
+    <div class="maincontainer">
+        <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+    </div>
+    <div class="clear">
+    </div>
+    
+    </form>
+</body>
+</html>

@@ -1,0 +1,592 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.UI.WebControls;
+using System.Configuration;
+using ErrorLog;
+using XRecruitmentStatusLibrary;
+using System.IO;
+
+public partial class CandidateDocument : CustomBasePage
+{
+    #region Page Variables
+    string DomainAddress = ConfigurationManager.AppSettings["DomainAddress"].ToString();
+    public static string CID;
+    string QueryStringVar = string.Empty;
+    SecureQueryString secQueryString;
+    #endregion Page Variables
+
+
+    #region Methods
+    private void BindData()
+    {
+        try
+        {
+            lblMsg.Text = "";
+
+            DataSet ds = new DataSet();
+            ds = BindDocumentType();
+            if (ds != null && ds.Tables != null)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    rptDocumentType.DataSource = ds.Tables[0];
+                    rptDocumentType.DataBind();
+                }
+                else
+                {
+                    lblMsg.Text = "";
+                }
+            }
+            else
+            {
+                lblMsg.Text = "";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+    private void UpdateCandidateInformation(string FilePath, string RefCode, string DocumentCode)
+    {
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_UpdateCandidateDocumentPath", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@CandidateCode", CID));
+                    command.Parameters.Add(new SqlParameter("@DocumentPath", FilePath));
+                    command.Parameters.Add(new SqlParameter("@ReferenceCode", Convert.ToInt32(RefCode)));
+                    command.Parameters.Add(new SqlParameter("@DocumentCode", Convert.ToInt32(DocumentCode)));
+                    command.ExecuteNonQuery();
+
+                    StatusManagement.MarkStatus(c, int.Parse(CID), Constants.ModuleCode.ProfileStatus,
+                                                Constants.CandidateStatus.DocumentsBrowsedProfileCompleted, Request.UserHostAddress.ToString(),
+                                                int.Parse(CID));
+
+                    StatusManagement.MarkStatus(c, int.Parse(CID), Constants.ModuleCode.ProfileStatus,
+                                   Constants.CandidateStatus.ProfileDone, Request.UserHostAddress.ToString(),
+                                   int.Parse(CID));
+
+                    // For Life Cycle Status
+                    StatusManagement.MarkStatus(c, int.Parse(CID), Constants.ModuleCode.LifeCycleStatus,
+                                                Constants.CandidateStatus.FormFilledWaitingforMapping, Request.UserHostAddress.ToString(),
+                                                int.Parse(CID));
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+    }
+    public bool CreateDocumentFolder()
+    {
+        try
+        {
+            string studentCode = CID;
+            string folderPath = System.Web.HttpContext.Current.Server.MapPath(ConfigurationManager.AppSettings["CandidateDocumentPath"].ToString());
+
+            if (!Directory.Exists(folderPath + studentCode + "/Documents"))
+                Directory.CreateDirectory(folderPath + studentCode + "/Documents");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            return false;
+        }
+    }
+    private DataSet BindDocumentType()
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectDocumentTypes", c))
+                {
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.CommandType = CommandType.StoredProcedure;
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    private DataSet BindCandidateDocuments(string DocumentTypeCode, string ProgramCode)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocument", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@ProgramCode", Convert.ToInt32(ProgramCode));
+                    command.Parameters.AddWithValue("@DocumentTypeCode", Convert.ToInt32(DocumentTypeCode));
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    private DataSet BindDocumentsUploaders(string ReferenceCode, string ProgramCode)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocumentstoBeUploaded", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@ReferenceCode", ReferenceCode);
+                    command.Parameters.AddWithValue("@ProgramCode", ProgramCode);
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    public bool validateExtension(FileUpload myFile)
+    {
+        bool isValid = false;
+        try
+        {
+            string Extension = System.IO.Path.GetExtension(myFile.FileName).ToLower();
+            if (Extension == ".jpg" || Extension == ".doc" || Extension == ".pdf" ||
+                Extension == ".jpeg" || Extension == ".png")
+                isValid = true;
+            else
+                isValid = false;
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+        return isValid;
+    }
+    private DataSet BindCandidatePersonalDocuments(string DocumentTypeCode)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocument", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@DocumentTypeCode", Convert.ToInt32(DocumentTypeCode));
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    private DataSet BindCandidateProfessionalExperienceDocuments(string DocumentType)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocument", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@DocumentTypeCode", Convert.ToInt32(DocumentType));
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    private DataSet BindPersonalDocumentsUploaders(string DocumentType, string ReferenceCode)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocumentstoBeUploaded", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@ReferenceCode", ReferenceCode);
+                    command.Parameters.AddWithValue("@DocumentTypeCode", DocumentType);
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    private DataSet BindExperienceDocumentsUploaders(string DocumentType, string ReferenceCode)
+    {
+        DataSet objDS = new DataSet();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ToString()))
+        {
+            c.Open();
+            try
+            {
+                using (SqlCommand command = new SqlCommand("XRec_SelectCandidateDocumentstoBeUploaded", c))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.AddWithValue("@CandidateCode", CID);
+                    command.Parameters.AddWithValue("@ReferenceCode", ReferenceCode);
+                    command.Parameters.AddWithValue("@DocumentTypeCode", DocumentType);
+                    using (SqlDataAdapter a = new SqlDataAdapter(command))
+                    {
+                        a.Fill(objDS);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+            }
+        }
+        return objDS;
+    }
+    #endregion
+
+    #region Events
+    protected void Page_Load(object sender, EventArgs e)
+    {
+          QueryStringVar = HttpContext.Current.Request[SecureQueryString.QueryStringVar];
+          if (QueryStringVar != null)
+          {
+              secQueryString = new SecureQueryString(QueryStringVar);
+
+              if (secQueryString["CID"] != null)
+              {
+                  CID = secQueryString["CID"].ToString();
+                  try
+                  {
+                      if (!IsPostBack)
+                      {
+                          BindData();
+                      }
+                  }
+                  catch (Exception ex)
+                  {
+                      ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+                  }
+              }
+          }
+    }
+    protected void rptUploadDocuments_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        try
+        {
+            if ((e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.AlternatingItem))
+            {
+                RequiredFieldValidator rfvCD = (RequiredFieldValidator)e.Item.FindControl("rfvCD");
+                RegularExpressionValidator revCD = (RegularExpressionValidator)e.Item.FindControl("revCD");
+                FileUpload fuCandidateDocument = (FileUpload)e.Item.FindControl("fuCandidateDocument");
+                Button btnUploadFile = (Button)e.Item.FindControl("btnUploadFile");
+                ImageButton Imgbtn = (ImageButton)e.Item.FindControl("Imgbtn");
+                Button btnChange = (Button)e.Item.FindControl("btnChange");
+
+                if (DataBinder.Eval(e.Item.DataItem, "DOCUMENT_Path") == "")
+                {
+                    Imgbtn.Visible = false;
+                    btnChange.Visible = false;
+                    fuCandidateDocument.Visible = true;
+                    btnUploadFile.Visible = true;
+                }
+                else
+                {
+                    Imgbtn.Visible = true;
+                    btnChange.Visible = true;
+                    fuCandidateDocument.Visible = false;
+                    btnUploadFile.Visible = false;
+                }
+                rfvCD.ValidationGroup = rfvCD.ClientID.ToString();
+                revCD.ValidationGroup = rfvCD.ClientID.ToString();
+                btnUploadFile.ValidationGroup = rfvCD.ClientID.ToString();
+
+                rfvCD.ControlToValidate = fuCandidateDocument.ID;
+                revCD.ControlToValidate = fuCandidateDocument.ID;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+    protected void rptDocumentType_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        try
+        {
+            if ((e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.AlternatingItem))
+            {
+                Repeater rptCandidateDocument = (Repeater)e.Item.FindControl("rptCandidateDocument");
+                HiddenField hdnDocumentTypeCode = (HiddenField)e.Item.FindControl("hdnDocumentTypeCode");
+                HiddenField hdnProgramCode = (HiddenField)e.Item.FindControl("hdnProgramCode");
+
+                if (Convert.ToInt32(hdnDocumentTypeCode.Value) == 1 || Convert.ToInt32(hdnDocumentTypeCode.Value) == 9)
+                {
+                    if (Convert.ToInt32(hdnDocumentTypeCode.Value) == 9)
+                    {
+                        DataSet dsCandidateDocument = new DataSet();
+                        dsCandidateDocument = BindCandidateProfessionalExperienceDocuments(hdnDocumentTypeCode.Value);
+                        if (dsCandidateDocument != null && dsCandidateDocument.Tables != null)
+                        {
+                            if (dsCandidateDocument.Tables[0].Rows.Count > 0)
+                            {
+                                rptCandidateDocument.DataSource = dsCandidateDocument.Tables[0];
+                                rptCandidateDocument.DataBind();
+                            }
+                        }
+                    }
+                    if (Convert.ToInt32(hdnDocumentTypeCode.Value) == 1)
+                    {
+                        DataSet dsCandidatePersonalDocument = new DataSet();
+                        dsCandidatePersonalDocument = BindCandidatePersonalDocuments(hdnDocumentTypeCode.Value);
+                        if (dsCandidatePersonalDocument != null && dsCandidatePersonalDocument.Tables != null)
+                        {
+                            if (dsCandidatePersonalDocument.Tables[0].Rows.Count > 0)
+                            {
+                                rptCandidateDocument.DataSource = dsCandidatePersonalDocument.Tables[0];
+                                rptCandidateDocument.DataBind();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    DataSet CandidatelDocument = new DataSet();
+                    CandidatelDocument = BindCandidateDocuments(hdnDocumentTypeCode.Value, hdnProgramCode.Value);
+                    if (CandidatelDocument != null && CandidatelDocument.Tables != null)
+                    {
+                        if (CandidatelDocument.Tables[0].Rows.Count > 0)
+                        {
+                            rptCandidateDocument.DataSource = CandidatelDocument.Tables[0];
+                            rptCandidateDocument.DataBind();
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+    protected void rptCandidateDocument_OnItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        try
+        {
+            if ((e.Item.ItemType == ListItemType.Item) || (e.Item.ItemType == ListItemType.AlternatingItem))
+            {
+                Repeater rptUploadDocuments = (Repeater)e.Item.FindControl("rptUploadDocuments");
+                HiddenField hdnReferenceCode = (HiddenField)e.Item.FindControl("hdnReferenceCode");
+                HiddenField hdnProgram = (HiddenField)e.Item.FindControl("hdnProgram");
+                HiddenField hdnDocument_Type = (HiddenField)e.Item.FindControl("hdnDocument_Type");
+                if (Convert.ToInt32(hdnDocument_Type.Value) == 1 || Convert.ToInt32(hdnDocument_Type.Value) == 9)
+                {
+                    if (Convert.ToInt32(hdnDocument_Type.Value) == 1)
+                    {
+                        DataSet dsPersonalDocumentsUploaders = new DataSet();
+                        dsPersonalDocumentsUploaders = BindPersonalDocumentsUploaders(hdnDocument_Type.Value, hdnReferenceCode.Value);
+                        if (dsPersonalDocumentsUploaders != null && dsPersonalDocumentsUploaders.Tables != null)
+                        {
+                            if (dsPersonalDocumentsUploaders.Tables[0].Rows.Count > 0)
+                            {
+                                rptUploadDocuments.DataSource = dsPersonalDocumentsUploaders.Tables[0];
+                                rptUploadDocuments.DataBind();
+                            }
+                        }
+                    }
+                    if (Convert.ToInt32(hdnDocument_Type.Value) == 9)
+                    {
+                        DataSet dsExperienceDocumentsUploaders = new DataSet();
+                        dsExperienceDocumentsUploaders = BindExperienceDocumentsUploaders(hdnDocument_Type.Value, hdnReferenceCode.Value);
+                        if (dsExperienceDocumentsUploaders != null && dsExperienceDocumentsUploaders.Tables != null)
+                        {
+                            if (dsExperienceDocumentsUploaders.Tables[0].Rows.Count > 0)
+                            {
+                                rptUploadDocuments.DataSource = dsExperienceDocumentsUploaders.Tables[0];
+                                rptUploadDocuments.DataBind();
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    DataSet dsDocumentsUploaders = new DataSet();
+                    dsDocumentsUploaders = BindDocumentsUploaders(hdnReferenceCode.Value, hdnProgram.Value);
+                    if (dsDocumentsUploaders != null && dsDocumentsUploaders.Tables != null)
+                    {
+                        if (dsDocumentsUploaders.Tables[0].Rows.Count > 0)
+                        {
+                            rptUploadDocuments.DataSource = dsDocumentsUploaders.Tables[0];
+                            rptUploadDocuments.DataBind();
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+    protected void rptUploadDocuments_OnItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "Upload")
+            {
+                lblMsg.Text = "";
+                HiddenField ReferenceCode = (HiddenField)e.Item.FindControl("ReferenceCode");
+                HiddenField hdnDocumentCode = (HiddenField)e.Item.FindControl("hdnDocumentCode");
+                Label lblDocumentTypeName = (Label)e.Item.FindControl("lblDocumentTypeName");
+                Label lblDocumentCategory = (Label)e.Item.FindControl("lblDocumentCategory");
+
+                FileUpload fuCandidateDocument = (FileUpload)e.Item.FindControl("fuCandidateDocument");
+                if (fuCandidateDocument.HasFile)
+                {
+                    string fileExtension = System.IO.Path.GetExtension(fuCandidateDocument.FileName).ToLower();
+
+                    try
+                    {
+                        if (validateExtension(fuCandidateDocument))
+                        {
+                            if (GeneralMethods.validatefile(fuCandidateDocument))
+                            {
+                                string filename = lblDocumentTypeName.Text.Replace(" ", "");
+
+                                string uploadFolderName = ConfigurationManager.AppSettings["CandidateDocumentsPath"].ToString() +
+                                                Convert.ToInt32(CID) + "/" + lblDocumentCategory.Text + "/";
+
+                                if (lblDocumentCategory.Text == "Personal")
+                                {
+                                    GeneralMethods.FileBrowse(fuCandidateDocument, uploadFolderName, lblDocumentTypeName.Text);
+                                    UpdateCandidateInformation(uploadFolderName + filename + fileExtension, ReferenceCode.Value, hdnDocumentCode.Value);
+                                }
+
+                                else
+                                {
+                                    GeneralMethods.FileBrowse(fuCandidateDocument, uploadFolderName, ReferenceCode.Value.ToString() + "_" + lblDocumentTypeName.Text);
+                                    UpdateCandidateInformation(uploadFolderName + ReferenceCode.Value.ToString() + "_" + filename + fileExtension, ReferenceCode.Value, hdnDocumentCode.Value);
+                                }
+                                BindData();
+                            }
+                            else
+                            {
+                                lblMsg.Text = "Maximum Size for the file upload is 2MB";
+                            }
+                        }
+                        else
+                        {
+                            lblMsg.Text = "Please Select Valid Extension";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+                        lblMsg.Text = "File Unable to upload!";
+                    }
+                }
+            }
+            if (e.CommandName == "View")
+            {
+                ImageButton Imgbtn = (ImageButton)e.Item.FindControl("Imgbtn");
+                Imgbtn.PostBackUrl = "";
+                GeneralMethods.FileResponse(Path.GetFileName(e.CommandArgument.ToString()), Path.GetDirectoryName(e.CommandArgument.ToString()));
+            }
+            if (e.CommandName == "Change")
+            {
+                ImageButton Imgbtn = (ImageButton)e.Item.FindControl("Imgbtn");
+                Button btnUploadFile = (Button)e.Item.FindControl("btnUploadFile");
+                btnUploadFile.Visible = true;
+                FileUpload fuCandidateDocument = (FileUpload)e.Item.FindControl("fuCandidateDocument");
+                fuCandidateDocument.Visible = true;
+                Imgbtn.Visible = false;
+                Button btnChange = (Button)e.Item.FindControl("btnChange");
+                btnChange.Visible = false;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+   
+   
+    protected void btnCancel_Click(object sender, EventArgs e)
+    {
+        try
+        {
+           
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, CID);
+        }
+    }
+    #endregion    
+}

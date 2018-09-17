@@ -1,0 +1,257 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.Web.UI.HtmlControls;
+using System.Globalization;
+using System.Collections;
+using System.IO;
+using XRecruitmentStatusLibrary;
+using ErrorLog;
+
+public partial class IntScheduledCandidate : CustomBasePage
+{
+    #region Variables
+    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString);
+    SqlConnection Errlogconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["errLogConnection"].ToString());
+    #endregion
+
+    #region Events
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!IsPostBack)
+            {
+                postedFromDate.Attributes.Add("readonly", "readonly");
+                postedFromDate.Value = DateTime.Now.ToString("MMM dd, yyyy");
+                postedToDate.Attributes.Add("readonly", "readonly");
+                postedToDate.Value = DateTime.Now.ToString("MMM dd, yyyy");
+                bind_rptrptTestSheduled();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, UserCode.ToString());
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+
+    }
+    protected void rptCandidateLists_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.AlternatingItem || e.Item.ItemType == ListItemType.Item)
+        {
+            try
+            {
+                LinkButton lnkCancel = (LinkButton)e.Item.FindControl("lnkCancel");
+                HiddenField hdnCandidateCode = (HiddenField)e.Item.FindControl("hdnCandidateCode");
+                HtmlAnchor aCandidateLink = (HtmlAnchor)e.Item.FindControl("aCandidateLink");
+                string RedirectingLink = "~/Candidate/CandidateDetails.aspx?" + "CID" + "=" + hdnCandidateCode.Value;
+                Label lblSchuduleFor = (Label)e.Item.FindControl("lblSchuduleFor");
+                HiddenField hdnCanStatus = (HiddenField)e.Item.FindControl("hdnCanStatus");
+                if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneTestPending).ToString())
+                {
+                    lblSchuduleFor.Text = "Test";
+                    lnkCancel.Text = "Mark Not Appeared";
+                }
+                else if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingDoneInterviewPending).ToString())
+                {
+                    lblSchuduleFor.Text = "Interview";
+                    lnkCancel.Text = "Mark Not Appeared";
+                }
+                else if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneOfferPending).ToString())
+                {
+                    lblSchuduleFor.Text = "Offer Letter";
+                    lnkCancel.Text = "Mark Not Appeared";
+                }
+                else
+                {
+                    lblSchuduleFor.Text = "-"; 
+                    lnkCancel.Text = "-";
+                    lnkCancel.Enabled = false;
+                }
+                aCandidateLink.Attributes.Add("href", RedirectingLink);
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, UserCode.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+    }
+    protected void rptTestSheduled_ItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        if (e.CommandName == "Cancel")
+        {
+            try
+            {
+                connection.Open();
+                SqlCommand sqlCommand = new SqlCommand("dbo.Xrec_Update_CandidateSlotIsActive", connection);
+                sqlCommand.Parameters.AddWithValue("@CandidateCode", e.CommandArgument);
+                //sqlCommand.Parameters.AddWithValue("@ChangeByID", UserCode);
+                //sqlCommand.Parameters.AddWithValue("@ChangeByIP", Request.UserHostAddress.ToString()); 
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                sqlCommand.ExecuteNonQuery();
+
+                Label lblSchuduleFor = (Label)e.Item.FindControl("lblSchuduleFor");
+                HiddenField hdnCanStatus = (HiddenField)e.Item.FindControl("hdnCanStatus");
+                if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneTestPending).ToString())
+                    StatusManagement.MarkLifeCycleStatus(connection, int.Parse(e.CommandArgument.ToString()), Constants.ModuleCode.LifeCycleStatus,
+                            Constants.CandidateLifeCycleStatus.TestnotAppearedReSchedulingPending, Request.UserHostAddress.ToString(), UserCode);
+                if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingDoneInterviewPending).ToString())
+                    StatusManagement.MarkLifeCycleStatus(connection, int.Parse(e.CommandArgument.ToString()), Constants.ModuleCode.LifeCycleStatus,
+                            Constants.CandidateLifeCycleStatus.InterviewnotAppearedReSchedulingPending, Request.UserHostAddress.ToString(), UserCode);
+                if (hdnCanStatus.Value == Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneOfferPending).ToString())
+                    StatusManagement.MarkLifeCycleStatus(connection, int.Parse(e.CommandArgument.ToString()), Constants.ModuleCode.LifeCycleStatus,
+                           Constants.CandidateLifeCycleStatus.OfferNotAcceptedReSchedulingPendingOffer, Request.UserHostAddress.ToString(), UserCode);
+
+
+
+                lblMsg.Visible = true;
+                lblMsg.Text = "reservation has been cancelled successfully.";
+                bind_rptrptTestSheduled();
+            }
+            catch (Exception ex)
+            {
+                ErrorLog.LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, UserCode.ToString());
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+
+    }
+    protected void lnkSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            lblMsg.Visible = false;
+            bind_rptrptTestSheduled();
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.RecruitmentAdmin, ex.Message + " " + ex.StackTrace, ex, UserCode.ToString());
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+    #endregion
+
+    #region Methods
+    private void bind_rptrptTestSheduled()
+    {
+
+        string Status = (Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneTestPending).ToString() + "," + Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingDoneInterviewPending).ToString() + "," + Convert.ToInt32(Constants.CandidateLifeCycleStatus.SchedulingdoneOfferPending).ToString());
+        DateTime fromdate = Convert.ToDateTime(postedFromDate.Value);
+
+        DateTime todate = Convert.ToDateTime(postedToDate.Value);
+        SqlCommand sqlCommand = new SqlCommand("dbo.Select_ReservedCandidateDateRangeWise", connection);
+        sqlCommand.Parameters.AddWithValue("@RequiredfromDate", fromdate.ToString("yyyy-MM-dd"));
+        sqlCommand.Parameters.AddWithValue("@RequiredtoDate", todate.ToString("yyyy-MM-dd"));
+        sqlCommand.Parameters.AddWithValue("@Status", Status);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+
+        SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+        DataTable dt = new DataTable();
+        adapter.Fill(dt);
+        if (dt != null)
+        {
+            if (dt.Rows.Count > 0)
+            {
+                if (!string.IsNullOrEmpty(txtRefNo.Text))
+                {
+                    if (dt.Select("reffNo='" + txtRefNo.Text + "'").Length > 0)
+                    {
+                        dt = dt.Select("reffNo='" + txtRefNo.Text + "'").CopyToDataTable();
+                    }
+                    else
+                    {
+                        rptTestSheduled.DataSource = null;
+                        rptTestSheduled.Visible = false;
+                        lblemtyMsg.Text = "No record(s) found";
+                        lblemtyMsg.Visible = true;
+                        return;
+                    }
+
+                }
+                if (ddlScheduledFor.SelectedValue != "0")
+                {
+                    if (dt.Select("canStatus=" + ddlScheduledFor.SelectedValue).Length > 0)
+                    {
+                        DataTable dt1 = dt.Select("canStatus=" + ddlScheduledFor.SelectedValue).CopyToDataTable();
+                        rptTestSheduled.Visible = true;
+                        lblemtyMsg.Visible = false;
+                        rptTestSheduled.DataSource = dt1;
+                        rptTestSheduled.DataBind();
+
+                    }
+
+                    else
+                    {
+                        rptTestSheduled.DataSource = null;
+                        rptTestSheduled.Visible = false;
+                        lblemtyMsg.Text = "No record(s) found";
+                        lblemtyMsg.Visible = true;
+                    }
+                }
+                else
+                {
+                    rptTestSheduled.Visible = true;
+                    lblemtyMsg.Visible = false;
+                    rptTestSheduled.DataSource = dt;
+                    rptTestSheduled.DataBind();
+                }
+
+            }
+            else
+            {
+                rptTestSheduled.DataSource = null;
+                rptTestSheduled.Visible = false;
+                lblemtyMsg.Text = "No record(s) found";
+                lblemtyMsg.Visible = true;
+            }
+        }
+        else
+        {
+            rptTestSheduled.DataSource = null;
+            rptTestSheduled.Visible = false;
+            lblemtyMsg.Text = "No record(s) found";
+            lblemtyMsg.Visible = true;
+        }
+
+
+
+
+
+
+    }
+    public static void CreateFolder(string FolderPath)
+    {
+        string folderPath = System.Web.HttpContext.Current.Server.MapPath(FolderPath);
+        DirectoryInfo dir = new DirectoryInfo(folderPath);
+        if (!dir.Exists)
+        {
+            Directory.CreateDirectory(folderPath);
+        }
+    }
+    #endregion
+
+}

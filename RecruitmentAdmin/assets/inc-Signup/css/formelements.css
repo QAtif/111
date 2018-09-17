@@ -1,0 +1,190 @@
+.formarea input, .formarea textarea {
+	border:1px solid #555555;
+	padding:5px 3px;
+}
+.formarea input.btn {
+	font-size:11px;
+	padding:4px 20px;
+	border:1px solid #555555;
+	cursor:pointer;
+	color:#474747;
+}
+.formarea input.btn.cancel {
+	background:url(/assets/images/btn-bg-g.png) repeat-x top left;
+}
+
+.formarea input.btn.save {
+	background:url(/assets/images/btn-bg.png) repeat-x top left;
+}
+
+.formarea  table td {
+	padding:5px 10px !important;
+	color:#474747;
+	font-size:11px;
+}
+.formarea  table td.nopad {
+	padding:0 !important;
+}
+
+.formarea  table td span {
+	color:#f89801;
+}
+.formarea  input.full,.formarea  textarea.full {
+	width:370px;
+}
+.formarea  input.large,.formarea  textarea.large {
+	width:98%;
+}
+.formarea  input.medium {
+	width:120px;
+	margin-right:10px;
+}
+.formarea  input.medium-big {
+	width:180px;
+	margin-right:10px;
+}
+
+.formarea  input.small {
+	width:70px;
+	margin-right:10px;
+}
+.formarea  input.mini {
+	width:50px;
+	margin-right:10px;
+}
+.formarea  input[type=checkbox] {
+	margin:0px 10px;
+}
+.formarea .innertab td {
+	padding:0px !important;
+	
+}
+.formarea select {
+	border:1px solid #555555;
+	padding:5px 3px;
+}
+.formarea select.medium-big {
+	width:190px;
+}
+
+.spera {
+	border-bottom:1px solid #cacaca;
+	padding:0px !important;
+}
+
+.btn-add {
+	color:#4074b4;
+	text-decoration:none;
+}
+.formarea h2 {
+color: #474747;
+font-size: 19px;
+font-weight: normal;
+padding: 0px 0px 15px 0px;
+}
+#footapp {
+background: url(/assets2/images/appfooter.png) repeat top left;
+width: 100%;
+height: 80px;
+}
+.footright {
+float: right;
+width: 685px;
+margin-top: 20px;
+}
+.footleft {
+float: left;
+width: 255px;
+margin: 20px 0px 0px 25px;
+}
+.footleft p {
+font-size: 12px;
+font-weight: bold;
+line-height: 19px;
+}
+.probar {
+float: left;
+width: 230px;
+}
+#progress {
+width: 180px;
+height: 9px;
+float: left;
+}
+.probar #pronumber {
+float: right;
+width: 30px;
+}
+.footright p a {
+color: #0e3e73;
+text-decoration: none;
+}
+.wrapper{
+	width:1001px;
+	margin:0 auto;	
+}
+.skipbtn{
+	position:absolute;
+	bottom:5px;
+	right:5px;	
+}
+.error{
+	color: red !important;
+font-weight: bold;	
+}
+#tblExperienceHeader tr td{
+	padding:5px !important;
+	border:0 !important;
+}
+
+#accordion2 h3{
+	width:100%;
+	background:url(/assets2/images/crops/bg-acc.png) repeat-x top left;
+	padding:10px 0px 9px 0px;
+	border:1px solid #d4d4d4;
+	cursor:pointer;
+	color:#474747;
+	font-weight:normal;
+	clear:both;
+}
+#accordion2 h3 a {
+	float:right;
+	margin-right:10px;
+}
+#accordion2  div {
+	padding:10px;
+	height: auto !important;
+}
+#accordion2 h3.ui-accordion-header-active .icon {
+	float:left;
+	margin-left:10px;
+	background:url(/assets2/images/crops/arrow-down.png) no-repeat top left;
+	width:14px;
+	height:14px;
+}
+
+#accordion2 h3 .icon {
+	float:left;
+	margin-left:10px;
+	margin-right:3px;
+	background:url(/assets2/images/crops/arrow-up.png) no-repeat top left;
+	width:14px;
+	height:14px;
+}
+#accordion2 .content {
+	width:100%;
+	padding:10px 5px;
+}
+.rdofix input{
+	float:left;
+}
+.rdofix label{
+	margin:0 0 5px 5px;
+}
+.formarea .innerhdtop{
+	padding: 10px 0 10px 10px;	
+}
+.error div{
+	clear:both;
+	padding:0 !important;	
+}

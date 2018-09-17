@@ -1,0 +1,96 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XRecruitmentStatusLibrary</RootNamespace>
+    <AssemblyName>XRecruitmentStatusLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="XRecruitmentStatusLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\RecruitmentAssessment\Bin\XRecruitmentStatusLibrary.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AlertManagement.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="EmailManagement.cs" />
+    <Compile Include="GeneralMethods.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSManagement.cs" />
+    <Compile Include="StatusManagement.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ErrorLog\ErrorLog.csproj">
+      <Project>{25ab4232-7f60-4713-91d7-1a0791554b2a}</Project>
+      <Name>ErrorLog</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="obj\Debug\DesignTimeResolveAssemblyReferencesInput.cache" />
+    <None Include="obj\Debug\XRecruitmentStatusLibrary.csprojResolveAssemblyReference.cache" />
+    <None Include="obj\Release\build.force" />
+    <None Include="obj\Release\DesignTimeResolveAssemblyReferencesInput.cache" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bin\Debug\ErrorLog.dll" />
+    <Content Include="bin\Debug\ErrorLog.pdb" />
+    <Content Include="bin\Debug\XRecruitmentStatusLibrary.dll" />
+    <Content Include="bin\Debug\XRecruitmentStatusLibrary.pdb" />
+    <Content Include="obj\Debug\XRecruitmentStatusLibrary.csproj.FileListAbsolute.txt" />
+    <Content Include="obj\Debug\XRecruitmentStatusLibrary.dll" />
+    <Content Include="obj\Debug\XRecruitmentStatusLibrary.pdb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Release\" />
+    <Folder Include="obj\Debug\TempPE\" />
+    <Folder Include="obj\Release\TempPE\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

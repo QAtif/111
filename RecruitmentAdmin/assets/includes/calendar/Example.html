@@ -1,0 +1,32 @@
+<html>
+<head>
+<!-- calendar stylesheet -->
+<LINK title=win2k-cold-1 media=all href="calendar-win2k-cold-1.css" type=text/css rel=stylesheet><!-- main calendar program -->
+<SCRIPT src="calendar.js" type=text/javascript></SCRIPT>
+<!-- language for the calendar -->
+<SCRIPT src="calendar-en.js" type=text/javascript></SCRIPT>
+<!-- the following script defines the Calendar.setup helper function, which makes
+       adding a calendar a matter of 1 or 2 lines of code. -->
+<SCRIPT src="calendar-setup.js" type=text/javascript></SCRIPT>
+
+</head>
+<body>
+<table>
+ <tr>
+              <td><strong><font color="#000000" size="1" face="Verdana, Arial, Helvetica, sans-serif">Date of birth <span class="red">*</span></font></strong></td>
+              <td><table border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td><input name="txtdob" type="text" id="txtdob" size="10" readonly></td>
+                  <td><font size="1" face="Verdana, Arial, Helvetica, sans-serif">
+                  <img src="calendar.gif" id="f_trigger_cccc" style="cursor: pointer;" title="Date selector" width="34" height="21"></font></td>
+              <SCRIPT type=text/javascript>
+    Calendar.setup({
+        inputField     :    "txtdob",      // id of the input field
+        ifFormat       :    "dd/M/y",       // format of the input field
+        button         :    "f_trigger_cccc",   // trigger for the calendar (button ID)
+        singleClick    :    false            // double-click mode
+    });
+                  </SCRIPT>  </tr>
+</table>
+</body>
+</html>

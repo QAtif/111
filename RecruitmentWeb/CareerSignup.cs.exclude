@@ -1,0 +1,347 @@
+﻿
+using ErrorLog;
+using System;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+using System.IO;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Web;
+using System.Web.Profile;
+using System.Web.SessionState;
+using System.Web.UI;
+using System.Web.UI.HtmlControls;
+using System.Web.UI.WebControls;
+using Telerik.Web.UI;
+using XRecruitmentStatusLibrary;
+
+public partial class CareerSignup : Page, IRequiresSessionState
+{
+    public string QueryStringVar { get; private set; }
+
+    private string DomainAddress = ConfigurationManager.AppSettings["DomainAddress"].ToString();
+    private string TokenSecret = "";
+    private string XML = string.Empty;
+    private string PhoneVerificationCode = string.Empty;
+    private string EmailVerificationCode = string.Empty;
+    //private string QueryStringVar = string.Empty;
+    //protected HtmlHead Head1;
+    //protected TextBox txtParentUrl;
+    //protected TextBox txtFullname;
+    //protected TextBox txtEmail;
+    //protected DropDownList ddlCountry;
+    //protected DropDownList ddlPhoneCodes;
+    //protected HtmlGenericControl dvCode;
+    //protected TextBox txtCell;
+    //protected HtmlGenericControl dvCell;
+    //protected TextBox txtCell2;
+    //protected HtmlGenericControl dvOther;
+    //protected TextBox txtPassword;
+    //protected TextBox txtReEnterPassPassword;
+    //protected Button ImageButton2;
+    //protected ImageButton ImageButton1;
+    //protected HtmlForm form1;
+    private SecureQueryString oSecureString;
+    private SecureQueryString secQueryString;
+
+    int CandidateCode = -1;
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!IsPostBack)
+            {
+                BindPhoneCodes();
+            }
+        }
+        catch (Exception ex)
+        {
+            LogError.Write((LogError.AppType)1, ex.Message + " " + ex.StackTrace, ex, "");
+        }
+    }
+
+    public void BindPhoneCodes()
+    {
+        DataSet dataSet = new DataSet();
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+        {
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            using (SqlCommand selectCommand = new SqlCommand("XRec_SelectService", connection))
+            {
+                selectCommand.CommandType = CommandType.StoredProcedure;
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                {
+                    sqlDataAdapter.Fill(dataSet);
+                    ddlPhoneCodes.DataSource = dataSet.Tables[0];
+                    ddlPhoneCodes.DataTextField = "ServiceName";
+                    ddlPhoneCodes.DataValueField = "ServiceName";
+                    ddlPhoneCodes.DataBind();
+                }
+            }
+        }
+    }
+
+    private void BindCountry()
+    {
+        //DataSet dataSet = new DataSet();
+        //using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+        //{
+        //    connection.Open();
+        //    using (SqlCommand selectCommand = new SqlCommand("XRec_SelectCountry", connection))
+        //    {
+        //        selectCommand.CommandType = CommandType.StoredProcedure;
+        //        using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+        //        {
+        //            sqlDataAdapter.Fill(dataSet);
+        //            ddlCountry.DataSource = dataSet.Tables[0];
+        //            ddlCountry.DataTextField = "Country_Name";
+        //            ddlCountry.DataValueField = "Country_Code";
+        //            ddlCountry.DataBind();
+        //            ddlCountry.SelectedValue = "172";
+        //        }
+        //    }
+        //}
+    }
+
+    public string GetRandomCode(int length)
+    {
+        string str = Guid.NewGuid().ToString().Replace("-", string.Empty);
+        if (length <= 0 || length > str.Length)
+            throw new ArgumentException("Length must be between 1 and " + str.Length);
+        return str.Substring(0, length);
+    }
+
+    public DataSet SignUp()
+    {
+        string empty1 = string.Empty;
+        string empty2 = string.Empty;
+        QueryStringVar = HttpContext.Current.Request[(string)SecureQueryString.QueryStringVar];
+        if (QueryStringVar != null)
+        {
+            secQueryString = new SecureQueryString(QueryStringVar);
+            if (secQueryString != null)
+            {
+                if (secQueryString["cc"] != null)
+                    empty1 = secQueryString["cc"].ToString();
+                if (secQueryString["rfc"] != null)
+                    empty2 = secQueryString["rfc"].ToString();
+            }
+        }
+        DataSet dataSet = new DataSet();
+        int length = 6;
+        PhoneVerificationCode = GetRandomCode(length);
+        EmailVerificationCode = GetRandomCode(length);
+        string empty3 = string.Empty;
+        string str = ddlPhoneCodes.SelectedValue.ToString() + txtCell.Text.ToString();
+        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+        {
+            if (connection.State != ConnectionState.Open)
+                connection.Open();
+            using (SqlCommand selectCommand = new SqlCommand("XRec_CreateCandidateSignup", connection))
+            {
+                oSecureString = new SecureQueryString();
+                selectCommand.CommandType = CommandType.StoredProcedure;
+                selectCommand.Parameters.AddWithValue("@FullName", txtFullname.Text);
+                selectCommand.Parameters.AddWithValue("@EmailAddress", txtEmail.Text);
+                selectCommand.Parameters.AddWithValue("@CurrentURL", Request.Url.ToString());
+                selectCommand.Parameters.AddWithValue("@ReferralURL", Request.UrlReferrer.ToString());
+                selectCommand.Parameters.AddWithValue("@PhoneNumber", str);
+                selectCommand.Parameters.AddWithValue("@Password", oSecureString.encrypt(txtPassword.Text.Trim()));
+                selectCommand.Parameters.AddWithValue("@UpdationIP", Request.UserHostAddress.ToString());
+                selectCommand.Parameters.AddWithValue("@PhoneVerificationCode", PhoneVerificationCode);
+                selectCommand.Parameters.AddWithValue("@EmailVerificationCode", EmailVerificationCode);
+                selectCommand.Parameters.AddWithValue("@CountryCode", 172);
+                if (empty1 != string.Empty)
+                    selectCommand.Parameters.AddWithValue("@AppliedCand_Code", empty1);
+                if (empty2 != string.Empty)
+                    selectCommand.Parameters.AddWithValue("@ReferralPortalID", empty2);
+                selectCommand.Parameters.AddWithValue("@SignUpThroughCode", 1);
+                selectCommand.Parameters.AddWithValue("@UserType", Convert.ToInt32(5));
+                // selectCommand.Parameters.AddWithValue("@referringURL", txtParentUrl.Text);
+                using (SqlDataAdapter sqlDataAdapter = new SqlDataAdapter(selectCommand))
+                    sqlDataAdapter.Fill(dataSet);
+            }
+        }
+        return dataSet;
+    }
+
+    protected void btnSignUp_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (!Page.IsValid)
+                return;
+            txtPassword.Attributes.Add("value", txtPassword.Text);
+            txtReEnterPassPassword.Attributes.Add("value", txtReEnterPassPassword.Text);
+            DataSet dataSet1 = new DataSet();
+            DataSet dataSet2 = SignUp();
+            if (dataSet2 == null || dataSet2.Tables == null || dataSet2.Tables.Count <= 0)
+                return;
+            if (dataSet2.Tables[0].Rows.Count > 0)
+            {
+                if (dataSet2.Tables[0].Rows[0]["CandidateCode"].ToString() != "0")
+                {
+                    Session["CC"] = dataSet2.Tables[0].Rows[0]["CandidateCode"].ToString();
+                    CandidateCode = Convert.ToInt32(dataSet2.Tables[0].Rows[0]["CandidateCode"].ToString());
+                    int Counter = SaveAllFiles();
+                    if (Counter > 0)
+                    {
+                        using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+                        {
+                            if (connection.State != ConnectionState.Open)
+                                connection.Open();
+                            StatusManagement.MarkLifeCycleStatus(connection, CandidateCode, Constants.ModuleCode.LifeCycleStatus,
+                             Constants.CandidateLifeCycleStatus.VerificationDoneApplicationPending, Request.UserHostAddress,
+                             CandidateCode);
+                            if (connection.State != ConnectionState.Closed)
+                                connection.Close();
+                        }
+                    }
+                    ScriptManager.RegisterStartupScript((Page)this, GetType(), "pass", "refreshParent('area/area.aspx');", true);
+                }
+                else
+                {
+                    if (dataSet2.Tables[0].Rows[0]["EmailAddressExist"].ToString() == "1")
+                        ScriptManager.RegisterStartupScript((Page)this, GetType(), "exists", "alert('Email Address Already Exist.');", true);
+                    if (dataSet2.Tables[0].Rows[0]["MobileNumberExist"].ToString() == "1")
+                        ScriptManager.RegisterStartupScript((Page)this, GetType(), "exists", "alert('Phone Number Already Exist.');", true);
+                    if (!(dataSet2.Tables[0].Rows[0]["EmailAddressExist"].ToString() == "1") || !(dataSet2.Tables[0].Rows[0]["MobileNumberExist"].ToString() == "1"))
+                        return;
+                    ScriptManager.RegisterStartupScript((Page)this, GetType(), "exists", "alert('Phone Number / Email Address Already Exist.');", true);
+                }
+            }
+            else
+                ScriptManager.RegisterStartupScript((Page)this, GetType(), "exists", "alert('Phone Number / Email Address Already Exist.');", true);
+        }
+        catch (Exception ex)
+        {
+            LogError.Write((LogError.AppType)1, ex.Message + " " + ex.StackTrace, ex, "");
+        }
+        
+    }
+
+    #region ResumeUpload
+    protected void btnSave_Click(object sender, EventArgs e)
+    {
+        try
+        {
+
+            int Counter = SaveAllFiles();
+
+            if (Counter > 0)
+            {
+                using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+                {
+                    if (connection.State != ConnectionState.Open)
+                        connection.Open();
+                    StatusManagement.MarkLifeCycleStatus(connection, CandidateCode, Constants.ModuleCode.LifeCycleStatus,
+                     Constants.CandidateLifeCycleStatus.VerificationDoneApplicationPending, Request.UserHostAddress,
+                     CandidateCode);
+                    //  HttpContext.Current.ApplicationInstance.CompleteRequest();
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + "Landing Pages " + ex.StackTrace, ex, CandidateCode.ToString());
+        }
+    }
+    private int SaveAllFiles()
+    {
+        int FileBrowseCounter = 0;
+        try
+        {
+
+            RadAsyncUpload TelerikUpload = AsyncUpload1;
+            if (TelerikUpload.UploadedFiles.Count > 0)
+            {
+                Telerik.Web.UI.UploadedFile file = TelerikUpload.UploadedFiles[0];
+                string fileExtension = System.IO.Path.GetExtension(TelerikUpload.UploadedFiles[0].FileName).ToLower();
+                string uploadFolderName = string.Empty;
+                uploadFolderName = ConfigurationManager.AppSettings["CandidateDocumentsPath"].ToString() +
+                                CandidateCode + "/Personal/";
+                FileBrowse(file, uploadFolderName, "Resume");
+                FileBrowseCounter = UpdateCandidateInformation(uploadFolderName + "Resume" + fileExtension);
+                //FileBrowseCounter++;
+            }
+            else
+            {
+                FileBrowseCounter = -1;
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " Landing Pages" + ex.StackTrace, ex, CandidateCode.ToString());
+        }
+        return FileBrowseCounter;
+    }
+    public static string FileBrowse(UploadedFile Source, string FolderPath, string FileName)
+    {
+        string str2;
+        CreateFolder(FolderPath);
+        string extension = Path.GetExtension(Source.GetName());
+        string str = FileName + extension;
+        if (IsValidPath(FolderPath))
+            str2 = FolderPath;
+        else
+            str2 = HttpContext.Current.Server.MapPath(FolderPath);
+
+        if ((str != "") && (Source.ContentLength != 0))
+        {
+            string filename = str2 + @"\" + str;
+            Source.SaveAs(filename);
+        }
+        return str;
+    }
+    public static void CreateFolder(string FolderPath)
+    {
+        string path = string.Empty;
+        if (IsValidPath(FolderPath))
+            path = FolderPath;
+        else
+            path = HttpContext.Current.Server.MapPath(FolderPath);
+
+        DirectoryInfo info = new DirectoryInfo(path);
+        if (!info.Exists)
+            Directory.CreateDirectory(path);
+    }
+    public static bool IsValidPath(string path)
+    {
+        Regex regex = new Regex(@"^(?:[a-zA-Z]\:|\\\\[\w\.]+\\[\w.]+)\\(?:[\w]+\\)*");
+        return regex.IsMatch(path);
+
+    }
+    public int UpdateCandidateInformation(string FilePath)
+    {
+        int affected = 0;
+        try
+        {
+            using (SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+            {
+                if (connection.State != ConnectionState.Open)
+                    connection.Open();
+                using (SqlCommand command = new SqlCommand("XRec_UpdateCandidateResumePath", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add(new SqlParameter("@CandidateCode", CandidateCode));
+                    command.Parameters.Add(new SqlParameter("@DocumentPath", FilePath));
+                    affected = command.ExecuteNonQuery();
+                }
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " Landing Pages UpdateCandidateInformation" + ex.StackTrace, ex, CandidateCode.ToString());
+        }
+        return affected;
+    }
+
+    #endregion
+}

@@ -1,0 +1,174 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Web.UI.WebControls.WebParts;
+using System.Web.UI.HtmlControls;
+using System.Data.SqlClient;
+using System.Collections.Specialized;
+using System.Configuration;
+using System.Data;
+using System.IO;
+
+
+public partial class ChangeJoiningDates : CustomBasePage
+{
+
+    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["PortalConnection"].ConnectionString);
+    SqlConnection Errlogconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["errLogConnection"].ToString());
+
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            try
+            {
+                if (!IsPostBack)
+                {
+                    BindDepartments();
+                    postedFromDate.Text = DateTime.Now.AddDays(-30).ToString("MMM dd, yyyy");
+                    postedToDate.Text = DateTime.Now.ToString("MMM dd, yyyy");
+                    //BindData();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                if (connection.State != ConnectionState.Closed)
+                    connection.Close();
+            }
+        }
+
+    }
+
+    protected void lnkSearch_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            BindData();
+        }
+        catch (Exception ex)
+        {
+            throw;
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    protected void rptUserDetails_ItemDataBound(object sender, RepeaterItemEventArgs e)
+    {
+        if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
+        {
+            HtmlGenericControl spnImage = (HtmlGenericControl)e.Item.FindControl("spnImage");
+
+            string pictureName = DataBinder.Eval(e.Item.DataItem, "Photo_Name").ToString();
+            string CandCatCode = DataBinder.Eval(e.Item.DataItem, "ref").ToString();
+            string path = string.Empty;
+            string newPath = string.Empty;
+
+            if (DataBinder.Eval(e.Item.DataItem, "Is_SupportUser").ToString().ToLower() == "false")
+            {
+                path = "http://myaxactweb:200/images/members/user/" + pictureName;
+                spnImage.InnerHtml = "<DIV><img src=\"" + path + "\" alt=\"Portal Picture\"  title=\"Picture\" width=\"41\" height=\"45\" /></a></DIV>";
+            }
+            else
+            {
+                path = "http://myaxactweb:200/images/members/support/" + pictureName;
+                spnImage.InnerHtml = "<DIV><img src=\"" + path + "\" alt=\"Portal Picture\"  title=\"Picture\" width=\"41\" height=\"45\" /></a></DIV>";
+            }
+        }
+    }
+
+    protected void rptBenefit_OnItemCommand(object source, RepeaterCommandEventArgs e)
+    {
+        try
+        {
+            if (e.CommandName == "UnSuspend")
+            {
+                CustomBasePage cbp = new CustomBasePage();
+                dbAccess.ExecuteNonQuery("UnSuspendPortal @UserCode='" + e.CommandArgument.ToString() + "',@UpdationIP='" + Request.UserHostAddress + "',@UpdatedBy='" + cbp.Usercode + "'");
+                BindData();
+            }
+
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+
+    private void BindDepartments()
+    {
+        using (connection)
+        {
+            SqlCommand sqlCommand = new SqlCommand("FR_getAllDepartments", connection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter da = new SqlDataAdapter(sqlCommand);
+            DataTable dt = new DataTable();
+            //connection.Open();
+            da.Fill(dt);
+
+            ddlDepartment.DataSource = dt;
+            ddlDepartment.DataTextField = "deptName";
+            ddlDepartment.DataValueField = "deptID";
+            ddlDepartment.DataBind();
+            ddlDepartment.Items.Insert(0, new ListItem("---All---", "-1"));
+        }
+    }
+
+    private void BindData()
+    {
+        using (connection)
+        {
+            SqlCommand command = new SqlCommand("Portal_Select_GetMasterReportData", connection);
+
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("@DeptID", SqlDbType.Int).Value = ddlDepartment.SelectedValue;
+            command.Parameters.Add("@Name", SqlDbType.VarChar).Value = txtName.Text;
+            command.Parameters.Add("@RefNo", SqlDbType.Int).Value = txtRefrenceNo.Text;
+
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            DataTable dt = new DataTable();
+            //connection.Open();
+            da.Fill(dt);
+
+            rptUserDetails.DataSource = dt;
+            rptUserDetails.DataBind();
+
+        }
+    }
+
+    private void UpdateUser()
+    {
+        using (connection)
+        {
+            SqlCommand command = new SqlCommand("Portal_Update_UserJoiningDate", connection);
+
+            command.CommandType = CommandType.StoredProcedure;
+            command.Parameters.Add("@UserID", SqlDbType.Int).Value = ddlDepartment.SelectedValue;
+            command.Parameters.Add("@Date", SqlDbType.VarChar).Value = txtName.Text;
+            command.Parameters.Add("@Updated_By", SqlDbType.Int).Value = UserCode;
+            command.Parameters.Add("@Updated_IP", SqlDbType.VarChar).Value = Request.UserHostAddress;
+
+            SqlDataAdapter da = new SqlDataAdapter(command);
+            DataTable dt = new DataTable();
+            //connection.Open();
+            da.Fill(dt);
+
+            rptUserDetails.DataSource = dt;
+            rptUserDetails.DataBind();
+
+        }
+    }
+}

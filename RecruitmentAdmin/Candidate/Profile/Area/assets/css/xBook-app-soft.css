@@ -1,0 +1,50 @@
+.ui-autocomplete 
+{
+    z-index:999;
+   
+}
+.ui-autocomplete  a 
+{
+    color:#666;
+    font-size:11px;
+}
+.xBook-button-normal, .xBook-button-center 
+{
+    color:#fff !important;
+	text-align:center;
+	width: 119px !important;
+    
+}
+.xBook-button-center2 {
+	   background: url("/Area/assets/img/button-normal.png") no-repeat scroll left top transparent;
+    border: medium none;
+    color: #FFFFFF;
+    display: inline-block;
+    font-size: 11px;
+    height: 25px;
+    line-height: 25px;
+    margin: 3px 10px 0 0;
+    outline: medium none;
+    padding-left: 10px;
+    text-align: left;
+    width: 119px;
+}
+.attachedpixs ul {
+width:100%;
+float:left;
+list-style:none;
+}
+.attachedpixs ul  li {
+	float:left;
+	width:100px;
+	position:relative;
+	margin-left:10px;
+}
+
+.attachedpixs li .fadeit{
+	height:100px;
+	width:100px;
+}
+.attachedpixs li:hover .fadeit, .attachedpixs li:hover .closeicon{
+	display:block;
+}

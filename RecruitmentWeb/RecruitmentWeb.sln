@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RecruitmentWeb", "http://localhost/RecruitmentWeb", "{313B57BA-8985-4BB8-A6A4-EC638B4B620F}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = ""$/RecruitmentWeb", WDHAAAAA"
+		SccAuxPath = ""
+		SccLocalPath = "."
+		SccProvider = "MSSCCI:Microsoft Visual SourceSafe"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/RecruitmentWeb"
+		Debug.AspNetCompiler.PhysicalPath = "E:\Work\X-ERP\XERP-Recruitment\RecruitmentWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\RecruitmentWeb\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/RecruitmentWeb"
+		Release.AspNetCompiler.PhysicalPath = "E:\Work\X-ERP\XERP-Recruitment\RecruitmentWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\RecruitmentWeb\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "E:\Work\X-ERP\XERP-Recruitment\RecruitmentWeb\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		SccWebProject1 = true
+		SccProjectUniqueName1 = http://localhost/RecruitmentWeb
+		SccLocalPath1 = E:\\Work\\X-ERP\\XERP-Recruitment\\RecruitmentWeb
+		SccProjectEnlistmentChoice1 = 2
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{313B57BA-8985-4BB8-A6A4-EC638B4B620F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{313B57BA-8985-4BB8-A6A4-EC638B4B620F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

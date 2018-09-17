@@ -1,0 +1,27 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="FBConnectPage.aspx.cs" Inherits="FBConnectPage" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<script type="text/javascript">
+
+    function CloseWindow() {
+        window.close('', '_self', '');
+        if (parent != null) {
+            parent.window.location.href = parent.window.location.href;
+        }
+        this.close();
+    }
+</script>
+<body>
+    <form id="form1" runat="server">
+    <div>
+        <asp:Button ID="btnFBConnect" runat="server" Text="Facebook Connect" OnClick="btnFBConnect_Click" />
+        <asp:ImageButton ID="btnDownload" runat="server" OnClick="btnDownload_Click" ImageUrl="/assets3/img/connectfb.png"
+            AlternateText="Download Now!" />
+    </div>
+    </form>
+</body>
+</html>

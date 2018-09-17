@@ -1,0 +1,626 @@
+@charset "utf-8";
+/* CSS Document */
+
+@import url("newstyle.css");
+img {
+	border:0px;
+}
+* {
+	margin:0px;
+	padding:0px;
+}
+
+/* reset ends here  */
+h2 {
+	font-size:16px;
+	font-weight:normal;
+	padding:2px 0px;
+}
+h2 span {
+	font-weight:bold;
+}
+h2 span.smallfont {
+	font-weight:normal;
+	font-size:12px;
+}
+h3{font-family:Verdana;
+	font-size:13px;
+	line-height:30px;
+	color:#666666;
+}
+/* heading area ends here */
+body {
+	background:url(/assets/images/erp-bg.jpg) no-repeat top left #fff;
+	margin:0px;
+	padding:0px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:100%;
+	color:#333;
+	position:relative;	
+}
+p{
+	font-size:11px;
+	
+}
+a {
+	color:#1b7adb;
+	font-size:11px;
+}
+#main-wrapper {
+	float:left;
+	width:100%;
+}
+#header {
+	width:100%;
+	float:left;
+	height:87px;
+	background:url(/assets/images/main-bg.jpg) repeat-x top left;
+}
+
+#logo {
+	height:55px;
+	float:left;
+	width:350px;
+}
+#logodha {
+	float:right;
+	height:55px;
+	width:350px;
+}
+
+
+
+/* header css ends here */
+
+
+#mainmenu {
+	width:100%;
+	float:left;
+	height:32px;
+	font-size:12px;
+}
+#mainmenu ul {
+	padding:0px;
+	margin:0px;
+	float:left;
+	margin-left:20px;
+	width:auto;
+	padding:2px 0px;
+}
+#mainmenu ul ul{
+	padding:0px;
+	margin:0px;
+	margin-left:20px;
+	width:250px;
+	padding:2px 0px;
+	display:none;
+	position:absolute;
+	background:#575757;
+	font-size:11px;
+	z-index:3;
+}
+#mainmenu li{ 
+	list-style:none;
+	padding:0px;
+	margin:0px;
+	float:left;
+	position:relative;
+}
+
+#mainmenu li li{ 
+	width:100%;
+}
+#mainmenu li li:hover {
+	background:#6d6d6d;
+}
+#mainmenu li li li:hover {
+	background:#6d6d6d;
+}
+#mainmenu ul li:hover ul{ 
+	display:block;
+	top:30px;
+	*top:28px;
+	left:-25px;
+	padding:5px;
+	z-index:3;
+}
+#mainmenu ul li ul li ul{ 
+	display:none !important;
+}
+#mainmenu ul li ul li:hover ul{ 
+	display:block !important;
+	top:-5px;
+	left:230px;
+	padding:5px;
+	z-index:3;
+	background:#999;
+}
+#mainmenu a{ 
+	float:left;
+	padding:6px 10px 10px 30px ;
+	background:url(/assets/images/li-bg.jpg) no-repeat top left;
+	color:#fff;
+	text-decoration:none;
+	font-weight:bold;
+	text-transform:capitalize;
+}
+
+/* menu css ends here */
+
+#content{
+	width:100%;
+	float:left;
+	padding:20px 0px;
+}
+#content #holder{
+	width:96%;
+	margin:0px auto;
+}
+#content #holder #contentinner{
+	width:100%;
+	float:left;
+}
+
+.description {
+	float:left;
+	width:100%;
+	padding:10px 0px;
+}
+/* main inner ends here */
+
+
+
+#footer{
+	float:left;
+	width:100%;
+	color:#666666;
+	font-size:11px;
+	text-align:center;
+	padding:20px 0px;
+}
+
+#container {
+	width:100%;
+	float:left;
+	font-size:12px;
+	min-height:600px;
+	z-index:0 !important;
+}
+
+.btnadd {
+	background: url(/assets/images/icons/simple-btn-bg.png) repeat-x top left #000;
+	margin:5px 10px;
+	padding:4px 10px 3px 10px ;
+	color:#fff;
+	font-size:12px;
+	text-decoration:none;	
+	border: 0px ;
+	position: relative;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	z-index: 2;
+	behavior: url(/assets/css/ie-css3.htc);
+	float:right;
+}
+.btnnormal {
+	
+	background: url(/assets/images/icons/simple-btn-bg.png) repeat-x top left #000;
+	margin:0px 10px;
+	padding:3px 10px 6px 10px ;
+	color:#fff;
+	font-size:12px;
+	text-decoration:none;	
+	border: 0px ;
+	position: relative;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	z-index: 2;
+	behavior: url(/assets/css/ie-css3.htc);
+	/*top:10px;*/
+}
+.btnnormal.crop {
+	top:0px;
+}
+
+/*main structure ends here */
+
+
+/* real table data starts */
+
+#container  table{
+	width:100%;
+	border-top:1px solid #d5d5d5;
+	border-right:1px solid #d5d5d5;
+}
+#container table th {
+	padding:7px;
+}
+#container table td,#container table th{
+	border-left:1px solid #d5d5d5 ;
+	border-bottom:1px solid #d5d5d5 ;
+}
+
+#container table thead{
+	background:	url(/assets/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+#container table tbody tr.grey td{
+	background:#f7f7f7;
+	text-indent:10px;
+}
+#container table tbody tr th.grey{
+	background:#f7f7f7;
+	
+}
+#container table tbody tr td{
+	background:#fff;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+	text-indent:35px;
+}
+#container table tbody tr td span{color:#F00;}
+#container table tbody tr.simple td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+#container table tbody tr.special td{
+	padding:0px;
+	font-size:11px;
+	text-indent:0px;
+}
+
+
+
+
+
+
+/* real table data type two starts */
+
+#container  table.specialtab{
+	width:100%;
+	border:1px solid #d5d5d5;
+	border-bottom:0px;
+	
+}
+#container  table.specialtab span{
+	font-weight:normal;
+	
+}
+#container table th {
+	padding:7px;
+}
+#container table.specialtab td,#container table.specialtab th{
+	border-bottom:1px solid #d5d5d5;
+	border-left:0px;
+}
+
+#container table.specialtab thead{
+	background:	url(/assets/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+#container table.specialtab tbody tr.grey td{
+	background:#f7f7f7;
+	text-indent:10px;
+}
+#container table.specialtab tbody tr.grey td span{ text-align:center;}
+
+
+#container table.specialtab tbody tr td{
+	background:#fff;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+	text-indent:35px;
+	
+}
+#container table.specialtab tbody tr.simple td{
+	background:#fff;
+	padding:20px 0px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+#container table.specialtab tbody tr.simpletd td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+#container table.specialtab tbody tr.special td{
+	padding:0px;
+	font-size:11px;
+	text-indent:0px;
+}
+
+/* table yellow starts here */
+
+
+#container  table.yellow{
+	width:100%;
+	border:1px solid #d5d5d5;
+	border-bottom:0px;
+	
+}
+#container table th {
+	padding:7px;
+}
+#container table.yellow td,#container table.yellow th{
+	border-bottom:1px solid #d5d5d5;
+	border-left:0px;
+}
+
+#container table.yellow thead{
+	background:	url(/assets/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+#container table.yellow tbody tr.grey td{
+	background:#f7f7f7;
+	text-indent:10px;
+}
+#container table.yellow tbody tr td{
+	background:#fffcea;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+	text-indent:35px;
+}
+#container table.yellow tbody tr.simple td{
+	background:#fffcea;
+	padding:20px 0px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+#container table.yellow tbody tr.simpletd td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+#container table.yellow tbody tr.special td{
+	padding:0px;
+	font-size:11px;
+	text-indent:0px;
+}
+
+
+
+
+
+/* table style two ends here*/
+
+/* right and left starts here */
+#right {
+	width:68%;
+	float:right;	
+}
+
+#left {
+	width:30%;
+	float:left;
+}
+
+#empsearch {
+	width:100%;
+	float:left;
+	height:300px;
+	overflow:scroll;
+	overflow-x:hidden;
+}
+.searchedlist {
+	padding:20px;
+	margin:0px;
+}
+.searchedlist li{
+	padding:10px 0px;
+	list-style:none;
+}
+/* right and left ends here */
+
+select {
+	width:95%;
+}
+textarea {
+	width:98%;
+}
+textarea.medium {
+	width:50%;
+}
+select.vlarge {
+	width:500px;
+}
+select.vvlarge {
+	width:700px;
+}
+
+select.large {
+	width:300px;
+}
+select.medium {
+	width:95%;
+}
+select.small {
+	width:50%;
+	margin:5px;
+}
+select.vsmall {
+	width:60px;
+}
+.center  {
+	text-align:center;
+}
+input.small {
+	width:20px;
+}
+input.medium {
+	width:20%;
+}
+input.normal {
+	width:50%;
+	margin:5px;
+}
+input.large {
+	width:350px;
+}
+input.vlarge {
+	width:500px;
+}
+
+ul.typea {
+	margin:0px;
+	padding:0px;
+}
+ul.typea li{
+	list-style:none;
+	margin:15px 0px;
+	padding-left:20px;
+	background:url(/assets/images/icons/li-bg.jpg) no-repeat top left;
+}
+.addsimple {
+	background:url(/assets/images/icons/add.png) no-repeat top left;
+	padding:2px 0px;
+	padding-left:25px;
+	margin:0px 3px;	
+}
+.removesimple {
+	background:url(/assets/images/icons/remove.jpg) no-repeat top left;
+	padding:2px 0px;
+	padding-left:18px;
+	margin:0px 3px;
+}
+table.none {
+	margin:0px !important;
+	padding:0px !important;
+	border:0px !important;
+	background:none !important;
+}
+table.none td {
+	margin:0px !important;
+	border:0px !important;
+	padding:0px !important;
+	background:none !important;
+}
+
+
+/* real table data type two starts  orange*/
+
+#container  table.orange{
+	width:100%;
+	border:1px solid #d5d5d5;
+	border-bottom:0px;
+	
+}
+#container table th {
+	padding:7px;
+}
+#container table.orange td,#container table.orange th{
+	border-bottom:1px solid #d5d5d5;
+	border-left:0px;
+}
+
+#container table.orange thead{
+	background:	url(/assets/images/orange-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+#container table.orange tbody tr.orng td{
+	background:#f2e9d2;
+	text-indent:10px;
+}
+#container table.orange tbody tr td{
+	background:#fff;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+	text-indent:35px;
+}
+#container table.orange tbody tr.simple td{
+	background:#fff6dd;
+	padding:20px 0px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+#container table.orange tbody tr.simpletd td{
+	background:#fff6dd;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+#container table.orange tbody tr.special td{
+	padding:0px;
+	font-size:11px;
+	text-indent:0px;
+}
+.bold{font-weight:bold;}
+.leftborder td{border-left:solid 1px #CCC!important; border-bottom: solid 1px #CCC!important;}
+
+.btnlarge {
+	
+	background: url(/assets/images/icons/simple-btn-bg.png) repeat-x top left #000;
+	margin:0px 10px;
+	padding:3px 5px 6px 5px ;
+	color:#fff;
+	font-size:12px;
+	text-decoration:none;	
+	border: 0px ;
+	position: relative;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	z-index: 2;
+	behavior: url(/assets/css/ie-css3.htc);
+	/*top:10px;*/
+}
+.paddme td {
+	padding:20px 5px !important;
+}
+.next-prev{ padding:0;}
+
+table.attspecial {
+	border:0px !important;
+}
+table.attspecial td {
+	border:1px solid #d5d5d5 !important;
+	padding:3px !important;
+}
+table.attspecial td.grey  {
+	background:#f7f7f7;
+}
+
+.left-border-none
+{
+	border-left:none!important;
+}
+
+.right-border-none
+{
+	border-right:none!important;
+}
+
+
+.no-border
+{
+	border-left:none!important;
+	border-right:none!important;
+}

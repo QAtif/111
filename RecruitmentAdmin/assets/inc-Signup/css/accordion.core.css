@@ -1,0 +1,93 @@
+ul.accordion, ol.accordion {
+	margin: 0;
+	padding: 0;
+}
+.accordion{
+	float: left;
+    /*min-height: 800px;*/
+    list-style: none outside none;
+    margin: 20px 0 0 0;
+    padding: 0;
+    width: 282px;
+	position:relative;	
+	list-style:none;
+	/*overflow:hidden;*/
+}
+.accordion li{
+    float: left; background:#EEEEEE;
+    position: relative;
+    text-indent: 0;
+    width: 281px;	
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	color:#474747;
+}
+.accordion li:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+ *zoom: 1;
+}
+
+.accordion a {
+padding: 14px 0 14px 55px;
+	line-height: 15px;
+	font-size: 12px;
+	font-family: Verdana, Geneva, sans-serif;
+	color:#474747;
+	text-decoration:none;
+	display:block;
+	background:url(/assets2/images/tab-bdr-bot.png) no-repeat left bottom;
+   
+}
+.accordion a:hover{
+	background: url(/assets2/images/tab-active.png) no-repeat 266px center white;
+	color: #f89801;
+}
+.accordion a.active{
+	background: url(/assets2/images/tab-active.png) no-repeat 266px center white;
+	color: #f89801;
+}
+.activeit a{
+	background: url(/assets2/images/tab-active.png) no-repeat 266px center white;
+	color: #f89801;
+	width:226px;	
+}
+.accordion .loading {
+	display: none;
+}
+.loading {
+	display: none;
+}
+.accordion {
+
+}
+.accordion li img {
+	left: 17px;
+position: absolute;
+top: 8px;
+z-index: 2;
+}
+.accordion li h3.hd2 a:hover {
+	background:none;
+}
+.accordion li.locked h3 a {
+
+}
+.accordion li h3 {
+	margin:         0;
+	padding:        0;
+}
+.accordion .panel {
+	
+}
+#example1 li.active .panel{
+	display:block;	
+}
+.panel .padtopfix{
+	padding-top:16px;
+	padding-bottom:0px;	
+}

@@ -1,0 +1,42 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="ProfileMaster.master.cs" Inherits="Candidate_Profile_ProfileMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title></title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <!--#include virtual="/Candidate/Profile/Area/includes/header-scripts-applications.html"-->
+   
+    <asp:ContentPlaceHolder ID="HeadContainer" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="main">
+        <form id="form1" runat="server" class="xStyledForm">
+        <!-- End Header -->
+        <div class="row-fluid">            
+            <div>
+                <section>
+      <div class="tab-content">
+            <asp:ScriptManager runat="server" ID="scrptmgr"></asp:ScriptManager>
+            <div>
+                <asp:ContentPlaceHolder ID="ContentContainer" runat="server">
+                </asp:ContentPlaceHolder>
+            </div>
+             </div>
+    </section>
+            </div>
+        </div>
+        
+        </form> 
+         
+    <link href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css"
+        rel="stylesheet" type="text/css" />
+    <!-- <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script-->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/jquery-ui.min.js"></script>
+    </div>
+ <!--#include virtual="/Candidate/Profile/Area/includes/footer-scripts.html"-->
+</body>
+</html>

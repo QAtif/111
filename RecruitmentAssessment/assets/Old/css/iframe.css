@@ -1,0 +1,199 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+/* heading area ends here */
+
+* {
+	margin:0px;
+	padding:0px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:100%;
+
+}
+p{
+	font-size:11px;
+	
+}
+a {
+	color:#1b7adb;
+	font-size:11px;
+}
+img {
+	border:0px;
+}
+#container {
+	width:100%;
+	float:left;
+	font-size:12px;
+	position:relative;
+}
+
+/* real table data starts */
+
+#container  table{
+	width:100%;
+	border-top:1px solid #d5d5d5;
+	border-right:1px solid #d5d5d5;
+}
+#container table th {
+	padding:7px;
+}
+#container table td,#container table th{
+	border-left:1px solid #d5d5d5;
+	border-bottom:1px solid #d5d5d5;
+}
+
+#container table thead{
+	background:	url(/assets/images/th-bg.jpg) repeat-x top left;
+	height:15px;
+	font-size:12px;
+	color:#666666;
+}
+#container table tbody tr.grey td{
+	background:#f7f7f7;
+	text-indent:10px;
+}
+#container table tbody tr td{
+	background:#fff;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+}
+
+/* anus's css starts here */
+h3{
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:16px;
+	color:#2a4b80;
+	font-weight:bold;
+	margin: 6px 0px 15px 10px;
+	}
+#container table tbody tr.simple td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+a{
+	
+text-decoration:none;
+	}
+.btnnormal {
+	background: url(/assets/images/icons/simple-btn-bg.png) repeat-x top left #000;
+	margin:10px 10px;
+	padding:3px 10px 6px 10px ;
+	color:#fff;
+	font-size:12px;
+	text-decoration:none;	
+	border: 0px ;
+	position: relative;
+	-moz-border-radius: 6px;
+	-webkit-border-radius: 6px;
+	border-radius: 6px;
+	z-index: 2;
+	behavior: url(/assets/css/ie-css3.htc);
+	top:10px;
+	
+}
+.btn-center{
+	
+	margin:0px auto; 
+	width:150px;}
+
+.btnadd .right ,.btnnormal .right  {
+	background:url(/assets/images/icons/btn-bg-right.png) no-repeat top right;
+	height:16px;
+	width:100%;
+	text-align:center;
+	float:right;
+	padding:3px 5px 3px 40px;
+	margin:0px ;
+}
+
+select {
+	width:95%;
+}
+textarea {
+	width:98%;
+}
+select.large {
+	width:300px;
+}
+select.medium {
+	width:220px;
+}
+select.small {
+	width:130px;
+}
+
+
+
+
+/* anus's css ends here */
+
+
+
+
+/* saad's css starts here */
+
+
+#container  table.specialtab{
+	width:100%;
+	border:1px solid #d5d5d5;
+	border-bottom:0px;
+	
+}
+#container table th {
+	padding:7px;
+}
+#container table.specialtab td,#container table.specialtab th{
+	border-bottom:1px solid #d5d5d5;
+	border-left:0px;
+}
+
+#container table.specialtab thead{
+	background:	url(/assets/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+#container table.specialtab tbody tr.grey td{
+	background:#f7f7f7;
+	text-indent:10px;
+}
+#container table.specialtab tbody tr td{
+	background:#fff;
+	padding:5px;
+	text-indent:35px;
+	font-size:11px;
+	color:#666;
+	text-indent:35px;
+}
+#container table.specialtab tbody tr.simple td{
+	background:#fff;
+	padding:20px 0px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+#container table.specialtab tbody tr.simpletd td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	text-indent:10px;
+}
+
+#container table.specialtab tbody tr.special td{
+	padding:0px;
+	font-size:11px;
+	text-indent:0px;
+}
+
+#container table tbody tr.red td{
+	background:#ffe8e8;
+	text-indent:10px;
+}

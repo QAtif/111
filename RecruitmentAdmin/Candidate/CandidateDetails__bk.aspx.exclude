@@ -1,0 +1,1163 @@
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.master" AutoEventWireup="true" CodeFile="CandidateDetails__bk.aspx.cs" Inherits="Candidate_CandidateDetails__bk" %>
+
+<asp:Content ID="Content1" ContentPlaceHolderID="HeadContent" runat="Server">
+    <script src="../Scripts/jquery-ui.js" type="text/javascript"></script>
+    <link href="../css/jquery-ui.css" rel="stylesheet" type="text/css" />
+    <script src="/assets/includes/calendar/calendar.js" type="text/javascript"></script>
+    <script src="/assets/includes/calendar/calendar-en.js" type="text/javascript"></script>
+    <script src="/assets/includes/calendar/calendar-setup.js" type="text/javascript"></script>
+    <link type="text/css" rel="stylesheet" href="/assets/includes/calendar/calendar-win2k-cold-1.css" />
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="BodyContent" runat="Server">
+    <script type="text/javascript">
+        $(function () {
+            $('#accordion').accordion({
+
+                autoHeight: false,
+                clearStyle: true
+            });
+        });
+
+        function ShowCalender() {
+            debugger;
+            var lblJoiningDate = document.getElementById('<%=lblJoiningDateName.ClientID%>').innerText;
+            var lnkChange = document.getElementById('<%=lnkChangeJoiningDate.ClientID%>').innerText;
+            var bl = false;
+
+            if (lblJoiningDate != "-" && lnkChange == "Change") {
+                document.getElementById('<%=lnkChangeJoiningDate.ClientID%>').innerText = "Submit";
+                document.getElementById('<%=lblJoiningDateName.ClientID%>').style.display = 'none';
+                document.getElementById('<%=txtJoiningDate.ClientID%>').style.display = '';
+                document.getElementById('<%=txtJoiningDate.ClientID%>').value = lblJoiningDate;
+                document.getElementById('<%=img1.ClientID%>').style.display = '';
+            }
+            else {
+                document.getElementById('<%=lnkChangeJoiningDate.ClientID%>').innerText = "Change";
+                document.getElementById('<%=lblJoiningDateName.ClientID%>').style.display = '';
+                document.getElementById('<%=txtJoiningDate.ClientID%>').style.display = 'none';
+                document.getElementById('<%=img1.ClientID%>').style.display = 'none';
+
+                bl = true;
+            }
+            return bl;
+        }
+
+        $(document).ready(function () {
+
+            $('a.fancybox-close').live('click', function () { location.reload(); });
+        });
+        $(function () {
+            $('#accordion').accordion({
+
+                autoHeight: false,
+                clearStyle: true
+
+            });
+
+
+        });
+
+
+    </script>
+    <div id="container" class="contentarea">
+        <div id="accordion">
+            <h4 style="font-weight: bold">
+                Personal Details</h4>
+            <div>
+                <table>
+                    <tr>
+                        <td align="right">
+                            <a id="lnkAddEditPersonal" runat="server" class="openframe">Add/Edit</a>
+                        </td>
+                    </tr>
+                </table>
+                <table width="50%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td rowspan="11" style="width: 50%">
+                            <img id="imgCandidatePic" alt="No Picture" runat="server" style="width: 100%;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Full Name </b>
+                        </td>
+                        <td>
+                            <label id="lblName" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Email_Address</b>
+                        </td>
+                        <td>
+                            <label id="lblEmailAddress" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Date Of Birth</b>
+                        </td>
+                        <td>
+                            <label id="lblDoB" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>NIC</b>
+                        </td>
+                        <td>
+                            <label id="lblNic" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Gender</b>
+                        </td>
+                        <td>
+                            <label id="lblGender" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Phone Number</b>
+                        </td>
+                        <td>
+                            <label id="lblPhoneNumber" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Religon</b>
+                        </td>
+                        <td>
+                            <label id="lblReligion" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>MaritalStatus</b>
+                        </td>
+                        <td>
+                            <label id="lblMaritalStatus" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Nationality</b>
+                        </td>
+                        <td>
+                            <label id="lblNationality" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Address</b>
+                        </td>
+                        <td>
+                            <label id="lblAddress" runat="server">
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <asp:LinkButton ID="lnkbtnCV" CausesValidation="false" runat="server" OnClick="lnkbtnCV_OnClick">View Uploaded CV</asp:LinkButton>
+                            <label id="lblNoCV" runat="server" style="color: Red">
+                            </label>
+                            <asp:HiddenField ID="hdnCVPath" runat="server" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <asp:LinkButton runat="server" ID="lnkViewPortfolio" OnClick="lnkViewPortfolio_Click"
+                                Font-Bold="false" Text="View Attached Portfolio" />
+                            <asp:HiddenField runat="server" ID="hdnpFileName" Value="0" />
+                            <br />
+                            OR
+                            <br />
+                            <a id="aPURL" runat="server">Click link to Portfolio </a>
+                        </td>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                <br />
+                <table width="50%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <b>Current Status</b>
+                        </td>
+                        <td>
+                            <label id="lblCurrentStatus" runat="server">
+                            </label>
+                            &nbsp;&nbsp;&nbsp; <span id="sSchedule" runat="server" stlye="display:none;">(Press
+                                to <a id="aSchedule" runat="server" style="font-weight: bold"></a>)</span>
+                        </td>
+                        <td>
+                            <a>Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Profile</b>
+                        </td>
+                        <td>
+                            <label id="lblProfileName" runat="server">
+                            </label>
+                        </td>
+                        <td>
+                            <a>Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Requistion</b>
+                        </td>
+                        <td>
+                            <label id="lblRequisitionName" runat="server">
+                            </label>
+                            &nbsp;&nbsp;&nbsp; <span id="sShortlist" runat="server" stlye="display:none;">(Press
+                                to
+                                <asp:LinkButton ID="lnkShortlist" runat="server" OnClick="lnkShortlist_Click"></asp:LinkButton>)</span>
+                        </td>
+                        <td>
+                            <a>Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Category</b>
+                        </td>
+                        <td>
+                            <label id="lblCategoryName" runat="server">
+                            </label>
+                        </td>
+                        <td>
+                            <a>Change</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Joining Date</b>
+                        </td>
+                        <td>
+                            <label id="lblJoiningDateName" runat="server">
+                            </label>
+                            <input runat="server" width="50px" type="text" id="txtJoiningDate" style="width: 120px;
+                                display: none;" clientidmode="Static" readonly="readonly" /><img src="/assets/images/icons/calendericon.jpg"
+                                    alt="" width="16" style="display: none;" height="16" id="img1" runat="server" />
+                            <script type="text/javascript">
+                                Calendar.setup({
+                                    inputField: "txtJoiningDate",      // id of the input field
+                                    ifFormat: "M dd, y",       // format of the input field
+                                    //ifFormat       :    "y-M-dd",       // format of the input field
+                                    //ifFormat       :    "M-dd-y",       // format of the input field
+                                    button: "img1",   // trigger for the calendar (button ID)
+                                    singleClick: true            // double-click mode
+                                });
+                            </script>
+                        </td>
+                        <td>
+                            <asp:LinkButton runat="server" ID="lnkChangeJoiningDate" OnClick="lnkChangeJoiningDate_Click"
+                                Text="Change" OnClientClick="javascript:return ShowCalender();"></asp:LinkButton>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Professional Experience</h4>
+            <div>
+                <table>
+                    <tr>
+                        <td align="right">
+                            <a id="lnkAddEditProfessional" runat="server" class="openframe">Add/Edit</a>
+                        </td>
+                    </tr>
+                </table>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tbody>
+                        <asp:Repeater ID="rptProfessionalExperience" runat="server">
+                            <HeaderTemplate>
+                                <tr class="simple">
+                                    <th>
+                                        Industry
+                                    </th>
+                                    <th>
+                                        Company
+                                    </th>
+                                    <th>
+                                        Title
+                                    </th>
+                                    <th>
+                                        Location
+                                    </th>
+                                    <th>
+                                        Start Date
+                                    </th>
+                                    <th>
+                                        End Date
+                                    </th>
+                                    <th>
+                                        Still Working
+                                    </th>
+                                    <th>
+                                        Still Salary
+                                    </th>
+                                    <th>
+                                        Initial Salary
+                                    </th>
+                                </tr>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr class="simple">
+                                    <td>
+                                        <%# Eval("Industry")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Company")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Position_Title")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Location")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("jobStart_Date")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("jobEnd_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Is_CurrentlyWorking")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Current_Salary")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Initial_Salary")%>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <tr class="grey">
+                                    <td>
+                                        <%# Eval("Industry")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Company")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Position_Title")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Location")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("jobStart_Date")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("jobEnd_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Is_CurrentlyWorking")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Current_Salary")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Initial_Salary")%>
+                                    </td>
+                                </tr>
+                            </AlternatingItemTemplate>
+                            <FooterTemplate>
+                                </table>
+                            </FooterTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Educational Qaulification</h4>
+            <div>
+                <table>
+                    <tr>
+                        <td align="right">
+                            <a id="lnkAddEditEducational" runat="server" class="openframe">Add/Edit</a>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="10">
+                    <tbody>
+                        <asp:Repeater ID="rptEduQualification" runat="server">
+                            <HeaderTemplate>
+                                <tr class="simple">
+                                    <th>
+                                        Institute
+                                    </th>
+                                    <th>
+                                        Degree
+                                    </th>
+                                    <th>
+                                        Program
+                                    </th>
+                                    <th>
+                                        Major
+                                    </th>
+                                    <th>
+                                        Grade
+                                    </th>
+                                    <th>
+                                        Start Date
+                                    </th>
+                                    <th>
+                                        End Date
+                                    </th>
+                                    <th>
+                                        Current Studying
+                                    </th>
+                                </tr>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr class="simple">
+                                    <td>
+                                        <%# Eval("Institute")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Degree")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Program_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Major_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Grade")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Start_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("End_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("EducationStatus_Code")%>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <tr class="grey">
+                                    <td>
+                                        <%# Eval("Institute")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Degree")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Program_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Major_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Grade")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Start_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("End_Date")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("EducationStatus_Code")%>
+                                    </td>
+                                </tr>
+                            </AlternatingItemTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Skill Set</h4>
+            <div>
+                <table>
+                    <tr>
+                        <td align="right">
+                            <a id="lnkAddEditSkillSet" runat="server" class="openframe">Add/Edit</a>
+                        </td>
+                    </tr>
+                </table>
+                <asp:Repeater ID="rptSkills" runat="server">
+                    <HeaderTemplate>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="10">
+                            <tr class="bo" style="background-color: #DCDCDC;">
+                                <td>
+                                    Skils
+                                </td>
+                            </tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <tr class="simple">
+                            <td>
+                                <%# Eval("Skill")%>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                    <AlternatingItemTemplate>
+                        <tr class="grey">
+                            <td>
+                                <%# Eval("Skill")%>
+                            </td>
+                        </tr>
+                    </AlternatingItemTemplate>
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+            </div>
+            <h4 style="font-weight: bold">
+                Documents</h4>
+            <div>
+                <asp:ScriptManager ID="ScriptManager1" runat="server">
+                </asp:ScriptManager>
+                <table>
+                    <tr>
+                        <td align="right">
+                            <a id="lnkAddEditDocuments" runat="server" class="openframe">Add/Edit</a>
+                        </td>
+                    </tr>
+                </table>
+                <asp:UpdatePanel ID="UpdatePanel1" runat="server">
+                    <ContentTemplate>
+                        <table>
+                            <tr>
+                                <td style="font-weight: bold">
+                                    Personal Documents
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <asp:Repeater ID="rptPersonal" runat="server" OnItemDataBound="rptPersonal_ItemDataBound"
+                                            OnItemCommand="rptProfessional_ItemCommand">
+                                            <HeaderTemplate>
+                                                <tr style="background-color: #dddddd">
+                                                    <th>
+                                                        S/No.
+                                                    </th>
+                                                    <th>
+                                                        Document Name
+                                                    </th>
+                                                    <th>
+                                                        Document Type
+                                                    </th>
+                                                    <th>
+                                                        Document From
+                                                    </th>
+                                                    <th>
+                                                        View
+                                                    </th>
+                                                    <th id="thPersonalAction" runat="server" style="display: none;">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <tr class="normal" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tdPersonalAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                            <AlternatingItemTemplate>
+                                                <tr class="grey" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tdPersonalAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </AlternatingItemTemplate>
+                                        </asp:Repeater>
+                                    </table>
+                                    <div style="text-align: center">
+                                        <asp:Label ID="lblemtypersonal" runat="server" ForeColor="Red"></asp:Label>
+                                        <br />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold">
+                                    Educational Documents
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <asp:Repeater ID="rptEducational" runat="server" OnItemDataBound="rptEducational_ItemDataBound"
+                                            OnItemCommand="rptEducational_ItemCommand">
+                                            <HeaderTemplate>
+                                                <tr style="background-color: #dddddd">
+                                                    <th>
+                                                        S/No.
+                                                    </th>
+                                                    <th>
+                                                        Document Name
+                                                    </th>
+                                                    <th>
+                                                        Document Type
+                                                    </th>
+                                                    <th>
+                                                        Document From
+                                                    </th>
+                                                    <th>
+                                                        View
+                                                    </th>
+                                                    <th id="thEduAction" runat="server" style="display: none;">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <tr class="normal" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tdEduAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                            <AlternatingItemTemplate>
+                                                <tr class="grey" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tdEduAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </AlternatingItemTemplate>
+                                        </asp:Repeater>
+                                    </table>
+                                    <div style="text-align: center">
+                                        <asp:Label ID="lblemtyEducational" runat="server" ForeColor="Red"></asp:Label>
+                                        <br />
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: bold">
+                                    Professional Documents
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table>
+                                        <asp:Repeater ID="rptProfessional" runat="server" OnItemDataBound="rptProfessional_ItemDataBound"
+                                            OnItemCommand="rptProfessional_ItemCommand">
+                                            <HeaderTemplate>
+                                                <tr style="background-color: #dddddd">
+                                                    <th>
+                                                        S/No.
+                                                    </th>
+                                                    <th>
+                                                        Document Name
+                                                    </th>
+                                                    <th>
+                                                        Document Type
+                                                    </th>
+                                                    <th>
+                                                        Document From
+                                                    </th>
+                                                    <th>
+                                                        View
+                                                    </th>
+                                                    <th id="thProfAction" runat="server" style="display: none;">
+                                                        Action
+                                                    </th>
+                                                </tr>
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <tr class="normal" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tDProfAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </ItemTemplate>
+                                            <AlternatingItemTemplate>
+                                                <tr class="grey" align="center">
+                                                    <td>
+                                                        <%# Container.ItemIndex +1 %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("Document_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("DocType_Name") %>
+                                                    </td>
+                                                    <td>
+                                                        <%# Eval("CandidateDocumentName") %>
+                                                    </td>
+                                                    <td>
+                                                        <a>View</a>
+                                                    </td>
+                                                    <td id="tDProfAction" runat="server" style="display: none;">
+                                                        <asp:LinkButton ID="lnkMarkVerified" Text="Mark Verified" runat="server" CommandName="MarkDocVerified"
+                                                            CommandArgument='<%# Eval("CandDoc_Code")%>' ToolTip="Click here If Document is verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? false : true  %>' />
+                                                        <asp:Image ID="imgChecked" runat="server" ImageUrl="/assets/images/1.gif" ToolTip="Document already verified."
+                                                            Visible='<%# ((bool)Eval("Is_Verified")) == true ? true : false  %>' />
+                                                    </td>
+                                                </tr>
+                                            </AlternatingItemTemplate>
+                                        </asp:Repeater>
+                                    </table>
+                                    <div style="text-align: center">
+                                        <asp:Label ID="lblemtyProfessional" runat="server" ForeColor="Red"></asp:Label>
+                                        <br />
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </ContentTemplate>
+                </asp:UpdatePanel>
+            </div>
+            <h4 style="font-weight: bold">
+                Family Details</h4>
+            <div>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tbody>
+                        <asp:Repeater ID="rptFamily" runat="server">
+                            <HeaderTemplate>
+                                <tr class="simple">
+                                    <th>
+                                        Relation
+                                    </th>
+                                    <th>
+                                        Member Name
+                                    </th>
+                                    <th>
+                                        Date Of Birth
+                                    </th>
+                                    <th>
+                                        Age
+                                    </th>
+                                    <th>
+                                        Occupation
+                                    </th>
+                                    <th>
+                                        Designation
+                                    </th>
+                                </tr>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr class="simple">
+                                    <td>
+                                        <%# Eval("Relation_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Member_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("DateOfBirth")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("MemberAge")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("Occupation")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("Designation")%>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <tr class="grey">
+                                    <td>
+                                        <%# Eval("Relation_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("Member_Name")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("DateOfBirth")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("MemberAge")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("Occupation")%>
+                                    </td>
+                                    <td nowrap="nowrap">
+                                        <%# Eval("Designation")%>
+                                    </td>
+                                </tr>
+                            </AlternatingItemTemplate>
+                            <FooterTemplate>
+                                </table>
+                            </FooterTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <td>
+                            <asp:Label ID="lblMsgfamily" runat="server" ForeColor="Red"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Test Results</h4>
+            <div>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tbody>
+                        <asp:Repeater ID="rptTest" runat="server">
+                            <HeaderTemplate>
+                                <tr class="simple">
+                                    <th>
+                                        Test
+                                    </th>
+                                    <th>
+                                        Result
+                                    </th>
+                                    <th>
+                                        View
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </HeaderTemplate>
+                            <ItemTemplate>
+                                <tr class="simple">
+                                    <td>
+                                        <%# Eval("TestName")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("TestResult")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("TestPath")%>
+                                    </td>
+                                    <td>
+                                        <a>Mark Pass / Fail</a>
+                                    </td>
+                                </tr>
+                            </ItemTemplate>
+                            <AlternatingItemTemplate>
+                                <tr class="grey">
+                                    <td>
+                                        <%# Eval("TestName")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("TestResult")%>
+                                    </td>
+                                    <td>
+                                        <%# Eval("TestPath")%>
+                                    </td>
+                                    <td>
+                                        <a>Mark Pass / Fail</a>
+                                    </td>
+                                </tr>
+                            </AlternatingItemTemplate>
+                            <FooterTemplate>
+                                </table>
+                            </FooterTemplate>
+                        </asp:Repeater>
+                    </tbody>
+                </table>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <td>
+                            <asp:Label ID="lblMsgTest" runat="server" ForeColor="Red"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Communication</h4>
+            <div>
+                <asp:Repeater ID="rptCommunication" runat="server" OnItemDataBound="rptCommunication_ItemDataBound">
+                    <HeaderTemplate>
+                        <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                            <tr>
+                                <td align="center">
+                                    <b>Comments</b>
+                                </td>
+                                <td align="center">
+                                    <b>Communicator Name</b>
+                                </td>
+                                <td align="center">
+                                    <b>Date</b>
+                                </td>
+                                <td align="center">
+                                    <b>Status</b>
+                                </td>
+                            </tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                        <tr id="trCommunicationWay" runat="server">
+                            <td colspan="4">
+                                <b>
+                                    <%#Eval("CommunicationWay")%>
+                                </b>
+                                <asp:HiddenField ID="hdnCommCode" runat="server" Value='<%#Eval("CommunicationWayCode") %>' />
+                            </td>
+                        </tr>
+                        <tr id="trCommunicationWayRecord" runat="server">
+                            <td align="center">
+                                <%#Eval("Comments")%>
+                            </td>
+                            <td align="center">
+                                <%#Eval("Fullname")%>
+                            </td>
+                            <td align="center">
+                                <%#Eval("Created_Date")%>
+                            </td>
+                            <td align="center">
+                                <%#Eval("TestStatus")%>
+                            </td>
+                        </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+                <table width="80%" border="0" cellspacing="0" cellpadding="10">
+                    <tr>
+                        <td>
+                            <asp:Label ID="lblMsgCommu" runat="server" ForeColor="Red"></asp:Label>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h4 style="font-weight: bold">
+                Official Documents</h4>
+            <div>
+                <table width="50%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td>
+                            <a>Offer Letter</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a>Appointment Letter</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <a>Medical Letter</a>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <h4 id="HActions" runat="server" style="font-weight: bold">
+                Actions</h4>
+            <div>
+                <table id="tblInterview" runat="server" width="50%" style="display: none;">
+                    <tr>
+                        <td>
+                            <asp:RadioButton ID="rdbPass" Text="Mark Pass" runat="server" GroupName="PassOrFail"
+                                Checked="true" />&nbsp;&nbsp;
+                            <asp:RadioButton ID="rdbFail" Text="Mark Fail" runat="server" GroupName="PassOrFail" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Enter Interview Comments:</strong><br />
+                            <textarea id="txtaComments" cols="50" rows="6" runat="server"></textarea>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator1" runat="server" ControlToValidate="txtaComments"
+                                ErrorMessage="" Font-Bold="True" ForeColor="Red" Text="<img src='Images/Exclamation.gif' title='Comment is required!' />"
+                                Display="Dynamic" InitialValue="" ValidationGroup="CommentsCheck"></asp:RequiredFieldValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Grade:</strong>
+                            <br />
+                            <asp:DropDownList ID="ddlGrade" runat="server">
+                            </asp:DropDownList>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <asp:LinkButton runat="server" ID="lnkSearch" CssClass="btn-ora nl" OnClick="lnkSubmit_Click"
+                                ValidationGroup="CommentsCheck">
+                        <img src="/assets/images/icons/search.png" width="12" height="13" alt="" align="absmiddle" />&nbsp;Submit
+                            </asp:LinkButton>
+                        </td>
+                    </tr>
+                </table>
+                <table id="tblOfferGeneration" runat="server" width="50%" style="display: none;">
+                    <tr id="trOfferGenerationReserve" runat="server">
+                        <td>
+                            Click here to <a id="AReserve" runat="server" class="openframe">Reserve</a> for
+                            the Offer Letter.
+                        </td>
+                    </tr>
+                    <tr id="trOfferGenerationReserved" runat="server">
+                        <td>
+                            <strong>Already Reserved</strong> for the Offer Letter.
+                        </td>
+                    </tr>
+                </table>
+                <table id="tblOfferDelivered" runat="server" width="50%" style="display: none;">
+                    <tr>
+                        <td>
+                            <strong>Mark Offer delivered here :</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Enter Comments:</strong><br />
+                            <textarea id="txtaOfferdelivered" cols="50" rows="6" runat="server"></textarea>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator2" runat="server" ControlToValidate="txtaOfferdelivered"
+                                ErrorMessage="" Font-Bold="True" ForeColor="Red" Text="<img src='Images/Exclamation.gif' title='Comment is required!' />"
+                                Display="Dynamic" InitialValue="" ValidationGroup="OfferCheck"></asp:RequiredFieldValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <asp:LinkButton runat="server" ID="lnkMarkOfferDelivered" CssClass="btn-ora nl" OnClick="lnkMarkOfferDelivered_Click"
+                                ValidationGroup="OfferCheck">
+                        <img src="/assets/images/icons/search.png" width="12" height="13" alt="" align="absmiddle" />&nbsp;Offer Delivered
+                            </asp:LinkButton>
+                        </td>
+                    </tr>
+                </table>
+                <table id="tblOfferAcceptance" runat="server" width="50%" style="display: none;">
+                    <tr>
+                        <td>
+                            <strong>Mark Offer accepetance here :</strong>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Enter Comments:</strong><br />
+                            <textarea id="txtaOfferAccepetance" cols="50" rows="6" runat="server"></textarea>
+                            <asp:RequiredFieldValidator ID="RequiredFieldValidator3" runat="server" ControlToValidate="txtaOfferAccepetance"
+                                ErrorMessage="" Font-Bold="True" ForeColor="Red" Text="<img src='Images/Exclamation.gif' title='Comment is required!' />"
+                                Display="Dynamic" InitialValue="" ValidationGroup="AcceptCheck"></asp:RequiredFieldValidator>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">
+                            <asp:LinkButton runat="server" ID="lnkMarkOfferAccepted" CssClass="btn-ora nl" OnClick="lnkMarkOfferAccepted_Click"
+                                ValidationGroup="AcceptCheck">
+                        <img src="/assets/images/icons/search.png" width="12" height="13" alt="" align="absmiddle" />&nbsp;Offer Accepted
+                            </asp:LinkButton>
+                            <asp:LinkButton runat="server" ID="lnkMarkOfferNotAccepted" CssClass="btn-ora nl"
+                                OnClick="lnkMarkOfferNotAccepted_Click">
+                        <img src="/assets/images/icons/search.png" width="12" height="13" alt="" align="absmiddle" />&nbsp;Offer Not Accepted
+                            </asp:LinkButton>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</asp:Content>

@@ -1,0 +1,350 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+using System.Data;
+using ErrorLog;
+using System.Configuration;
+using Telerik.Web.UI;
+using System.IO;
+using System.Text.RegularExpressions;
+
+public partial class Admin_BrowseResume : System.Web.UI.Page
+{
+    #region variable
+    SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString);
+    SqlConnection Errlogconnection = new SqlConnection(ConfigurationManager.ConnectionStrings["errLogConnection"].ToString());
+    string QueryStringVar = string.Empty;
+    SecureQueryString secQueryString;
+    public List<UploadedResumeFileInfo> uploadedFiles = new List<UploadedResumeFileInfo>();
+    #endregion
+
+    #region  Properties
+    public List<UploadedResumeFileInfo> UploadedFiles
+    {
+        get { return uploadedFiles; }
+        set { uploadedFiles = value; }
+    }
+    #endregion
+
+    protected void Page_Load(object sender, EventArgs e)
+    {
+        if (!IsPostBack)
+        {
+            BindData();
+        }
+    }
+
+    protected void btnSubmit_Click(object sender, EventArgs e)
+    {
+        try
+        {
+            if (Page.IsValid)
+            {
+                UploadFile();
+
+                lblMsg.Visible = true;
+                lblMsg.ForeColor = System.Drawing.Color.Green;
+                lblMsg.Text = "Successfully Saved";
+
+            }
+            else
+            {
+                lblMsg.Visible = true;
+                lblMsg.ForeColor = System.Drawing.Color.Red;
+                lblMsg.Text = "Please Browse File";
+            }
+
+        }
+
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, "Browse Resume");
+            lblMsg.Visible = true;
+            lblMsg.ForeColor = System.Drawing.Color.Red;
+            lblMsg.Text = ex.Message;
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+    }
+
+    public DataTable SignUp()
+    {
+        DataTable dtSignup = new DataTable();
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+        {
+            c.Open();
+            using (SqlCommand command = new SqlCommand("XRec_CreateCandidateSignupResume", c))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@Updated_IP", Request.UserHostAddress.ToString()));
+                using (SqlDataAdapter a = new SqlDataAdapter(command))
+                {
+                    a.Fill(dtSignup);
+                }
+            }
+        }
+        return dtSignup;
+    }
+    private void BrowseResume()
+    {
+        foreach (UploadedFile file in AsyncUpload1.UploadedFiles)
+        {
+            UploadedResumeFileInfo uploadedFileInfo = new UploadedResumeFileInfo();
+
+            uploadedFileInfo.FileName = file.GetName();
+            uploadedFileInfo.FileExtension = file.GetExtension().Replace(".", string.Empty);
+            uploadedFileInfo.ContentLength = file.ContentLength / 1024;
+            UploadedFiles.Add(uploadedFileInfo);
+        }
+
+    }
+    public static bool FileBrowse(UploadedFile Source, string FolderPath, string FileName)
+    {
+        bool IsDOne = false;
+        string str2;
+        CreateFolder(FolderPath);
+        string extension = Path.GetExtension(Source.GetName());
+        string str = FileName + extension;
+        if (IsValidPath(FolderPath))
+            str2 = FolderPath;
+        else
+            str2 = HttpContext.Current.Server.MapPath(FolderPath);
+
+        if ((str != "") && (Source.ContentLength != 0))
+        {
+            string filename = str2 + @"\" + str;
+            Source.SaveAs(filename);
+            IsDOne = true;
+        }
+        return IsDOne;
+    }
+    public static void CreateFolder(string FolderPath)
+    {
+        string path = string.Empty;
+        if (IsValidPath(FolderPath))
+            path = FolderPath;
+        else
+            path = HttpContext.Current.Server.MapPath(FolderPath);
+
+        DirectoryInfo info = new DirectoryInfo(path);
+        if (!info.Exists)
+            Directory.CreateDirectory(path);
+    }
+    public static bool IsValidPath(string path)
+    {
+        Regex regex = new Regex(@"^(?:[a-zA-Z]\:|\\\\[\w\.]+\\[\w.]+)\\(?:[\w]+\\)*");
+        return regex.IsMatch(path);
+    }
+    private void UploadFile()
+    {
+        foreach (UploadedFile file in AsyncUpload1.UploadedFiles)
+        {
+            string RndmNmber = string.Empty;
+            string CandCode = string.Empty;
+
+            if (file != null)
+            {
+                DataTable dtData = SignUp();
+                if (dtData != null)
+                {
+                    if (dtData.Rows.Count > 0)
+                    {
+
+                        string fileExtension = System.IO.Path.GetExtension(file.FileName).ToLower();
+                        string uploadFolderName = ConfigurationManager.AppSettings["CandidateDocumentsPath"].ToString() +
+                                                    dtData.Rows[0][0].ToString() + @"/Resume/";
+                        RndmNmber = GetRandomCode(6).ToString();
+                        string FilenameByUser = string.Empty;
+
+                        if (FilenameByUser == "")
+                            FilenameByUser = file.FileName.Replace(fileExtension, "");
+
+                        if (fileExtension.ToLower() == ".doc" || fileExtension.ToLower() == ".docx" || fileExtension.ToLower() == ".pdf")
+                        {
+                            if (FileBrowse(file, uploadFolderName, FilenameByUser + "_" + RndmNmber))
+                                InsertUserResume(uploadFolderName + FilenameByUser + "_" + RndmNmber + fileExtension, dtData.Rows[0][0].ToString(), FilenameByUser + "_" + RndmNmber + fileExtension);
+                        }
+                    }
+                }
+
+            }
+        }
+    }
+    private void InsertUserResume(string FilePath, string CandCode, string FileName)
+    {
+        using (SqlConnection c = new SqlConnection(ConfigurationManager.ConnectionStrings["ConnectionString"].ToString()))
+        {
+            c.Open();
+            using (SqlCommand command = new SqlCommand("XRec_InsertUerResume", c))
+            {
+                command.CommandType = CommandType.StoredProcedure;
+                command.Parameters.Add(new SqlParameter("@Candidate_Code", CandCode));
+                command.Parameters.Add(new SqlParameter("@Category_Code", ddlCategory.SelectedValue));
+                command.Parameters.Add(new SqlParameter("@Resume_Path", FilePath));
+                command.Parameters.Add(new SqlParameter("@Updated_IP", Request.UserHostAddress.ToString()));
+                command.Parameters.Add(new SqlParameter("@FileName", FileName));
+
+                command.ExecuteNonQuery();
+            }
+        }
+    }
+    public string GetRandomCode(int length)
+    {
+        // Get the GUID
+        string guidResult = System.Guid.NewGuid().ToString();
+
+        // Remove the hyphens
+        guidResult = guidResult.Replace("-", string.Empty);
+
+        // Make sure length is valid
+        if (length <= 0 || length > guidResult.Length)
+            throw new ArgumentException("Length must be between 1 and " + guidResult.Length);
+
+        // Return the first length bytes
+        return guidResult.Substring(0, length);
+    }
+    private void BindData()
+    {
+        BindDomain(ref connection);
+    }
+    private void BindCategory(ref SqlConnection connection)
+    {
+        SqlCommand sqlCommand = new SqlCommand("XRec_SelectProfileCategory", connection);
+
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+        DataSet ds = new DataSet();
+        adapter.Fill(ds);
+
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            ddlCategory.DataSource = ds;
+            ddlCategory.DataTextField = "Category_Name";
+            ddlCategory.DataValueField = "Category_Code";
+            ddlCategory.DataBind();
+
+            ddlCategory.Items.Insert(0, new ListItem("--Select--", ""));
+        }
+
+    }
+    private void BindDomain(ref SqlConnection connection)
+    {
+        SqlCommand sqlCommand = new SqlCommand("XRec_SelectDomainByUserWeb", connection);
+        sqlCommand.CommandType = CommandType.StoredProcedure;
+        SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+        DataSet ds = new DataSet();
+        adapter.Fill(ds);
+
+        if (ds.Tables[0].Rows.Count > 0)
+        {
+            ddlDomain.DataSource = ds;
+            ddlDomain.DataTextField = "Domain_Name";
+            ddlDomain.DataValueField = "Domain_Code";
+            ddlDomain.DataBind();
+
+            ddlDomain.Items.Insert(0, new ListItem("--Select--", ""));
+        }
+
+    }
+    protected void ddlDomain_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddlDomain.SelectedValue != "")
+            {
+                SqlCommand sqlCommand = new SqlCommand("XRec_SelectSubDomain", connection);
+                sqlCommand.Parameters.AddWithValue("@DomainCode", ddlDomain.SelectedValue);
+
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlSubDomain.DataSource = ds;
+                    ddlSubDomain.DataTextField = "SubDomain_Name";
+                    ddlSubDomain.DataValueField = "SubDomain_Code";
+                    ddlSubDomain.DataBind();
+
+                    ddlSubDomain.Items.Insert(0, new ListItem("--Select--", ""));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, "Browse Resume");
+        }
+        finally
+        {
+            if (connection.State != ConnectionState.Closed)
+                connection.Close();
+        }
+
+    }
+    protected void ddlSubDomain_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            if (ddlSubDomain.SelectedValue != "")
+            {
+                SqlCommand sqlCommand = new SqlCommand("XRec_SelectCategoryBySubDomain", connection);
+                sqlCommand.Parameters.AddWithValue("@SubDomainCode", ddlSubDomain.SelectedValue);
+
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+                DataSet ds = new DataSet();
+                adapter.Fill(ds);
+
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    ddlCategory.DataSource = ds;
+                    ddlCategory.DataTextField = "Category_Name";
+                    ddlCategory.DataValueField = "Category_Code";
+                    ddlCategory.DataBind();
+
+                    ddlCategory.Items.Insert(0, new ListItem("--Select--", ""));
+                }
+                else
+                {
+                    ddlCategory.Items.Clear();
+                    ddlCategory.Items.Insert(0, new ListItem("--Select--", ""));
+                }
+            }
+            else
+            {
+                ddlCategory.Items.Clear();
+                ddlCategory.Items.Insert(0, new ListItem("--Select--", ""));
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorLog.LogError.Write(LogError.AppType.Candidate, ex.Message + " " + ex.StackTrace, ex, "Category Bind");
+        }
+    }
+    protected void CustomValidator1_ServerValidate(object source, ServerValidateEventArgs e)
+    {
+        if (AsyncUpload1.UploadedFiles.Count == 0)
+        {
+            e.IsValid = false;
+        }
+        else
+        {
+            e.IsValid = true;
+        }
+    }
+}
+
+public class UploadedResumeFileInfo
+{
+    public string FileName { get; set; }
+    public string FileExtension { get; set; }
+    public Int64 ContentLength { get; set; }
+}

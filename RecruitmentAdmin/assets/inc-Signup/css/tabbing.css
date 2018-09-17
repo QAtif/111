@@ -1,0 +1,110 @@
+
+
+.career-service {
+	margin:0 auto;
+    width: 100%;
+	color:#474747;
+	font:normal 12px Verdana, Geneva, sans-serif;
+}
+
+.he630{height: 630px !important;}
+
+ul.tabs {
+    float: left;
+    /*height: 780px;*/
+	height: 780px;
+    list-style: none outside none;
+    margin: 20px 0 0 0;
+    padding: 0;
+    width: 282px;
+	position:relative;
+}
+ul.tabs li {
+    background: url("/assets2/images/tab-normal.png") no-repeat scroll 266px center transparent;
+    float: left;
+    position: relative;
+    text-indent: 0;
+    width: 283px;
+	cursor:pointer !important; 
+}
+ul.tabs img {
+   left: 17px;
+    position: absolute;
+    top: 5px;
+    z-index: 2;
+}
+ul.tabs a {
+	background:url(/assets2/images/tab-bdr-bot.png) no-repeat left bottom;
+    color: #474747;
+    display: block;
+    font: normal 12px/30px Verdana,Geneva,sans-serif;
+    margin: 0;
+    padding: 0 0 4px 52px;
+    position: relative;
+    text-decoration: none;
+    top: 1px;
+    width: 255px;
+}
+ul.tabs a:active {
+    outline: medium none;
+}
+ul.tabs a:hover {
+    background:url(/assets2/images/tab-active.png) no-repeat 266px center  #ffffff;
+    color: #518ac9;
+    width: 232px;
+}
+ul.tabs a.current, ul.tabs a.current:hover, ul.tabs li.current a {
+    background: url("/assets2/images/tab-active.png") no-repeat scroll 266px center #FFFFFF;
+    color: #518AC9;
+    position: relative;
+    width: 232px;
+}
+
+
+.panes > div {
+    border-top: 0 none;
+    float: right;
+    padding:25px 15px 15px 15px;
+    width:540px;
+}
+
+.panes > div a { color:#457bba; text-decoration:none; }
+.panes > div a:hover { text-decoration:underline; }
+
+.left-area{
+	background:#eeeeee;
+	width:282px;
+	float:left;	
+}
+
+
+.tab-icon2, .tab-icon1, .tab-icon3{
+	background: url(/assets2/images/sprites.png) no-repeat;
+}
+
+.tab-icon2{
+	background-position: 0 -66px ;
+	width: 28px;
+	height: 30px;
+}
+
+.tab-icon1{
+	background-position: 0 -36px ;
+	width: 24px;
+	height: 25px;
+}
+
+.tab-icon3{
+	background-position: 0 0;
+	width: 29px;
+	height: 27px;
+}
+
+.head{
+	font:normal 20px Verdana, Geneva, sans-serif;	
+}
+
+h3 { color:#457bba; font-size:14px; font-weight:bold; }
+h4 { color:#af0c0c; width:531px; padding:0 0 10px; border-bottom:2px solid #dadada;  }
+
+.hdc1 { color:#b30606; }

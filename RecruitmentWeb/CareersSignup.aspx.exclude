@@ -1,0 +1,462 @@
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeFile="CareerSignup.cs" Inherits="CareerSignup" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head id="Head1" runat="server">
+    <title>Home Cracker</title>
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/Area/assets/css/xbook.css" />
+	 <link rel="stylesheet" type="text/css" href="/Area/assets/css/form.css" />
+    <script type="text/javascript" src="/Area/assets/js/telerik-scripts.js"></script> 
+    <script type="text/javascript" src="/Area/assets/js/jquery.js"></script>
+    <script type="text/javascript">
+        function refreshParent(obj) {
+            window.parent.location.href = obj;
+        }
+       <%-- function ShowHideCodes() {
+            var ddl = document.getElementById('<%=ddlCountry.ClientID%>');
+            var codes = document.getElementById('<%=ddlPhoneCodes.ClientID%>');
+            var txt = document.getElementById('<%=txtCell.ClientID%>');
+
+            var dvCode = document.getElementById('<%=dvCode.ClientID%>');
+            var dvCell = document.getElementById('<%=dvCell.ClientID%>');
+            var dvOther = document.getElementById('<%=dvOther.ClientID%>');
+
+            if (ddl.value == '172') {
+                dvOther.style.display = 'none';
+                dvCode.style.display = '';
+                dvCell.style.display = '';
+                // codes.style.display = '';
+            }
+            else {
+                dvOther.style.display = '';
+                dvCode.style.display = 'none';
+                dvCell.style.display = 'none';
+                // codes.style.display = 'none';
+            }
+            return false;
+        }--%>
+
+        function parenturl() {
+            $('#txtParentUrl').val(document.referrer);
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            if (cvalue != window.location.href) {
+                var d = new Date();
+                d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+                var expires = "expires=" + d.toGMTString();
+                document.cookie = cname + "=" + cvalue + "; " + expires;
+                $('#txtParentUrl').val(cvalue);
+                //alert($('#txtParentUrl').val());
+            }
+        }
+
+        function getCookie(cname) {
+            var name = cname + "=";
+            var ca = document.cookie.split(';');
+            for (var i = 0; i < ca.length; i++) {
+                var c = ca[i].trim();
+                if (c.indexOf(name) == 0) return c.substring(name.length, c.length);
+            }
+            return "";
+        }
+
+        function checkCookie() {
+            //debugger;
+            //            var user = getCookie("parentURL");
+            //            if (user != "") {
+            //                $('#txtParentUrl').val(user);                 
+            //            }
+            //            else {
+            var user = document.referrer;
+            if (user != "" && user != null) {
+                setCookie("parentURL", user, 365);
+            }
+            //}
+        }
+
+
+    </script>
+    <style type="text/css">
+        p {
+            font-family: 'FranklinGothic-MediumCond';
+            font-size: 18px;
+            color: white;
+        }
+
+        .cracker-wrapper, .cracker-wrapper2 {
+            padding: 0 30px;
+        }
+
+        .error {
+            background: #FFD9D9;
+            border: 1px solid #F00;
+        }
+
+        .addpad {
+            padding-top: 4px;
+        }
+
+        body {
+            margin: 0px;
+            background: transparent;
+        }
+
+        form {
+            background: #fff;
+            max-width: 850px;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+
+</head>
+<body onload="checkCookie();">
+    <form id="form1" runat="server">
+        <asp:ScriptManager ID="sm" runat="server">
+    </asp:ScriptManager>
+        <div style="display: none;">
+            <asp:TextBox ID="txtParentUrl" runat="server" BorderStyle="None" Font-Size="0px"
+                ForeColor="#F6F6F6" Height="0px" Width="0px"></asp:TextBox>
+        </div>
+   
+    <div class="field">
+        <i class="icn ico-na"></i>
+        <asp:TextBox ID="txtFullname" runat="server" MaxLength="50" placeholder="Full Name" CssClass="fullname fld"></asp:TextBox>
+    </div>
+    <div class="field">
+        <i class="icn ico-em"></i>
+         <asp:TextBox ID="txtEmail" runat="server" MaxLength="50" placeholder="Email Address" CssClass="email fld"></asp:TextBox></p>
+    </div>
+    <div class="field">
+        <i class="icn ico-phn"></i>
+       <asp:DropDownList ID="ddlPhoneCodes" runat="server"></asp:DropDownList>
+          <asp:TextBox ID="txtCell" CssClass="cell fld pn" runat="server" MaxLength="7" onkeydown="return isNumberKey(this);" placeholder="Enter Mobile Number"></asp:TextBox>
+    </div>
+    <div class="field">
+        <i class="icn ico-pwd"></i>
+         <asp:TextBox CssClass="password fld" ID="txtPassword" runat="server" TextMode="Password" placeholder="Password"
+                            onkeyup='javascript:ValidatePasswordStrength();' MaxLength="20"></asp:TextBox>
+    </div>
+    <div class="field">
+        <i class="icn ico-pwd"></i>
+          <asp:TextBox CssClass="confirmpassword fld" ID="txtReEnterPassPassword" runat="server" TextMode="Password" placeholder="Confirm Password"
+                            Text="Confirm Password" MaxLength="20"></asp:TextBox>
+    </div>
+        <div class="field" id="divResume">          
+             <telerik:RadAsyncUpload HttpHandlerUrl="~/handlers/CustomHandler.ashx" runat="server"
+                    ismultiselect="False" InitialFileInputsCount="1" ID="AsyncUpload1" HideFileInput="true"
+                    MultipleFileSelection="Disabled" AllowedFileExtensions=".jpeg,.jpg,.png,.gif,.bmp,.psd,.doc,.docx,.pdf"
+                    MaxFileInputsCount="1" OnClientFileUploaded="onFileUploaded" OnClientFileUploading="onFileUploading"
+                    OnClientValidationFailed="onValidationFail">
+                    <Localization Select="Attach File" />
+                </telerik:RadAsyncUpload>
+        </div>
+    <div class="posrel">
+        <i class="icn ico-submit"></i>
+        <asp:Button ID="ImageButton2" runat="server" CssClass="sbt" Text="Signup" OnClientClick="return validateForm();" OnClick="btnSignUp_Click" />
+    </div>
+</form> 
+
+
+</body>
+<script type="text/javascript">
+
+    function validateForm() {
+      
+        var isName, isEmail, isPhone, isPass, isConfirmPass, isPassMatch ,isResume= false;
+        if ($('.fullname').val().trim() == "") {
+            $('.fullname').addClass('error');
+        } else {
+            $('.fullname').removeClass('error');
+            isName = true;
+        }
+       
+        if ($('.email').val().trim() == "") {
+            $('.email').addClass('error');
+        } else {
+            //  $('.email').removeClass('error');
+            var emailRegex = new RegExp(/^(("[\w-\s]+")|([\w-]+(?:\.[\w-]+)*)|("[\w-\s]+")([\w-]+(?:\.[\w-]+)*))(@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$)|(@\[?((25[0-5]\.|2[0-4][0-9]\.|1[0-9]{2}\.|[0-9]{1,2}\.))((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\.){2}(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[0-9]{1,2})\]?$)/i);
+            if (emailRegex.test($('.email').val().trim())) {
+                $('.email').removeClass('error');
+                isEmail = true;
+            }
+            else {
+                $('.email').addClass('error');
+            }
+        }
+       
+
+        if ($('.password').val().trim() == "") {
+            $('.password').addClass('error');
+        } else {
+            $('.password').removeClass('error');
+            isPass = true;
+        }
+
+        if ($('.confirmpassword').val().trim() == "") {
+            $('.confirmpassword').addClass('error');
+        } else {
+            isConfirmPass = true;
+
+            if ($('.password').val().trim() == $('.confirmpassword').val().trim()) {
+                $('.confirmpassword').removeClass('error');
+                $('.password').removeClass('error');
+                isPassMatch = true;
+            }
+            else {
+                $('.password').addClass('error');
+                $('.confirmpassword').addClass('error');
+                isPassMatch = false;
+            }
+        }
+      
+        //if ($('.country').val() == "172") {
+            if ($('.cell').val() == "") {
+                $('.cell').addClass('error');
+            } else {
+                //$('.cell').removeClass('error');
+
+                var phoneRegex = new RegExp("^[0-99]*$");
+                if (phoneRegex.test($('.cell').val())) {
+                    $('.cell').removeClass('error');
+                    isPhone = true;
+                }
+                else {
+                    $('.cell').addClass('error');
+                }
+            }
+        //}
+        //else {
+        //    if ($('.othercell').val().trim() == "") {
+        //        $('.othercell').addClass('error');
+        //    } else {
+        //        var phoneRegex = new RegExp("^[0-99]*$");
+        //        if (phoneRegex.test($('.othercell').val())) {
+        //            $('.othercell').removeClass('error');
+        //            isPhone = true;
+        //        }
+        //        else {
+        //            $('.othercell').addClass('error');
+        //        }
+        //    }
+        //}
+
+            if ($('.ruUploadProgress').text() == 'Uploaded file') {
+                isResume = true;
+                $('#divResume').removeClass('error');
+            }
+
+            else {
+                alert('resume');
+              //  $('.ruUploadProgress').text('Please Upload Resume');
+                $('#divResume').addClass('error');
+            }
+
+            if (isName && isEmail && isPass && isPhone && isConfirmPass && isResume) {
+            if (isPassMatch) { }
+                // $(".errormsg").html("");
+            else {
+                //  $(".errormsg").html("Password does not match <br/>");
+                return false;
+            }
+        }
+        else {
+            //$(".errormsg").html("Please provide complete & valid information");
+            return false;
+        }
+    }
+
+
+
+    function CheckPasswordStrength(isvalid, complex) {
+        if (!isvalid) {
+            $('#progress').css({
+                'width': complex * 4 + '%'
+            }).removeClass('progressbarValid').addClass('progressbarInvalid');
+        } else {
+            $('#progress').css({
+                'width': complex * 4 + '%'
+            }).removeClass('progressbarInvalid').addClass('progressbarValid');
+        }
+
+
+        if (complex * 4 >= 0 && complex * 4 <= 25) {
+
+            //$('#complexity').html(Math.round(complex * 4) + '% Weak');
+            $('#complexity').html('Weak');
+        }
+
+        else if (complex * 4 >= 26 && complex * 4 <= 50) {
+            //            else if (complex * 4 <= 68) {
+            //$('#complexity').html(Math.round(complex * 4) + '% Medium');
+            $('#complexity').html('Medium');
+            //  $('#complexity').html(50 + '% Medium');
+        }
+
+            //            else if (complex * 4 <= 90) {
+        else if (complex * 4 >= 51 && complex * 4 <= 75) {
+            // $('#complexity').html(80 + '% Strong');
+            //$('#complexity').html(Math.round(complex * 4) + '% Strong');
+
+            $('#complexity').html('Strong');
+        }
+
+        else if (complex * 4 >= 76 && complex * 4 <= 100) {
+            // $('#complexity').html(80 + '% Strong');
+            //$('#complexity').html(Math.round(complex * 4) + '% Strong');
+
+            $('#complexity').html('Strongest');
+        }
+
+        else if (complex * 4 >= 101) {
+            // $('#complexity').html(80 + '% Strong');
+            //$('#complexity').html(Math.round(complex * 4) + '% Strong');
+
+            $('#complexity').html('Strongest');
+        }
+
+
+        //            if (complex == 0) {
+        //			
+        //                //$('#complexity').html('0' + '% Weak');
+        //                $('#complexity').html('');
+        //				
+        //            }
+
+        //            if (complex * 4 >= 100) {
+        //                //$('#complexity').html('100' + '% Strong');
+        //                $('#complexity').html('Strong');
+        //            }
+
+        //            if (complex * 4 <= 34) {
+
+        //                //$('#complexity').html(Math.round(complex * 4) + '% Weak');
+        //                
+        //				$('#complexity').html('Weak');
+        //				
+        //            }
+
+        //            else if (complex * 4 <= 68) {
+        //                //$('#complexity').html(Math.round(complex * 4) + '% Medium');
+        //                $('#complexity').html('Medium');
+        //                //  $('#complexity').html(50 + '% Medium');
+        //            }
+
+        //            else if (complex * 4 <= 90) {
+        //                // $('#complexity').html(80 + '% Strong');
+        //                //$('#complexity').html(Math.round(complex * 4) + '% Strong');
+        //                $('#complexity').html('Strong');
+        //            }
+
+        //            else {
+        //                if (Math.round(complex * 4) >= 100) {
+        //                    //$('#complexity').html('100' + '% Strong');
+        //                    $('#complexity').html('Strong');
+        //                }
+        //                else {
+        //                    // change string Strong to show very Strong :)
+        //                    //$('#complexity').html(Math.round(complex * 4) + '%  Strong');
+        //                    $('#complexity').html('Strong');
+        //                }
+        //            }
+    }
+
+
+
+
+    function ValidatePasswordStrength() {
+        //debugger;
+        var score = 1; var isOK = false;
+        var complexity = 0; var valid = false;
+
+        if ($('.password').val().length == 0) {
+            $('#progressbar').attr("style", "display:none");
+            $('#complexity').attr("style", "display:none");
+            return;
+        }
+
+
+        if ($('.password').val().length != 0) {
+            $('#progressbar').attr("style", "display:''");
+            $('#complexity').attr("style", "display:''");
+
+
+            if ($('.password').val().length == 0) {
+                CheckPasswordStrength(false, 0);
+                return;
+            }
+
+            if ($('.password').val().length <= 6) {
+                CheckPasswordStrength(false, 5);
+                return;
+            }
+            if ($('.email').val().indexOf($('.password').val()) >= 0) {
+                CheckPasswordStrength(false, 5);
+                return;
+            }
+
+            if ($('.password').val().length >= 10) {
+                score++;
+                complexity = complexity + 6.25;
+            }
+            var numberRegex = new RegExp("[0-9]", "g");
+            if (numberRegex.test($('.password').val())) {
+                score++;
+                complexity = complexity + 6.25;
+            }
+
+            var alphaRegex = new RegExp("[a-zA-Z]+", "g");
+            if (alphaRegex.test($('.password').val())) {
+                score++;
+                complexity = complexity + 6.25;
+            }
+
+            var charRegex = /.[!,@,#,$,%,^,&,*,?,_,~,.,-,£,(,)]/;
+            if (charRegex.test($('.password').val())) {
+                score++;
+                complexity = complexity + 6.25;
+            }
+
+            CheckPasswordStrength(valid, complexity);
+        }
+        else if ($('.password').val().length == 0) {
+            CheckPasswordStrength(false, 0);
+            return;
+        }
+    }
+
+
+
+    function isNumberKey(evt) {
+
+        var charCode = (evt.which) ? evt.which : event.keyCode
+        var isnumeric = false;
+        if (charCode >= 48 && charCode <= 57)
+            isnumeric = true;
+        if (charCode == 46)
+            isnumeric = true;
+        if (charCode == 8)
+            isnumeric = true;
+        if (charCode == 9)
+            isnumeric = true;
+        if (charCode == 110)
+            isnumeric = true;
+        if (charCode == 190)
+            isnumeric = true;
+        if (charCode >= 37 && charCode <= 40)
+            isnumeric = true;
+        if (charCode >= 96 && charCode <= 105)
+            isnumeric = true;
+
+        return isnumeric;
+
+    }
+
+</script>
+</html>

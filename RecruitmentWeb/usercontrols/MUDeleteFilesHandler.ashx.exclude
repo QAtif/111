@@ -1,0 +1,54 @@
+﻿<%@ WebHandler Language="C#" Class="MUDeleteFilesHandler" %>
+
+using System;
+using System.Web;
+using System.Data.SqlClient;
+using System.Data;
+using System.Configuration;
+using System.Web.Script.Serialization;
+using System.Collections.Generic;
+using System.IO;
+public class MUDeleteFilesHandler : IHttpHandler
+{
+
+    public void ProcessRequest(HttpContext context)
+    {
+        context.Response.ContentType = "application/json";
+
+
+        string json = new System.IO.StreamReader(context.Request.InputStream).ReadToEnd();
+        JavaScriptSerializer serializer = new JavaScriptSerializer();
+        Dictionary<string, string> keyValuesJson = serializer.Deserialize<Dictionary<string, string>>(json);
+        string fileName = keyValuesJson["FileName"];
+        string filePath = keyValuesJson["filePath"];
+        bool deleteFromServer = Convert.ToBoolean(keyValuesJson["deleteFromServer"]);
+        string tableName = keyValuesJson["tableName"];
+        string connstringName = keyValuesJson["connStringName"];
+        string fileid = keyValuesJson["fileid"];
+
+
+        SqlConnection connection = new SqlConnection(ConfigurationManager.ConnectionStrings[connstringName].ConnectionString);
+            connection.Open();
+            string sql = @"update " + tableName + " set isactive=0  where DocumentID=@DocumentID ";
+            SqlCommand sqlCommand = new SqlCommand(sql, connection);
+            sqlCommand.CommandType = CommandType.Text;
+            sqlCommand.Parameters.AddWithValue("@DocumentID", fileid);
+            sqlCommand.ExecuteNonQuery();
+
+            if (deleteFromServer)
+            {
+                FileInfo document = new FileInfo(HttpContext.Current.Server.MapPath(filePath) + fileName);
+                if(document.Exists)
+                    document.Delete();
+            }
+      }
+
+    public bool IsReusable
+    {
+        get
+        {
+            return false;
+        }
+    }
+
+}

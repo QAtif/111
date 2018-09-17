@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700');
+
+#form1 * {box-sizing: border-box;}
+
+#form1 .icn {
+    background: url(sprite-main.png) 0 0;
+    display: inline-block;
+}
+#form1 .ico-na {background-position:-599px -912px;width: 20px;height: 18px;top: 10px;left: 6px;}
+#form1 .ico-em {background-position:-601px -940px;width: 16px;height: 15px;top: 12px;left: 9px;}
+#form1 .ico-phn {background-position: -601px -967px;width: 18px;height: 18px;top: 11px;left: 9px;}
+#form1 .ico-pwd {background-position: -604px -994px;width: 12px;height: 15px;top: 11px;left: 9px;}
+#form1 .ico-submit {background-position:-595px -1026px;width: 24px;height: 24px;position: absolute;left: 94px;top: 16px;}
+
+#form1 .field {padding-bottom: 8px;position: relative;}
+#form1 .field .fld {border: 1px solid #dcdcdc;border-radius: 5px;height:30px!important;padding: 7px 5px 6px 35px!important;font-size: 13px;color: #929292;font-family: 'Poppins', sans-serif;width: 100%!important;}
+#form1 .field .fld.pn { padding-left: 100px!important; }
+#form1 .field select {font-family: 'Poppins', sans-serif;color: #929292!important;border: 0px;font-size: 13px;position: absolute;left: 34px;top: 9px!important; width: auto!important;}
+#form1 .field select:focus { outline: 0px; border: 0px; }
+#form1 .field i {position: absolute;}
+#form1 .sbt {font-family: 'Poppins', sans-serif;font-weight: 800;text-transform: uppercase;color:#001b43;cursor:pointer;background: #fbb515;padding: 12px 10px 9px 10px;text-align: center;outline: 0px;border: none;border-radius: 10px;font-size: 21px;width: 100%;height: 54px;}
+
+#form1 .posrel { position: relative; }

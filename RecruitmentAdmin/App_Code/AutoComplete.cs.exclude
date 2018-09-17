@@ -1,0 +1,1105 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Services;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.Data;
+using AjaxControlToolkit;
+
+/// <summary>
+/// Summary description for AutoComplete
+/// </summary>
+[WebService(Namespace = "http://tempuri.org/")]
+[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
+[System.Web.Script.Services.ScriptService]
+public class AutoComplete : System.Web.Services.WebService
+{
+
+    public AutoComplete()
+    {
+
+        //Uncomment the following line if using designed components 
+        //InitializeComponent(); 
+    }
+
+
+    [WebMethod]
+    public List<CandidateData> FetchUnMappedCandidate(string prefixText)
+    {
+        List<CandidateData> collectionCand = new List<CandidateData>();
+        CandidateData cand;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectUnMappedCandidateByFilter";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        cand = new CandidateData();
+                        cand.CandidateCode = sdr["Candidate_Code"].ToString();
+                        cand.CandidateFullName = sdr["Full_Name"].ToString();
+                        cand.CandidateEmailAddress = sdr["Email_Address"].ToString();
+                        cand.CandidatePhoneNumber = sdr["Phone_Number"].ToString();
+                        collectionCand.Add(cand);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionCand.ToList();
+    }
+
+
+    [WebMethod]
+    public List<CandidateData> FetchMappedCandidate(string prefixText)
+    {
+        List<CandidateData> collectionCand = new List<CandidateData>();
+        CandidateData cand;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectMappedCandidateByFilter";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        cand = new CandidateData();
+                        cand.CandidateCode = sdr["Candidate_Code"].ToString();
+                        cand.CandidateFullName = sdr["Full_Name"].ToString();
+                        cand.CandidateEmailAddress = sdr["Email_Address"].ToString();
+                        cand.CandidatePhoneNumber = sdr["Phone_Number"].ToString();
+                        collectionCand.Add(cand);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionCand.ToList();
+    }
+
+
+    [WebMethod]
+    public List<SkillData> FetchSkill(string prefixText)
+    {
+        List<SkillData> collectionskill = new List<SkillData>();
+        SkillData skill;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectSkills";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        skill = new SkillData();
+                        skill.SkillCode = sdr["Skill_Code"].ToString();
+                        skill.SkillName = sdr["Skill"].ToString();
+                        collectionskill.Add(skill);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionskill.ToList();
+    }
+
+
+    [WebMethod]
+    public List<string> FetchSkillList(string prefixText)
+    {
+        List<string> collectionc = new List<string>();
+        string c;
+        DataSet objDS = new DataSet();
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+
+            using (SqlCommand command = new SqlCommand("XRec_SelectSkills", conn))
+            {
+                command.Parameters.AddWithValue("@SearchText", prefixText);
+                command.CommandType = CommandType.StoredProcedure;
+                using (SqlDataAdapter a = new SqlDataAdapter(command))
+                {
+                    a.Fill(objDS);
+                }
+            }
+        }
+
+        List<string> str = new List<string>();
+        string item;
+
+        for (int i = 0; i < objDS.Tables[0].Rows.Count; i++)
+        {
+            item = AutoCompleteExtender.CreateAutoCompleteItem(objDS.Tables[0].Rows[i]["Skill"].ToString(), objDS.Tables[0].Rows[i]["Skill_Code"].ToString());
+            str.Add(item);
+        }
+        return str;
+    }
+
+    [WebMethod]
+    public List<IndustryData> FetchIndustry(string prefixText)
+    {
+        List<IndustryData> collectionind = new List<IndustryData>();
+        IndustryData ind;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectIndustry";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        ind = new IndustryData();
+                        ind.IndustryCode = sdr["IndustryCode"].ToString();
+                        ind.IndustryName = sdr["IndustryName"].ToString();
+                        collectionind.Add(ind);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionind.ToList();
+    }
+
+
+    [WebMethod]
+    public List<CompanyData> FetchCompany(string prefixText)
+    {
+        List<CompanyData> collectioncom = new List<CompanyData>();
+        CompanyData com;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectCompany";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        com = new CompanyData();
+                        com.CompanyCode = sdr["CompanyCode"].ToString();
+                        com.CompanyName = sdr["CompanyName"].ToString();
+                        collectioncom.Add(com);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectioncom.ToList();
+    }
+
+
+    [WebMethod]
+    public List<BenefitData> FetchBenefits(string prefixText)
+    {
+        List<BenefitData> collectionben = new List<BenefitData>();
+        BenefitData ben;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectBenefitForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        ben = new BenefitData();
+                        ben.BenefitCode = sdr["Benefit_Code"].ToString();
+                        ben.BenifitName = sdr["Benefits"].ToString();
+                        ben.BenifitType = sdr["Benefit_Type"].ToString();
+                        collectionben.Add(ben);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionben.ToList();
+    }
+
+
+    [WebMethod]
+    public List<DegreeData> FetchDegree(string prefixText)
+    {
+        List<DegreeData> collectiondeg = new List<DegreeData>();
+        DegreeData deg;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectDegreeForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        deg = new DegreeData();
+                        deg.DegreeCode = sdr["Degree_Code"].ToString();
+                        deg.DegreeName = sdr["Degree"].ToString();
+                        deg.ProgramName = sdr["Program_Name"].ToString();
+                        collectiondeg.Add(deg);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectiondeg.ToList();
+    }
+
+
+
+    [WebMethod]
+    public List<MajorData> FetchMajor(string prefixText)
+    {
+        List<MajorData> collectionmaj = new List<MajorData>();
+        MajorData maj;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectMajorForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        maj = new MajorData();
+                        maj.MajorCode = sdr["Major_Code"].ToString();
+                        maj.MajorName = sdr["Major_Name"].ToString();
+                        collectionmaj.Add(maj);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionmaj.ToList();
+    }
+
+
+    [WebMethod]
+    public List<InstituteData> FetchInstitute(string prefixText)
+    {
+        List<InstituteData> collectionins = new List<InstituteData>();
+        InstituteData ins;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectInstituteForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        ins = new InstituteData();
+                        ins.InstituteCode = sdr["Institute_Code"].ToString();
+                        ins.InstituteName = sdr["Institute"].ToString();
+                        collectionins.Add(ins);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionins.ToList();
+    }
+
+
+
+    [WebMethod]
+    public List<DomainData> FetchDomain(string prefixText)
+    {
+        List<DomainData> collectiondom = new List<DomainData>();
+        DomainData dom;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectDomainForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        dom = new DomainData();
+                        dom.DomainCode = sdr["Domain_Code"].ToString();
+                        dom.DomainName = sdr["Domain_Name"].ToString();
+                        collectiondom.Add(dom);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectiondom.ToList();
+    }
+
+
+    [WebMethod]
+    public List<SubDomainData> FetchSubDomain(string prefixText)
+    {
+        List<SubDomainData> collectionsdom = new List<SubDomainData>();
+        SubDomainData sdom;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "XRec_SelectSubDomainForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        sdom = new SubDomainData();
+                        sdom.SubDomainCode = sdr["SubDomain_Code"].ToString();
+                        sdom.SubDomainName = sdr["SubDomain_Name"].ToString();
+                        sdom.DomainName = sdr["Domain_Name"].ToString();
+                        collectionsdom.Add(sdom);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionsdom.ToList();
+    }
+
+
+    [WebMethod]
+    public List<string> FetchCompanyLive(string prefixText)
+    {
+        List<string> collectionc = new List<string>();
+        string c;
+        DataSet objDS = new DataSet();
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentLiveConn"].ConnectionString;
+
+            using (SqlCommand command = new SqlCommand("Xweb_Select_Company", conn))
+            {
+                command.Parameters.AddWithValue("@SearchText", prefixText);
+                command.CommandType = CommandType.StoredProcedure;
+                using (SqlDataAdapter a = new SqlDataAdapter(command))
+                {
+                    a.Fill(objDS);
+                }
+            }
+        }
+
+        List<string> str = new List<string>();
+        string item;
+
+        for (int i = 0; i < objDS.Tables[0].Rows.Count; i++)
+        {
+            item = AutoCompleteExtender.CreateAutoCompleteItem(objDS.Tables[0].Rows[i]["Company_Name"].ToString(), objDS.Tables[0].Rows[i]["Company_Name"].ToString());
+            str.Add(item);
+        }
+        return str;
+
+    }
+
+    [WebMethod]
+    public List<TestIndustryData> FetchIndustryList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectIndustry";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["IndustryCode"].ToString();
+                        item.Name = sdr["IndustryName"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestCompanyData> FetchCompanyList(string prefixText)
+    {
+        List<TestCompanyData> collectionItem = new List<TestCompanyData>();
+        TestCompanyData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectCompanyWithDetail";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestCompanyData();
+                        item.Code = sdr["CompanyCode"].ToString();
+                        item.Name = sdr["CompanyName"].ToString();
+                        item.Website = sdr["CompanyWebsite"].ToString();
+                        item.Number = sdr["CompanyNumber"].ToString();
+                        item.Email = sdr["CompanyEmail"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    public class TestCompanyData
+    {
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
+        public string Website
+        {
+            get;
+            set;
+        }
+
+        public string Number
+        {
+            get;
+            set;
+        }
+        public string Email
+        {
+            get;
+            set;
+        }
+    }
+    public class TestLocationData
+    {
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
+        public string type
+        {
+            get;
+            set;
+        }
+
+
+    }
+    [WebMethod]
+    public List<TestLocationData> FetchLocationList(string prefixText)
+    {
+        List<TestLocationData> collectionItem = new List<TestLocationData>();
+        TestLocationData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredLocation";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestLocationData();
+                        item.Code = sdr["LocationCode"].ToString();
+                        item.Name = sdr["LocationName"].ToString();
+                        item.type = sdr["Type"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchJobTitle(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectJobTitle";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["JobTitle_Code"].ToString();
+                        item.Name = sdr["JobTitle"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchInstituteList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredInstitute";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["InstituteCode"].ToString();
+                        item.Name = sdr["InstituteName"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchListProgramWise(string prefixText)
+    {
+        string prefix = string.Empty;
+        string programCode = string.Empty;
+        string[] completeText = prefixText.Split('%');
+        programCode = completeText[1];
+        prefix = completeText[0];
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredPrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefix);
+                cmd.Parameters.AddWithValue("@Program_Code", programCode);
+
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchDegreeList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredDoctoratePrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchFieldList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredMajor";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["MajorID"].ToString();
+                        item.Name = sdr["Major"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchMasterList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredMasterPrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchBachelorsList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredBachelorPrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchInterList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredIntermediatePrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchMatricList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredMatricPrograms";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchDiplomaList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredDiploma";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchCertificateList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredCertificate";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["DegreeID"].ToString();
+                        item.Name = sdr["Degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchSkillSetList(string prefixText)  
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectFilteredSkill";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["SkillID"].ToString();
+                        item.Name = sdr["Skill"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchAllDegreeSetList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.Xrec_SelectDegree";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["degree_code"].ToString();
+                        item.Name = sdr["degree"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    [WebMethod]
+    public List<TestIndustryData> FetchMajorSetList(string prefixText)
+    {
+        List<TestIndustryData> collectionItem = new List<TestIndustryData>();
+        TestIndustryData item;
+        using (SqlConnection conn = new SqlConnection())
+        {
+            conn.ConnectionString = ConfigurationManager.ConnectionStrings["RecruitmentAdminConn"].ConnectionString;
+            using (SqlCommand cmd = new SqlCommand())
+            {
+                cmd.CommandText = "dbo.XRec_SelectMajorForSearch";
+                cmd.CommandType = System.Data.CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SearchText", prefixText);
+                cmd.Connection = conn;
+                conn.Open();
+                using (SqlDataReader sdr = cmd.ExecuteReader())
+                {
+                    while (sdr.Read())
+                    {
+                        item = new TestIndustryData();
+                        item.Code = sdr["Major_Code"].ToString();
+                        item.Name = sdr["Major_Name"].ToString();
+                        collectionItem.Add(item);
+                    }
+
+                }
+                conn.Close();
+
+            }
+        }
+        return collectionItem.ToList();
+    }
+    public class TestIndustryData
+    {
+        public string Code
+        {
+            get;
+            set;
+        }
+
+        public string Name
+        {
+            get;
+            set;
+        }
+    }
+
+
+
+
+
+
+
+
+}

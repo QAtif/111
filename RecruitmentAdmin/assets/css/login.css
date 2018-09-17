@@ -1,0 +1,19 @@
+@charset "utf-8";
+/* CSS Document */
+
+body{
+	background:url(/assetsprocurement/images/portal/portal-bg.jpg) left top no-repeat;
+	margin:0 auto;
+	font:normal 11px Verdana;}
+.inner-body{ float:left; overflow:hidden; width:900px;}
+.login{float:right; margin-top:200px;}
+.logo{}
+.loginbg{ background:url(/assetsprocurement/images/portal/login-bg.jpg) top left no-repeat; height:179px; width:331px;}
+.input-large{background-color:#ffffe0; border:solid 1px #dddddd; height:12px; font:11px Verdana; width:150px;}
+.input-medium{background-color:#ffffe0; border:solid 1px #dddddd; height:12px; font:11px Verdana; width:100px;}
+.input-small{background-color:#ffffe0; border:solid 1px #dddddd; height:12px; font:11px Verdana; width:30px;}
+.link{ float:right;color:#0092ee; }
+img{border:none}
+
+.link a:link,.link a:hover{color:#0092ee;}
+.forgot-psw{ background:url(/assetsprocurement/images/portal/forgot-psw.jpg) top left no-repeat; height:179px; width:331px;}

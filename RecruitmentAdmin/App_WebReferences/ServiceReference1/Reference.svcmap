@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6cf696a5-4493-4538-9a14-f1680a3ff87b" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://xent1:300/SlotManagementAPI.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="SlotManagementAPI.xsd" MetadataType="Schema" ID="f9e0a0ad-8469-447a-93b1-c5457d8ce8b6" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?xsd=xsd1" />
+    <MetadataFile FileName="SlotManagementAPI1.xsd" MetadataType="Schema" ID="973991e3-d232-4bff-a935-c83b950767c0" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?xsd=xsd2" />
+    <MetadataFile FileName="SlotManagementAPI2.xsd" MetadataType="Schema" ID="cc740286-7854-48ed-9c32-c0f6038dc635" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?xsd=xsd3" />
+    <MetadataFile FileName="SlotManagementAPI.wsdl" MetadataType="Wsdl" ID="e2195bf6-20f6-43c2-b10e-571e7ddabe5c" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?wsdl" />
+    <MetadataFile FileName="SlotManagementAPI3.xsd" MetadataType="Schema" ID="a43d872c-3f2f-4bdf-bd9d-64f47fda3892" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?xsd=xsd0" />
+    <MetadataFile FileName="SlotManagementAPI.disco" MetadataType="Disco" ID="2ec4f521-b1ec-42a8-aa28-f69a7f80a152" SourceId="1" SourceUrl="http://xent1:300/SlotManagementAPI.svc?disco" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

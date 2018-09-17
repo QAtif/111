@@ -1,0 +1,79 @@
+<%@ Page Title="" Language="C#" MasterPageFile="~/A2/Admin.master" AutoEventWireup="true"
+    CodeFile="CategoryHead.aspx.cs" Inherits="CategoryHead" %>
+
+<%@ Register Src="~/A2/Control/RequisitionStatus.ascx" TagName="RequisitionStatus"
+    TagPrefix="Con" %>
+<%@ Register Src="~/A2/Control/ToDaysSchedule.ascx" TagName="TodaysSchedule" TagPrefix="Con" %>
+<%@ Register Src="../Control/JCalendar.ascx" TagName="JCalendar" TagPrefix="uc1" %>
+<asp:Content ID="Content1" ContentPlaceHolderID="headerContent" runat="Server">
+
+    <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+    <script src="../assets/js/QuicjSearch.js" type="text/javascript"></script>
+
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="BodyContent" runat="Server">
+    <div class="page">
+        <section class="wrapit topmenu"> 
+        <span class="resource-icon"></span> 
+        <span class="msearch showsrchbox">Category Head</span>
+    </section>
+        <!-- TOPMENU END HERE -->
+        <section class="mainSection">
+    	
+        <div class="clearfix">
+            <ul class="pendingColumn">
+                <li class="radishColor grid_240  first even">
+                   <con:RequisitionStatus id="ConConRequisitionStatus" runat="server"></con:RequisitionStatus>
+                </li>
+                <li class="lighBlueColor grid_1030 last odd">
+                   <con:TodaysSchedule id="ConConTodaySchedule" runat="server"></con:TodaysSchedule>
+                </li>
+            </ul>
+        </div><!-- CLEARFIX END HERE -->
+        
+        <section class="clearfix oneThirdWedgit reportSection">
+            <div class="leftAside reportStatus">
+            	<div class="topSection clearfix">
+            		<h3>Current Requisitions Status</h3>
+                    <ul class="departReport">
+                    	<li>
+                        	<i class="dropDown"></i>
+                        	<div class="hideShow">
+                            	<div class="drop_menu scrollBar">
+                                    <ul>
+                                        <li>DepartmentS</li>
+                                        <li><a href="javascript:;" title="">Graphics Departme</a></li>
+                                        <li><a href="javascript:;" title="">Brand Management</a></li>
+                                        <li><a href="javascript:;" title="">User Interface</a></li>
+                                        <li><a href="javascript:;" title="">Administration</a></li>
+                                        <li><a href="javascript:;" title="">Command &amp; Control</a></li>
+                                        <li><a href="javascript:;" title="">Graphics Departme</a></li>
+                                        <li><a href="javascript:;" title="">Brand Management</a></li>
+                                        <li><a href="javascript:;" title="">User Interface</a></li>
+                                        <li><a href="javascript:;" title="">Administration</a></li>
+                                        <li><a href="javascript:;" title="">Command &amp; Control</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div><!-- TOPSECTION END HERE -->
+                <div class="clearfix">
+                	<img src="assets/images/graph-image.jpg" alt="" width="683" height="257">
+                </div>
+            </div><!-- LEFT-ASIDE END HERE -->
+            
+            <div class="rightAside reportStatus">
+            	<div class="topSection clearfix">
+                    
+                    <uc1:JCalendar ID="JCalendar1" runat="server" />
+                </div><!-- TOPSECTION END HERE -->
+				
+                
+            </div><!-- RIGHT-ASIDE END HERE -->
+        </section><!-- REPORTSECTION END HERE -->
+    
+    </section>
+        <!-- MAIN-SECTION END HERE -->
+    </div>
+</asp:Content>

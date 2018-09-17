@@ -1,0 +1,253 @@
+body {
+	margin:0px;
+	padding:0px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:11px;
+	background:url(/assetsprocurement/images/member-mgmt/member-area/bg-main.png) repeat-x top left #69a71f;
+	}
+img {
+		border:0px;
+}
+* {
+	margin:0px;
+	padding:0px;
+}
+#main-wrapper {
+	width:970px;
+	margin:0px auto;
+}
+#wrapper-inner {
+	width:100%;
+	float:left;
+	padding:30px 0px;
+}
+#banner {
+	width:100%;
+	float:left;
+}
+#contentmain {
+	background:url(/assetsprocurement/images/member-mgmt/member-area/content-bottom.png) no-repeat center bottom;
+	padding-bottom:19px;
+	float:left;
+	width:100%;
+	margin-top:10px;
+}
+#contenttop {
+	float:left;
+	width:100%;
+	background:url(/assetsprocurement/images/member-mgmt/member-area/content-top.png) no-repeat center top;
+	height:20px;
+}
+#content {
+	background:url(/assetsprocurement/images/member-mgmt/member-area/content-bg.png) repeat-x left top #fff;
+	float:left;
+	width:920px;
+	margin-left:2px;
+	padding:5px 20px;
+	border-left:3px solid #fff;
+	border-right:3px solid #fff;
+}
+#content h2 {
+	color:#2b8000;
+	font-size:28px;
+	padding:0px;
+	margin:0px;
+	font-weight:normal;
+	border-bottom:1px solid #d2d2d2;
+	padding-bottom:4px;
+}
+#content h2 span{
+	color:#666666;
+	font-size:16px;
+	font-weight:bold;
+}
+#content p{
+	color:#313131;
+}
+.contentinner {
+	background:url(/assetsprocurement/images/member-mgmt/member-area/content-innter-bottom.png) no-repeat left bottom;
+	padding-bottom:15px;
+	float:left;
+	width:854px;
+	margin-left:35px;
+	margin-top:15px;
+}
+.contentcontainer {
+	float:left;
+	width:834px;
+	background:url(/assetsprocurement/images/member-mgmt/member-area/content-inner.png) no-repeat left top;
+	padding:10px 10px;
+}
+.contentcontainer h3 {
+	color:#2b8000;
+	font-size:20px;
+	font-weight:normal;
+}
+.contentcontainer h3 a{
+	color:#2b8000;
+	font-size:11px;
+}
+
+/* table starts here */
+table.special td{
+	padding:5px 0px;
+	text-align:left;
+	background:none !important;
+	border:0px  !important;
+}
+input {
+	border:1px solid #cacaca;
+}
+span.red {
+	color:#F00;
+}
+.contentcontainer table td a{
+	color:#2b8000;
+	font-size:11px;
+}
+a{
+	color:#2b8000;
+	font-size:11px;
+}
+
+
+
+
+.contentcontainer table{
+	width:100%;
+	border-top:1px solid #d5d5d5;
+	border-right:1px solid #d5d5d5;
+}
+.contentcontainer table th {
+	padding:7px;
+}
+.contentcontainer table td,.contentcontainer table th{
+	border-left:1px solid #d5d5d5 ;
+	border-bottom:1px solid #d5d5d5 ;
+}
+
+.contentcontainer table thead{
+	background:	url(/assetsprocurement/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+.contentcontainer table tbody tr.grey td{
+	background:#f7f7f7;
+	padding:5px;
+}
+.contentcontainer table tbody tr td{
+	background:#fff;
+	padding:5px;	
+}
+.contentcontainer table tbody tr.blue td{
+	background:#eaf5ff;
+}
+.contentcontainer table tbody tr th.grey{
+	background:#f7f7f7;
+}
+
+#container table tbody tr td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	
+}
+
+
+
+
+
+
+
+
+
+.contentcontainer table.simple{
+	width:100%;
+	border:1px solid #d5d5d5;
+}
+.contentcontainer table.simple th {
+	padding:7px;
+}
+.contentcontainer table.simple td,.contentcontainer table.simple th{
+	border:0px;
+}
+
+.contentcontainer table.simple thead{
+	background:	url(/assetsprocurement/images/th-bg.jpg) repeat-x bottom left;
+	font-size:12px;
+	color:#666666;
+}
+.contentcontainer table.simple tbody tr.grey td{
+	background:#f7f7f7;
+	padding:5px;
+}
+.contentcontainer table.simple tbody tr td{
+	background:#fff;
+	padding:5px;	
+}
+.contentcontainer table.simple tbody tr.blue td{
+	background:#eaf5ff;
+}
+.contentcontainer table.simple tbody tr th.grey{
+	background:#f7f7f7;
+}
+
+#container table.simple tbody tr td{
+	background:#fff;
+	padding:5px;
+	font-size:11px;
+	color:#666;
+	
+}
+
+
+
+
+
+
+
+
+table.none {
+	margin:0px !important;
+	padding:0px !important;
+	border:0px !important;
+	background:none !important;
+}
+table.none td {
+	margin:0px !important;
+	border:0px !important;
+	padding:0px !important;
+	background:none !important;
+}
+
+
+
+
+
+
+
+
+
+#footer {
+	float:left;
+	width:100%;
+	padding:10px 0px;
+	font-size:11px;
+}
+#footer .copyright{
+	width:300px;
+	float:left;
+	margin-left:350px;
+	color:#FFF;
+}
+#poweredby {
+	color:#FFF;
+	text-align:right;
+	float:right;
+	width:200px;
+}
+
+
+
+

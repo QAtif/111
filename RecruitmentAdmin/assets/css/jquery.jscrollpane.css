@@ -1,0 +1,63 @@
+/* Tiny Scrollbar */
+#scrollbar1 { width: 960px; margin: 20px 0 10px; }
+#scrollbar1 .viewport { width: 960px; height: 280px; overflow: hidden; position: relative; float:left; }
+#scrollbar1 .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0;  }
+#scrollbar1 .scrollbar{  background: url("/assetsprocurement/images/scroll/bg-scrollbar-track-x.png") no-repeat scroll 0 0 transparent;
+    clear: both;
+    height: 15px;
+    margin: 0 0 5px;
+    position: relative;
+	float:right;}
+#scrollbar1 .track {  background: url("/assetsprocurement/images/scroll/bg-scrollbar-trackend-x.png") no-repeat scroll 100% 0 transparent;
+    height: 15px;
+    position: relative;
+    width: 100%;}
+#scrollbar1 .thumb {  background: url("/assetsprocurement/images/scroll/bg-scrollbar-thumb-x.png") no-repeat scroll 100% 50% transparent;
+    cursor: pointer;
+    height: 25px;
+    left: 0;
+    overflow: hidden;
+    position: absolute;
+    top: -5px; }
+#scrollbar1 .thumb .end {  background: url("/assetsprocurement/images/scroll/bg-scrollbar-thumb-x.png") no-repeat scroll 0 50% transparent;
+    height: 25px;
+    overflow: hidden;
+    width: 5px;}
+#scrollbar1 .disable { display: none; }
+.noSelect { user-select: none; -o-user-select: none; -moz-user-select: none; -khtml-user-select: none; -webkit-user-select: none; }
+
+
+
+
+
+
+/* Tiny Scrollbar */
+.scrollbar2 { width: 960px; margin: 20px 0 10px; }
+.scrollbar2  .viewport {  height: 200px;
+    overflow: hidden;
+    position: relative;
+    width: 100%; }
+.scrollbar2  .overview { list-style: none; position: absolute; left: 0; top: 0; padding: 0; margin: 0; width:980px;  }
+.scrollbar2  .scrollbar{ background: url("/assetsprocurement/images/scroll/bg-scrollbar-track-y.png") no-repeat scroll 0 0 transparent;
+    float: right;
+    position: relative;
+    width: 15px;
+	z-index:20;}
+.scrollbar2  .track {   background: url("/assetsprocurement/images/scroll/bg-scrollbar-trackend-y.png") no-repeat scroll 0 100% transparent;
+    height: 100%;
+    padding: 0 1px;
+    position: relative;
+    width: 13px;}
+.scrollbar2  .thumb {    background: url("/assetsprocurement/images/scroll/bg-scrollbar-thumb-y.png") no-repeat scroll 50% 100% transparent;
+    cursor: pointer;
+    height: 20px;
+    left: -5px;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    width: 25px; }
+.scrollbar2  .thumb .end {   background: url("/assetsprocurement/images/scroll/bg-scrollbar-thumb-y.png") no-repeat scroll 50% 0 transparent;
+    height: 5px;
+    overflow: hidden;
+    width: 25px;}
+.scrollbar2  .disable { display: none; }

@@ -1,0 +1,27 @@
+.profile{border:1px solid #dcdcdc; margin-top:12px; background:url(/assetsprocurement/images/portalnew/tabbg.jpg) repeat-x left top; overflow:hidden; padding-bottom:10px}
+.profile h2{ margin:0px; padding:0px; ; font-size:12px; color:#5b5b5b; line-height:20px; border-bottom:1px solid #cbcbcb; background:url(/assetsprocurement/images/portalnew/icons/bulltet-normal.jpg) no-repeat 12px 6px; padding-left:22px;}
+.profile-inner{ padding:12px;}
+.profile-inner p{ margin:0px; padding:0px; line-height:16px;}
+.profile-inner img{ margin:0 5px 5px 0;}
+.profile .achive{ width:177px; float:left; border-right:2px solid #d7d7d7; float:left; clear:left; padding:0 17px 33px 0; margin:5px 0 10px 0;}
+.profile .targets{ width:177px; float:left; float:left; padding:0 0px 0 10px; margin-top:5px;}
+
+#right .time{ float:left;}
+#right .available{ float:right;}
+#right .available a{color:#555555;}
+#right .available img{ margin-left:10px;}
+#right .help{ float:left; margin-top:16px;}
+#right .help img{ margin-right:4px;}
+#right ul{ margin:0px; padding:15px 0 0 0; clear:both;}
+#right ul li{list-style:none; margin-bottom:4px; width:312px; float:left; *float:none; border-bottom:1px solid #dcdcdc; border-left:1px solid #dcdcdc;}
+#right ul li a{ background:url(/assetsprocurement/images/portalnew/right-tab-bg.jpg) repeat-x left top; line-height:38px; float:left; width:300px; padding-left:12px; font-size:12px; color:#666666; font-weight:bold;}
+#right ul li a img{ margin-right:8px;}
+#right ul li a.notab{ background:none; line-height:normal; float:none; width:auto; border:none; padding:0px; color:#2488de; font-weight:normal; font-size:11px;}
+#right ul li ul{background:#fff; float:left;}
+#right .ul-special{background:#fff; padding:10px 0 10px 9px; width:303px;}
+#right .ul-special li{width:296px; background:url(/assetsprocurement/images/portalnew/form-bg.jpg) repeat-x left 7px; border-top:1px solid #d7d7d7; border-left:1px solid #d7d7d7; border-bottom:none;}
+#right .ul-special li a{ background:url(/assetsprocurement/images/portalnew/form-right-bg.jpg) repeat-y right top; padding:0px 0 0 10px; width:287px; float:left; color:#163880;}
+.border{ border:1px solid #dcdcdc; background:#f4f4f4!important; width:310px;}
+#right .inbox{ width:100%; background:#f4f4f4; text-align:right; padding:5px 0 5px 0; float:left;}
+#right .inbox a{ margin-right:5px; float:right!important;}
+#right .view-all{background:url(/assetsprocurement/images/portalnew/icons/bulltet-normal.jpg) no-repeat 0px 5px; line-height:20px; padding:0px 5px 0 10px; text-align:right; width:auto; float:right; color:#163880;}

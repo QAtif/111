@@ -1,0 +1,322 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{AE1E027B-B88F-4015-8D30-4CF43BC33503}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BOLDocumentUploadingService", "BOLDocumentUploadingService", "{057186E5-E5F8-4F60-BF1D-4AE30C31E603}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOLRecruitmentDocumentUploadingLibrary", "Services\BOLDocumentUploadingService\BOLRecruitmentDocumentUploadingLibrary\BOLRecruitmentDocumentUploadingLibrary.csproj", "{186C71A4-AB11-4772-B8B9-71826A6729C7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BOLRecruitmentDocumentUploadingService", "Services\BOLDocumentUploadingService\BOLRecruitmentDocumentUploadingService\BOLRecruitmentDocumentUploadingService.csproj", "{6CA14809-05ED-4912-9D97-822BA71F6FE5}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BRecruitmentAdmin", "BRecruitmentAdmin", "{9C4C4D7D-515C-4C89-B9BD-5534D3990ACF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Letters", "Letters", "{F25215A4-A85D-48C2-9F98-62031B5EF71B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CR", "CR", "{F1B149E5-D614-4A8A-BAEB-199F3E36285B}"
+	ProjectSection(SolutionItems) = preProject
+		Services\BRecruitmentAdmin\Letters\BOLAppointment_FirstPage.rpt = Services\BRecruitmentAdmin\Letters\BOLAppointment_FirstPage.rpt
+		Services\BRecruitmentAdmin\Letters\BOLCandidateAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\BOLCandidateAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\BOLCandidateOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\BOLCandidateOfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\BOLFirstLastPage_AppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\BOLFirstLastPage_AppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\BOLFirstLastPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\BOLFirstLastPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\BOLFirstPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\BOLFirstPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\MedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\MedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\PrintEnvelopA4.rpt = Services\BRecruitmentAdmin\Letters\PrintEnvelopA4.rpt
+		Services\BRecruitmentAdmin\Letters\SupportStaffAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\SupportStaffAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\SupportStaffMedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\SupportStaffMedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\SupportStaffOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\SupportStaffOfferLetter.rpt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BOLNETWORK", "BOLNETWORK", "{275243CA-681B-46E2-963E-3C70D4CC0FDD}"
+	ProjectSection(SolutionItems) = preProject
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\AddressVerificationLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\AddressVerificationLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLAppointment_FirstPage.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLAppointment_FirstPage.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLCandidateAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLCandidateAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLCandidateOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLCandidateOfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstLastPage_AppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstLastPage_AppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstLastPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstLastPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\BOLFirstPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_bk.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_bk.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_BK27122016.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_BK27122016.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_BK30122016.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\MedicalLetter_org_BK30122016.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\PrintEnvelopA4.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\PrintEnvelopA4.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffMedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffMedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffMedicalLetter_org_bkp10022017.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffMedicalLetter_org_bkp10022017.rpt
+		Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\BOLNETWORK\SupportStaffOfferLetter.rpt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PakNewsLetter", "PakNewsLetter", "{97893031-D4F8-4E8B-8769-D0DC01485C13}"
+	ProjectSection(SolutionItems) = preProject
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\AddressVerificationLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\AddressVerificationLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLAppointment_FirstPage.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLAppointment_FirstPage.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLFirstLastPage_AppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLFirstLastPage_AppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLFirstLastPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\BOLFirstLastPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_bk.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_bk.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_BK27122016.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_BK27122016.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_BK30122016.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\MedicalLetter_org_BK30122016.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKAppointment_FirstPage.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKAppointment_FirstPage.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKCandidateAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKCandidateAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKCandidateOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKCandidateOfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKFirstPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PAKFirstPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PrintEnvelopA4.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\PrintEnvelopA4.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffMedicalLetter_org.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffMedicalLetter_org.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffMedicalLetter_org_bkp10022017.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffMedicalLetter_org_bkp10022017.rpt
+		Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\PakNewsLetter\SupportStaffOfferLetter.rpt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Consultant", "Consultant", "{A22247EB-D5A4-4024-AEE2-F12640FCE711}"
+	ProjectSection(SolutionItems) = preProject
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLAppointment_FirstPage.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLAppointment_FirstPage.rpt
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLCandidateAppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLCandidateAppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLCandidateOfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLCandidateOfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstLastPage_AppointmentLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstLastPage_AppointmentLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstLastPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstLastPage_OfferLetter.rpt
+		Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstPage_OfferLetter.rpt = Services\BRecruitmentAdmin\Letters\CR\Consultant\BOLFirstPage_OfferLetter.rpt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CRM Service", "CRM Service", "{F297F1AF-5FFD-4916-9995-A707909D36BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRecCRMService", "Services\XRecCRMService\BRecCRMService.csproj", "{BA368317-1EC0-4C6E-B990-39BEFE6942C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BRecCRMLibrary", "Services\XRecCRMLibrary\BRecCRMLibrary.csproj", "{F224C7A6-AAD8-42AE-9096-6EB657A75233}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XRecruitmentStatusLibrary", "XRecruitmentStatusLibrary\XRecruitmentStatusLibrary.csproj", "{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RecruitmentWeb", "RecruitmentWeb", "{B2D09325-C802-4D06-9364-380F6DF1682C}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		ProjectReferences = "{25AB4232-7F60-4713-91D7-1A0791554B2A}|ErrorLog.dll;"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_17465"
+		Debug.AspNetCompiler.PhysicalPath = "RecruitmentWeb\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17465\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_17465"
+		Release.AspNetCompiler.PhysicalPath = "RecruitmentWeb\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17465\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "17465"
+		SlnRelativePath = "RecruitmentWeb\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecureQueryStringLib", "SecureQueryStringLib\SecureQueryStringLib.csproj", "{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RecruitmentAdmin", "RecruitmentAdmin", "{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_17538"
+		Debug.AspNetCompiler.PhysicalPath = "RecruitmentAdmin\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17538\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_17538"
+		Release.AspNetCompiler.PhysicalPath = "RecruitmentAdmin\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17538\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "17538"
+		SlnRelativePath = "RecruitmentAdmin\"
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ErrorLog", "ErrorLog\ErrorLog.csproj", "{25AB4232-7F60-4713-91D7-1A0791554B2A}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "RecruitmentAssessment", "RecruitmentAssessment", "{07CDCEA4-00E7-44E0-8985-059DA9000891}"
+	ProjectSection(WebsiteProperties) = preProject
+		SccProjectName = "SAK"
+		SccAuxPath = "SAK"
+		SccLocalPath = "SAK"
+		SccProvider = "SAK"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_17486"
+		Debug.AspNetCompiler.PhysicalPath = "RecruitmentAssessment\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17486\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_17486"
+		Release.AspNetCompiler.PhysicalPath = "RecruitmentAssessment\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_17486\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "17486"
+		SlnRelativePath = "RecruitmentAssessment\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{186C71A4-AB11-4772-B8B9-71826A6729C7}.Release|x86.Build.0 = Release|Any CPU
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Debug|x86.ActiveCfg = Debug|x86
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Debug|x86.Build.0 = Debug|x86
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Release|Any CPU.ActiveCfg = Release|x86
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Release|x86.ActiveCfg = Release|x86
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5}.Release|x86.Build.0 = Release|x86
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4}.Release|x86.Build.0 = Release|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Debug|x86.Build.0 = Debug|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Release|x86.ActiveCfg = Release|Any CPU
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233}.Release|x86.Build.0 = Release|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Debug|x86.Build.0 = Debug|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Release|x86.ActiveCfg = Release|Any CPU
+		{16DF7D90-FB64-4D46-9EF1-E55CED6B0BA5}.Release|x86.Build.0 = Release|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Debug|x86.Build.0 = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Release|x86.ActiveCfg = Debug|Any CPU
+		{B2D09325-C802-4D06-9364-380F6DF1682C}.Release|x86.Build.0 = Debug|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Debug|x86.Build.0 = Debug|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Release|x86.ActiveCfg = Release|Any CPU
+		{08872ED1-242A-4CE8-AFF0-362FBA8FBEA6}.Release|x86.Build.0 = Release|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Debug|x86.Build.0 = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Release|x86.ActiveCfg = Debug|Any CPU
+		{4F4127AC-E9D1-4BDD-B8F9-634FA19A6575}.Release|x86.Build.0 = Debug|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Debug|x86.Build.0 = Debug|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Release|x86.ActiveCfg = Release|Any CPU
+		{25AB4232-7F60-4713-91D7-1A0791554B2A}.Release|x86.Build.0 = Release|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Debug|x86.Build.0 = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Release|x86.ActiveCfg = Debug|Any CPU
+		{07CDCEA4-00E7-44E0-8985-059DA9000891}.Release|x86.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{057186E5-E5F8-4F60-BF1D-4AE30C31E603} = {AE1E027B-B88F-4015-8D30-4CF43BC33503}
+		{186C71A4-AB11-4772-B8B9-71826A6729C7} = {057186E5-E5F8-4F60-BF1D-4AE30C31E603}
+		{6CA14809-05ED-4912-9D97-822BA71F6FE5} = {057186E5-E5F8-4F60-BF1D-4AE30C31E603}
+		{9C4C4D7D-515C-4C89-B9BD-5534D3990ACF} = {AE1E027B-B88F-4015-8D30-4CF43BC33503}
+		{F25215A4-A85D-48C2-9F98-62031B5EF71B} = {9C4C4D7D-515C-4C89-B9BD-5534D3990ACF}
+		{F1B149E5-D614-4A8A-BAEB-199F3E36285B} = {F25215A4-A85D-48C2-9F98-62031B5EF71B}
+		{275243CA-681B-46E2-963E-3C70D4CC0FDD} = {F1B149E5-D614-4A8A-BAEB-199F3E36285B}
+		{97893031-D4F8-4E8B-8769-D0DC01485C13} = {F1B149E5-D614-4A8A-BAEB-199F3E36285B}
+		{A22247EB-D5A4-4024-AEE2-F12640FCE711} = {F1B149E5-D614-4A8A-BAEB-199F3E36285B}
+		{F297F1AF-5FFD-4916-9995-A707909D36BB} = {AE1E027B-B88F-4015-8D30-4CF43BC33503}
+		{BA368317-1EC0-4C6E-B990-39BEFE6942C4} = {F297F1AF-5FFD-4916-9995-A707909D36BB}
+		{F224C7A6-AAD8-42AE-9096-6EB657A75233} = {F297F1AF-5FFD-4916-9995-A707909D36BB}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 11
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = http://tfssrv02:8080/tfs/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = ErrorLog\\ErrorLog.csproj
+		SccProjectName1 = ErrorLog
+		SccLocalPath1 = ErrorLog
+		SccWebProject2 = true
+		SccProjectUniqueName2 = RecruitmentAdmin
+		SccProjectName2 = RecruitmentAdmin
+		SccLocalPath2 = RecruitmentAdmin
+		SccProjectEnlistmentChoice2 = 2
+		SccWebProject3 = true
+		SccProjectUniqueName3 = RecruitmentAssessment
+		SccProjectName3 = RecruitmentAssessment
+		SccLocalPath3 = RecruitmentAssessment
+		SccProjectEnlistmentChoice3 = 2
+		SccWebProject4 = true
+		SccProjectUniqueName4 = RecruitmentWeb
+		SccProjectName4 = RecruitmentWeb
+		SccLocalPath4 = RecruitmentWeb
+		SccProjectEnlistmentChoice4 = 2
+		SccProjectUniqueName5 = SecureQueryStringLib\\SecureQueryStringLib.csproj
+		SccProjectName5 = SecureQueryStringLib
+		SccLocalPath5 = SecureQueryStringLib
+		SccProjectUniqueName6 = Services\\BOLDocumentUploadingService\\BOLRecruitmentDocumentUploadingLibrary\\BOLRecruitmentDocumentUploadingLibrary.csproj
+		SccProjectTopLevelParentUniqueName6 = BOL-RecruitmentSystem.sln
+		SccProjectName6 = Services/BOLDocumentUploadingService/BOLRecruitmentDocumentUploadingLibrary
+		SccLocalPath6 = Services\\BOLDocumentUploadingService\\BOLRecruitmentDocumentUploadingLibrary
+		SccProjectUniqueName7 = Services\\BOLDocumentUploadingService\\BOLRecruitmentDocumentUploadingService\\BOLRecruitmentDocumentUploadingService.csproj
+		SccProjectTopLevelParentUniqueName7 = BOL-RecruitmentSystem.sln
+		SccProjectName7 = Services/BOLDocumentUploadingService/BOLRecruitmentDocumentUploadingService
+		SccLocalPath7 = Services\\BOLDocumentUploadingService\\BOLRecruitmentDocumentUploadingService
+		SccProjectUniqueName8 = Services\\XRecCRMLibrary\\BRecCRMLibrary.csproj
+		SccProjectTopLevelParentUniqueName8 = BOL-RecruitmentSystem.sln
+		SccProjectName8 = Services/XRecCRMLibrary
+		SccLocalPath8 = Services\\XRecCRMLibrary
+		SccProjectUniqueName9 = Services\\XRecCRMService\\BRecCRMService.csproj
+		SccProjectTopLevelParentUniqueName9 = BOL-RecruitmentSystem.sln
+		SccProjectName9 = Services/XRecCRMService
+		SccLocalPath9 = Services\\XRecCRMService
+		SccProjectUniqueName10 = XRecruitmentStatusLibrary\\XRecruitmentStatusLibrary.csproj
+		SccProjectName10 = XRecruitmentStatusLibrary
+		SccLocalPath10 = XRecruitmentStatusLibrary
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,295 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	margin:0px;
+	padding:0px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:100%;
+	/* background:url(/assetsprocurement/images/portal/main-bg.jpg) no-repeat center top; */
+}
+
+#mainwrapper {
+	width:1000px;
+	margin:0px auto;
+}
+#innerwrapper {
+	width:1000px;
+	float:left;
+	height:756px;
+	position:relative;
+}
+
+#mainmenu {
+	width:1000px;
+	height:77px;
+	position:absolute;
+	bottom:0px;
+}
+#menuinner {
+	float:left;
+	width:100%;
+	padding:10px 0px;
+}
+#mainmenu ul {
+	width:850px;
+	float:left;
+	margin:0px;
+	padding:0px;
+	margin-left:75px;
+	padding:10px 0px;
+}
+#mainmenu ul li{
+	padding:0px;
+	list-style:none;
+	margin:0px 10px;
+	background:url(/assetsprocurement/images/portal/menu-bg.jpg) repeat-x top left;
+	float:left;
+	position:relative;
+}
+#mainmenu ul li a{ 
+	font-size:16px;
+	font-weight:bold;
+	text-decoration:none;
+	color:#000;
+	background:url(/assetsprocurement/images/portal/icons/mywork.jpg) no-repeat left top;
+	padding:9px 15px 9px 50px ;
+	border-left:1px solid #c4c5c5;
+	border-bottom:2px solid #585858;
+	border-right:2px solid #585858;
+	border-top:1px solid #c4c5c5;		
+	float:left;
+}
+#mainmenu ul div{
+	padding:0px;
+	margin:0px;
+	margin-left:20px;
+	width:250px;
+	padding:2px 0px;
+	position:absolute;
+	background:#575757;
+	font-size:11px;
+	z-index:3;
+	display:none;
+}
+#mainmenu li{ 
+	list-style:none;
+	padding:0px;
+	margin:0px;
+	float:left;
+	position:relative;
+}
+
+#mainmenu li li{ 
+	width:220px;
+	background:url(/assetsprocurement/images/portal/sub-menu-bg.jpg) repeat-x top left;
+	margin:0px;
+	padding:0px;
+
+}
+#mainmenu li li a{ 
+	width:100%;
+	background:url(/assetsprocurement/images/portal/sub-menu-bg-bullet.jpg) no-repeat top right;
+	border:0px;
+	padding:7px 5px;
+	font-size:12px;
+
+}
+#mainmenu li li:hover{ 
+	background:url(/assetsprocurement/images/portal/sub-menu-bg-hover.jpg) repeat-x top right;
+}
+#mainmenu li li:hover a{ 
+	background:url(/assetsprocurement/images/portal/sub-menu-bg-bullet-hover.jpg) no-repeat top right;
+}
+#mainmenu li li li a{ 
+	background:url(/assetsprocurement/images/portal/sub-menu-bg-bullet.jpg) no-repeat top right !important;
+}
+#mainmenu li li li:hover a{ 
+	background:url(/assetsprocurement/images/portal/sub-menu-bg-bullet-hover.jpg) no-repeat top right !important;
+}
+
+#mainmenu ul li:hover div{ 
+	display:block;
+	bottom:39px;
+	*bottom:39px;
+	left:-20px;
+	padding:15px 5px 15px 15px;
+	z-index:1;
+	background:#fbaa1d;
+}
+#mainmenu ul li div div{
+	display:none !important;
+	
+}
+#mainmenu ul li div div ul{
+	float:left;
+}
+#mainmenu ul li div ul li:hover div{ 
+	display:block !important;
+	left:216px;
+	bottom:-78px;
+	padding:15px 5px 15px 15px;
+	z-index:1;
+	background:#fbaa1d;
+	width:250px;
+}
+
+#mainmenu ul li div ul li{
+	position:relative;
+}
+
+#mainmenu ul li div ul{ 
+	width:230px;
+	margin:0px;
+	padding:0px;
+	border:6px solid #aeaeae;
+	
+}
+#mainmenu ul li div h3 {
+	font-size:18px;
+	color:#fff;
+	margin:5px;
+	font-weight:normal;
+}
+#mainmenu  ul {
+	float:left;
+}
+.clearboth {
+	clear:both;
+}
+
+/* starts anas's css */
+
+#mainwrapper #rightside {
+	width:325px;
+	height:670px;
+	float:right;
+	background: url(/assetsprocurement/images/portal/right-bg.jpg) no-repeat center top;
+	
+	}
+#mainwrapper #leftside {
+	width:675px;
+	height:677px;
+	float:left;
+	}
+#mainwrapper #leftside #left-top{
+	width:677px;
+	height:280px;
+	float:left;
+	
+	}
+#mainwrapper #leftside #left-top #right{
+	width:432px;
+	height:280px;
+	float:right;
+	background: url(/assetsprocurement/images/portal/2.jpg) no-repeat center top;
+	
+	}
+	
+#mainwrapper #leftside #left-top #left{
+	width:245px;
+	height:280px;
+	float:left;
+	
+	}
+#mainwrapper #leftside #left-top #left .logo{
+	width:245px;
+	height:90px;
+	float:left;
+	background: url(/assetsprocurement/images/portal/logo.jpg) no-repeat center top;
+	}
+#mainwrapper #leftside #left-down{
+	width:677px;
+	height:395px;
+	float:left;
+	background: url(/assetsprocurement/images/portal/leftdown-bg.jpg) no-repeat center top;
+	}
+	
+	
+	* {
+	margin: 0;
+	padding: 0;
+}
+.group:after {
+	visibility: hidden;
+	display: block;
+	font-size: 0;
+	content: " ";
+	clear: both;
+	height: 0;
+}
+.tabs {
+	list-style: none;
+	width:235px;
+}
+.tabs li {
+	display: inline;
+	
+}
+.tabs li a {
+	color:#5c5c5c;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:9px;
+	float: left;
+	display: block;
+	padding: 4px 10px;
+	margin-left: -1px;
+	position: relative;
+	left: 1px;
+	text-decoration: none;
+	background: url(/assetsprocurement/images/portal/arrow.jpg) no-repeat scroll 3px 9px transparent;
+	
+}
+.tabs li a:hover {
+	background: #ccc;
+}
+/* Generic styles */
+        
+        .tabbed-area {
+	margin: 0 0 65px 0;
+}
+.box-wrap {
+	position: relative;
+	min-height: 66px;
+	width:245px;
+}
+.tabbed-area div div {
+	background: white;
+	padding: 5px;
+	min-height: 66px;
+	position: absolute;
+	top: -1px;
+	left: 0;
+	width: 217px;
+}
+.tabbed-area div div, .tabs li a {
+	border: 1px solid #ccc;
+	padding: 2px 1px 2px 15px;
+	font-size:14px;
+}
+#box-one:target, #box-two:target, #box-three:target {
+	z-index: 1;
+}
+/* tab */
+        
+        .cur-nav-fix-2 .tabs li a {
+			
+			background: url(/assetsprocurement/images/portal/tab-deactive-bg.jpg) repeat-x bottom transparent;
+	 width: 61px;
+
+}
+.cur-nav-fix-2 .tabs {
+	z-index: 2;
+	position: relative;
+}
+#mission:target .mission,  #aim:target .aim,  #about:target .about {
+	z-index: 1;
+}
+#mission:target a[href="#mission"],  #aim:target a[href="#aim"],  #about:target a[href="#about"] {
+	border-bottom: 1px solid white;
+	background: url(/assetsprocurement/images/portal/arrow-down.jpg) no-repeat scroll 3px 9px transparent;
+	color:#d16936;
+	font-weight:bold;
+}
+
+/* ends anas's css */
